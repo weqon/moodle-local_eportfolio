@@ -642,7 +642,7 @@ function get_shared_participants($courseid, $fullcourse = false, $enrolled = nul
 
             foreach ($user as $us) {
 
-                $usersbyrole[$us->id] = fullname($user);
+                $usersbyrole[$us->id] = fullname($us);
             }
 
         }
