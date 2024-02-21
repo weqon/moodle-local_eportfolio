@@ -110,7 +110,7 @@ function renderer_output_myeportfolios($tsort = '', $tdir = '') {
             // Add a hint if file is uploaded/shared as template and an undo icon to stop sharing as template.
             $istemplatefile = '';
 
-            if ($ent['istemplate']) {
+            if (!empty($ent['istemplate'])) {
 
                 $istemplatefile = html_writer::tag('i', '', array('class' => 'fa fa-info-circle ml-3', 'data-toggle' => 'tooltip',
                         'data-placement' => 'right', 'title' => get_string('overview:table:istemplate', 'local_eportfolio')));
