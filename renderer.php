@@ -250,7 +250,7 @@ function renderer_output_mysharedeportfolios($tsort = '', $tdir = '') {
 }
 
 function renderer_output_mysharedeportfoliosgrade($tsort = '', $tdir = '') {
-    global $DB, $USER;
+    global $CFG, $DB, $USER;
 
     $url = new moodle_url('/local/eportfolio/index.php');
 
@@ -445,7 +445,7 @@ function renderer_output_sharedeportfolios($tsort = '', $tdir = '') {
 }
 
 function renderer_output_sharedeportfoliosgrade($tsort = '', $tdir = '') {
-    global $DB;
+    global $CFG, $DB;
 
     $url = new moodle_url('/local/eportfolio/index.php');
 

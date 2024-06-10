@@ -27,14 +27,7 @@
  * Custom uninstallation procedure.
  */
 function xmldb_local_eportfolio_uninstall() {
-    global $CFG, $DB;
-
-    // Remove config entry for custommenuitems.
-    $oldcustommenuitems = $CFG->custommenuitems;
-
-    $newcustommenuitems = str_replace("ePortfolio|/local/eportfolio/index.php", '', $oldcustommenuitems);
-
-    set_config('custommenuitems', $newcustommenuitems);
+    global $DB;
 
     // Remove entries for customfield category, field and data.
     // First we need to collect some data from customfield_field.

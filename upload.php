@@ -25,7 +25,7 @@
 
 require_once('../../config.php');
 require_once('locallib.php');
-require_once('upload_form.php');
+require_once('classes/forms/upload_form.php');
 
 // First check, if user is logged in before accessing this page.
 require_login();
@@ -38,6 +38,14 @@ if (isguestuser()) {
 
 $url = new moodle_url('/local/eportfolio/upload.php');
 $context = context_user::instance($USER->id);
+
+$PAGE->set_url($url);
+$PAGE->set_context($context);
+$PAGE->set_title("ePortfolio - Übersicht");
+$PAGE->set_heading("ePortfolio - Übersicht");
+$PAGE->set_pagelayout('base');
+$PAGE->add_body_class('limitedwith');
+$PAGE->set_pagetype('user-files');
 
 // ToDo: Make this configurable.
 $filemanageropts = array(
@@ -61,20 +69,11 @@ file_prepare_draft_area($draftfile, $context->id, 'local_eportfolio', 'eportfoli
 
 $mform = new upload_form($url, $customdata);
 
-$PAGE->set_url($url);
-$PAGE->set_context($context);
-$PAGE->set_title("ePortfolio - Übersicht");
-$PAGE->set_heading("ePortfolio - Übersicht");
-$PAGE->set_pagelayout('base');
-$PAGE->add_body_class('limitedwith');
-$PAGE->set_pagetype('user-files');
-
-// Print the header.
-echo $OUTPUT->header();
-
 if ($formdata = $mform->is_cancelled()) {
 
-    redirect(new moodle_url('/local/eportfolio/index.php'));
+    $redirecturl = new moodle_url('/local/eportfolio/index.php');
+    redirect($redirecturl, get_string('uploadform:cancelled', 'local_eportfolio'), null,
+            \core\output\notification::NOTIFY_WARNING);
 
 } else if ($formdata = $mform->get_data()) {
 
@@ -143,8 +142,9 @@ if ($formdata = $mform->is_cancelled()) {
 
 } else {
 
+    echo $OUTPUT->header();
+
     $mform->display();
 
+    echo $OUTPUT->footer();
 }
-
-echo $OUTPUT->footer();

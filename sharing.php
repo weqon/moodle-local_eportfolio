@@ -28,7 +28,7 @@
 
 require_once('../../config.php');
 require_once('locallib.php');
-require_once('sharing_form.php');
+require_once('classes/forms/sharing_form.php');
 require_once($CFG->dirroot . '/course/modlib.php');
 require_once($CFG->dirroot . '/mod/h5pactivity/lib.php');
 
@@ -75,9 +75,6 @@ $PAGE->set_pagelayout('base');
 $PAGE->add_body_class('limitedwith');
 $PAGE->set_pagetype('user-files');
 
-// Print the header.
-echo $OUTPUT->header();
-
 if ($step == '0') {
     if ($formdata1 = $mform1->is_cancelled()) {
 
@@ -93,7 +90,11 @@ if ($step == '0') {
 
     } else {
 
+        echo $OUTPUT->header();
+
         $mform1->display();
+
+        echo $OUTPUT->footer();
 
     }
 }
@@ -132,7 +133,11 @@ if ($step == '1') {
 
     } else {
 
+        echo $OUTPUT->header();
+
         $mform2->display();
+
+        echo $OUTPUT->footer();
 
     }
 }
@@ -292,9 +297,10 @@ if ($step == '2') {
 
     } else {
 
+        echo $OUTPUT->header();
+
         $mform3->display();
 
+        echo $OUTPUT->footer();
     }
 }
-
-echo $OUTPUT->footer();

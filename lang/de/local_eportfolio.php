@@ -26,6 +26,10 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'ePortfolio';
+$string['navbar'] = 'ePortfolio';
+
+// db/access - permissions.
+$string['eportfolio:view_eport'] = 'ePortfolio anzeigen';
 
 $string['error:noguestaccess'] = 'Sie sind als Gast angemeldet. Der Gastzugriff ist für dieses Plugin nicht erlaubt. ';
 
@@ -112,6 +116,7 @@ $string['sharing:form:step:confirm'] = 'ePortfolio teilen';
 $string['sharing:form:courseselection'] = 'Kurs zum Teilen auswählen';
 $string['sharing:form:shareoptionselection'] = 'Art der Teilung auswählen';
 $string['sharing:form:sharedcourses'] = 'Kurs auswählen';
+$string['sharing:form:sharedcourses_help'] = 'Sie könne nur Kurse auswählen, in denen Sie eingeschrieben sind.';
 $string['sharing:form:select:allcourses'] = 'Alle Kurse';
 $string['sharing:form:select:singlecourse'] = 'Kurs auswählen';
 $string['sharing:form:shareoption'] = 'Typ';
@@ -148,9 +153,11 @@ $string['uploadform:header'] = 'H5P-Datei hochladen';
 $string['uploadform:file'] = 'Datei auswählen';
 $string['uploadform:template:header'] = 'Diese Datei als Vorlage zur Verfügung stellen';
 $string['uploadform:template:check'] = 'Als Vorlage bereitstellen';
+$string['uploadform:template:check_help'] = 'Wenn Sie das Portfolio als Vorlage teilen, können andere Nutzer:innen dieses kopieren und verwenden.';
 $string['uploadform:template:checklabel'] = 'Datei als Vorlage hochladen';
 $string['uploadform:successful'] = 'Die Datei wurde erfolgreich hochgeladen';
 $string['uploadform:error'] = 'Beim Hochladen der Datei ist ein Fehler aufgetreten! Bitte versuchen Sie es erneut!';
+$string['uploadform:cancelled'] = 'Die Aktion wurde abgebrochen!';
 
 // HelpFAQ.
 $string['helpfaq:header'] = 'Hilfe & FAQ';

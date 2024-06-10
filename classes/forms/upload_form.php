@@ -57,7 +57,7 @@ class upload_form extends moodleform {
 
             $mform->addElement('checkbox', 'uploadtemplate', get_string('uploadform:template:check', 'local_eportfolio'),
                     get_string('uploadform:template:checklabel', 'local_eportfolio'));
-            $mform->addHelpButton('status', 'uploadform:template:check', 'local_eportfolio');
+            $mform->addHelpButton('uploadtemplate', 'uploadform:template:check', 'local_eportfolio');
 
             foreach ($searchcourses as $sco) {
                 $course = $DB->get_record('course', ['id' => $sco]);

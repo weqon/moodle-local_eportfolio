@@ -98,15 +98,18 @@ function get_my_eportfolios($context, $tsort = '', $tdir = '') {
 
                 // Get the times for created and modified based on h5p file.
                 // In case additional file types will be allowed we have to replace this.
-                $contenthash = $file->get_contenthash();
-                $h5pfile = $DB->get_record('h5p', ['contenthash' => $contenthash]);
+                $pathnamehash = $file->get_pathnamehash();
+                $h5pfile = $DB->get_record('h5p', ['pathnamehash' => $pathnamehash]);
 
-                $eportfolios[$i]['filetimecreated'] = date('d.m.Y', $h5pfile->timecreated);
-                $eportfolios[$i]['filetimemodified'] = date('d.m.Y', $h5pfile->timemodified);
+                $eportfolios[$i]['filetimecreated'] = (!empty($h5pfile->timecreated)) ? date('d.m.Y', $h5pfile->timecreated) : '';
+                $eportfolios[$i]['filetimemodified'] =
+                        (!empty($h5pfile->timemodified)) ? date('d.m.Y', $h5pfile->timemodified) : '';
 
                 // In case a file was uploaded or shared as template, let's add a hint.
                 $templatefile = $DB->get_record('local_eportfolio_share', ['fileitemid' => $file->get_id(),
                         'shareoption' => 'template', 'userid' => $USER->id]);
+
+                $eportfolios[$i]['istemplate'] = false;
 
                 if ($templatefile) {
                     $eportfolios[$i]['istemplate'] = true;
@@ -479,17 +482,21 @@ function get_h5p_title($pathnamehash) {
 
     $h5pfile = $DB->get_record('h5p', ['pathnamehash' => $pathnamehash]);
 
-    $json = $h5pfile->jsoncontent;
-    $jsondecode = json_decode($json);
+    if ($h5pfile) {
+        $json = $h5pfile->jsoncontent;
+        $jsondecode = json_decode($json);
 
-    if ($jsondecode->metadata->title) {
-        $title = $jsondecode->metadata->title;
-    } else {
-        $title = $jsondecode->title;
-    }
+        if (isset($jsondecode->metadata)) {
+            if ($jsondecode->metadata->title) {
+                $title = $jsondecode->metadata->title;
+            }
+        } else {
+            $title = $jsondecode->title;
+        }
 
-    if (!empty($title)) {
-        return $title;
+        if (!empty($title)) {
+            return $title;
+        }
     }
 }
 
@@ -520,7 +527,7 @@ function get_course_roles_to_share($courseid) {
     // We need a little more to do here.
     $coursecontext = context_course::instance($courseid);
 
-    $sql = "SELECT * FROM {role_assignments} WHERE contextid = ? GROUP BY roleid";
+    $sql = "SELECT roleid FROM {role_assignments} WHERE contextid = ? GROUP BY roleid";
     $params = array(
             'contextid' => $coursecontext->id,
     );

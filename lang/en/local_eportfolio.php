@@ -26,6 +26,10 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'ePortfolio';
+$string['navbar'] = 'ePortfolio';
+
+// db/access - permissions.
+$string['eportfolio:view_eport'] = 'View ePortfolio';
 
 $string['error:noguestaccess'] = 'You are logged in as a guest. Guest access is not allowed for this plugin.';
 
@@ -110,6 +114,7 @@ $string['sharing:form:step:confirm'] = 'Share ePortfolio';
 $string['sharing:form:courseselection'] = 'Select a course to share';
 $string['sharing:form:shareoptionselection'] = 'Select a sharing type';
 $string['sharing:form:sharedcourses'] = 'Select course';
+$string['sharing:form:sharedcourses_help'] = 'You can only select courses in which you are enrolled.';
 $string['sharing:form:select:allcourses'] = 'All courses';
 $string['sharing:form:select:singlecourse'] = 'Select course';
 $string['sharing:form:shareoption'] = 'Type of sharing';
@@ -146,9 +151,11 @@ $string['uploadform:header'] = 'Upload H5P file';
 $string['uploadform:file'] = 'Select a file';
 $string['uploadform:template:header'] = 'Share this file as template';
 $string['uploadform:template:check'] = 'This is a template file';
+$string['uploadform:template:check_help'] = 'If you share the portfolio as a template, other users can copy and use it.';
 $string['uploadform:template:checklabel'] = 'Upload as template';
 $string['uploadform:successful'] = 'The file has been uploaded successfully.';
 $string['uploadform:error'] = 'An error occurred while uploading the file! Please try again!';
+$string['uploadform:cancelled'] = 'The operation has been cancelled!';
 
 // HelpFAQ.
 $string['helpfaq:header'] = 'Help & FAQ';

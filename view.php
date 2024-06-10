@@ -56,6 +56,15 @@ if ($cmid) {
     $context = context_user::instance($USER->id);
 }
 
+// Set page layout.
+$PAGE->set_url($url);
+$PAGE->set_context(context_user::instance($USER->id));
+$PAGE->set_title(get_string('view:header', 'local_eportfolio'));
+$PAGE->set_heading(get_string('view:header', 'local_eportfolio'));
+$PAGE->set_pagelayout('base');
+$PAGE->add_body_class('limitedwith');
+$PAGE->set_pagetype('user-files');
+
 // Convert display options to a valid object.
 $factory = new \core_h5p\factory();
 $core = $factory->get_core();
@@ -70,8 +79,8 @@ $fileurl = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_co
 
 // Get the times for created and modified based on h5p file.
 // In case additional file types will be allowed we have to replace this.
-$contenthash = $file->get_contenthash();
-$h5pfile = $DB->get_record('h5p', ['contenthash' => $contenthash]);
+$pathnamehash = $file->get_pathnamehash();
+$h5pfile = $DB->get_record('h5p', ['pathnamehash' => $pathnamehash]);
 
 // Let's build the backurl.
 if ($tocourse) {
@@ -85,6 +94,8 @@ if ($tocourse) {
     $backurlstring = get_string('view:eportfolio:button:backtoeportfolio', 'local_eportfolio');
 
 }
+
+$userfullname = '';
 
 // Let's check if user "owns" the ePortfolio and can edit it.
 if ($USER->id == $file->get_userid() && !$tocourse && $file->get_component() != 'mod_eportfolio') {
@@ -114,15 +125,6 @@ $eportfolio->h5pplayer = \core_h5p\player::display($fileurl, $config, false, 'lo
                         array('userid' => $USER->id, 'filename' => $file->get_filename(), 'itemid' => $id)),
         ],
 ])->trigger();
-
-// Set page layout.
-$PAGE->set_url($url);
-$PAGE->set_context(context_user::instance($USER->id));
-$PAGE->set_title(get_string('view:header', 'local_eportfolio'));
-$PAGE->set_heading(get_string('view:header', 'local_eportfolio'));
-$PAGE->set_pagelayout('base');
-$PAGE->add_body_class('limitedwith');
-$PAGE->set_pagetype('user-files');
 
 echo $OUTPUT->header();
 

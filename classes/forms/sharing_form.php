@@ -63,24 +63,25 @@ class sharing_form_1 extends moodleform {
                 $course = $DB->get_record('course', ['id' => $sco]);
                 $courses[$course->id] = $course->fullname . "<br>";
             }
+
+            $options = array(
+                    'multiple' => false,
+                    'noselectionstring' => get_string('sharing:form:select:allcourses', 'local_eportfolio'),
+                    'placeholder' => get_string('sharing:form:select:singlecourse', 'local_eportfolio'),
+            );
+            $mform->addElement('autocomplete', 'sharedcourse', get_string('sharing:form:sharedcourses',
+                    'local_eportfolio'), $courses, $options);
+            $mform->addHelpButton('sharedcourse', 'sharing:form:sharedcourses', 'local_eportfolio');
+            $mform->addRule('sharedcourse', get_string('sharing:form:select:hint', 'local_eportfolio'), 'required', null, 'client');
+
+            // Add standard buttons.
+            $this->add_action_buttons();
+
         } else {
             redirect(new moodle_url('index.php'),
                     get_string('sharing:form:step:nocourseselection', 'local_eportfolio'),
                     null, \core\output\notification::NOTIFY_ERROR);
         }
-
-        $options = array(
-                'multiple' => false,
-                'noselectionstring' => get_string('sharing:form:select:allcourses', 'local_eportfolio'),
-                'placeholder' => get_string('sharing:form:select:singlecourse', 'local_eportfolio'),
-        );
-        $mform->addElement('autocomplete', 'sharedcourse', get_string('sharing:form:sharedcourses',
-                'local_eportfolio'), $courses, $options);
-        $mform->addHelpButton('sharedcourse', 'sharing:form:sharedcourses', 'local_eportfolio');
-        $mform->addRule('sharedcourse', get_string('sharing:form:select:hint', 'local_eportfolio'), 'required', null, 'client');
-
-        // Add standard buttons.
-        $this->add_action_buttons();
 
     }
 

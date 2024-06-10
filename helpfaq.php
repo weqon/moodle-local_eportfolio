@@ -40,6 +40,7 @@ $context = context_user::instance($USER->id);
 
 // Set page layout.
 $PAGE->set_url($url);
+$PAGE->set_context(context_user::instance($USER->id));
 $PAGE->set_title(get_string('helpfaq:header', 'local_eportfolio'));
 $PAGE->set_heading(get_string('helpfaq:header', 'local_eportfolio'));
 $PAGE->set_pagelayout('base');

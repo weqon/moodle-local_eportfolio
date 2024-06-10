@@ -22,3 +22,16 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
+
+function local_eportfolio_before_http_headers() {
+    global $PAGE;
+
+    $context = context_system::instance();
+
+    if (has_capability('local/eportfolio:view_eport', $context) || is_siteadmin()) {
+        $PAGE->navbar->ignore_active();
+        $PAGE->primarynav->add(get_string('navbar', 'local_eportfolio'),
+                new moodle_url('/local/eportfolio/index.php'));
+    }
+
+}

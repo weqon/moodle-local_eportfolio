@@ -29,16 +29,6 @@
 function xmldb_local_eportfolio_install() {
     global $CFG, $DB;
 
-    // Add custommenuitmes to config.
-
-    // Get current configs for custommenuitems.
-    $custommenuitem = $CFG->custommenuitems;
-
-    // Add navbar entry.
-    $custommenuitem .= "\nePortfolio|/local/eportfolio/index.php";
-
-    set_config('custommenuitems', $custommenuitem);
-
     // Add checkbox to course settings to mark it as an eportfolio course.
     // First step: Add customfield category.
 
