@@ -18,7 +18,7 @@
  * Create new H5P content file.
  *
  * @package local_eportfolio
- * @copyright 2023 weQon UG {@link https://weqon.net}
+ * @copyright   2024 weQon UG <support@weqon.net>
  * @license https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -38,7 +38,7 @@ require_once("$CFG->libdir/formslib.php");
  * Display the H5P editor form.
  *
  * @package local_eportfolio
- * @copyright 2023 weQon UG {@link https://weqon.net}
+ * @copyright   2024 weQon UG <support@weqon.net>
  * @license https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class create_form extends \moodleform {

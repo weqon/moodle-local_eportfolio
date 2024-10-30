@@ -18,7 +18,7 @@
  * H5P content type form for eportfolio.
  *
  * @package local_eportfolio
- * @copyright 2023 weQon UG {@link https://weqon.net}
+ * @copyright   2024 weQon UG <support@weqon.net>
  * @license https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -33,7 +33,7 @@ use Moodle\H5PCore;
  * Display all available H5P content types.
  *
  * @package local_eportfolio
- * @copyright 2023 weQon UG {@link https://weqon.net}
+ * @copyright   2024 weQon UG <support@weqon.net>
  * @license https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class contentselect {

@@ -19,7 +19,7 @@
  *
  * @package     local_eportfolio
  * @category    upgrade
- * @copyright   2023 weQon UG <info@weqon.net>
+ * @copyright   2024 weQon UG <support@weqon.net>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -59,6 +59,8 @@ function xmldb_local_eportfolio_install() {
     $DB->insert_record('customfield_field', $addfield);
 
     // Add required capabilities to student role.
+    // Unfortunately there is no other option. We have tested it and without this capability an error message appears.
+    // Otherwise, other participants cannot access the file.
     $cap = 'moodle/h5p:deploy'; // Required for students to create and share H5P files.
     $roleid = '5'; // Default role id for student.
     $contextid = context_system::instance()->id;

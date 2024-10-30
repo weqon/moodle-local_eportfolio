@@ -1,9 +1,14 @@
 # ePortfolio #
 
-TODO Describe the plugin shortly here.
+The “ePortfolio” in Moodle provides a way to share your own content created
+with H5P available with other students. The H5P content can be created directly
+via the plugin or existing content types can be uploaded via a form. 
+Currently, the content can be shared for viewing and grading. 
+A teacher also has the option of making H5P content available as a 
+“template”.
 
-TODO Provide more detailed description here.
-
+Also, a H5P content type has been developed for the ePortfolio-Plugin:
+https://www.olivertacke.de/labs/2022/10/25/show-what-you-can-do-with-h5p-portfolio/
 ## Installing via uploaded ZIP file ##
 
 1. Log in to your Moodle site as an admin and go to _Site administration >
@@ -29,7 +34,7 @@ to complete the installation from the command line.
 
 ## License ##
 
-2023 weQon UG <info@weqon.net>
+2024 weQon UG <support@weqon.net>
 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free Software

@@ -20,7 +20,7 @@ namespace local_eportfolio\h5p;
  * Plugin can edit H5P content using H5P core features.
  *
  * @package local_eportfolio
- * @copyright 2023 weQon UG {@link https://weqon.net}
+ * @copyright   2024 weQon UG <support@weqon.net>
  * @license https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class canedit {

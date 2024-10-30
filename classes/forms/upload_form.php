@@ -17,7 +17,7 @@
 /**
  *
  * @package     local_eportfolio
- * @copyright   2023 weQon UG {@link https://weqon.net}
+ * @copyright   2024 weQon UG <support@weqon.net>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,7 +30,7 @@ require_once($CFG->dirroot . '/local/eportfolio/locallib.php');
  * Upload form class.
  *
  * @package     local_eportfolio
- * @copyright   2023 weQon UG {@link https://weqon.net}
+ * @copyright   2024 weQon UG <support@weqon.net>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class upload_form extends moodleform {

@@ -18,7 +18,7 @@
  * Upload page for eportfolio
  *
  * @package local_eportfolio
- * @copyright 2023 weQon UG {@link https://weqon.net}
+ * @copyright   2024 weQon UG <support@weqon.net>
  * @license https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

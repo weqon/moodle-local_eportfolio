@@ -17,7 +17,7 @@
 /**
  *
  * @package     local_eportfolio
- * @copyright   2023 weQon UG {@link https://weqon.net}
+ * @copyright   2024 weQon UG <support@weqon.net>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,7 +30,7 @@ require_once($CFG->dirroot . '/local/eportfolio/locallib.php');
  * Class for sharing form.
  *
  * @package     local_eportfolio
- * @copyright   2023 weQon UG {@link https://weqon.net}
+ * @copyright   2024 weQon UG <support@weqon.net>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class sharing_form_1 extends moodleform {
@@ -111,7 +111,7 @@ class sharing_form_1 extends moodleform {
  * Class for sharing form.
  *
  * @package     local_eportfolio
- * @copyright   2023 weQon UG {@link https://weqon.net}
+ * @copyright   2024 weQon UG <support@weqon.net>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class sharing_form_2 extends moodleform {
@@ -213,7 +213,7 @@ class sharing_form_2 extends moodleform {
  * Class for sharing form.
  *
  * @package     local_eportfolio
- * @copyright   2023 weQon UG {@link https://weqon.net}
+ * @copyright   2024 weQon UG <support@weqon.net>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class sharing_form_3 extends moodleform {
