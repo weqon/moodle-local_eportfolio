@@ -41,6 +41,7 @@ $id = required_param('id', PARAM_INT);
 
 // Reset session in case form was reopened, but already used.
 $referer = $_SERVER['HTTP_REFERER'];
+// Codechecker error: The function str_contains() is not present in PHP version 7.4 or earlier.
 if (!str_contains($referer, 'share.php')) {
     reset_session_data();
 }
