@@ -1,0 +1,31 @@
+#page .page-context-header .page-header-headings {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.page-context-header .header-button-group {
+    display: inline-flex !important;
+    float: left;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 1.5rem;
+}
+
+.divider {
+    height: 0;
+    margin: 1rem 0;
+    overflow: hidden;
+    border-top: 2px solid #ced4da;
+}
+
+.icon-round {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 1.2rem !important;
+}

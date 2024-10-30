@@ -163,14 +163,14 @@ function xmldb_local_eportfolio_upgrade($oldversion) {
 
         foreach ($eportfolios as $eport) {
 
-            $sql = "SELECT h.id FROM {files} AS f
-                            JOIN {h5p} AS h
+            $sql = "SELECT h.id FROM {files} f
+                            JOIN {h5p} h
                             ON f.pathnamehash = h.pathnamehash
                             WHERE f.id = :fileid";
 
-            $params = array(
+            $params = [
                     'fileid' => $eport->fileidcontext,
-            );
+            ];
 
             $h5pfile = $DB->get_record_sql($sql, $params);
 
@@ -188,6 +188,8 @@ function xmldb_local_eportfolio_upgrade($oldversion) {
         }
 
         // Add required capabilities to student role.
+        // Unfortunately there is no other option. We have tested it and without this capability an error message appears.
+        // Other participants cannot access the file.
         $cap = 'moodle/h5p:deploy'; // Required for students to create and share H5P files.
         $roleid = '5'; // Default role id for student.
         $contextid = context_system::instance()->id;
@@ -212,6 +214,152 @@ function xmldb_local_eportfolio_upgrade($oldversion) {
 
         // Eportfolio savepoint reached.
         upgrade_plugin_savepoint(true, 2023092800, 'local', 'eportfolio');
+    }
+
+    if ($oldversion < 2024082100) {
+
+        // Define table local_eportfolio to be created.
+        $table = new xmldb_table('local_eportfolio');
+
+        // Adding fields to table local_eportfolio.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('fileid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('h5pid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('usermodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+
+        // Adding keys to table local_eportfolio.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+
+        // Conditionally launch create table for local_eportfolio.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Eportfolio savepoint reached.
+        upgrade_plugin_savepoint(true, 2024082100, 'local', 'eportfolio');
+
+        // Now create new DB entries for user specific files.
+        // First get all files for component local_eportfolio.
+        $eportfoliofiles = $DB->get_records('files', ['component' => 'local_eportfolio', 'filearea' => 'eportfolio']);
+
+        foreach ($eportfoliofiles as $efile) {
+
+            if ($efile->filename != '.') {
+
+                // Get the H5P file.
+                $h5pfile = $DB->get_record('h5p', ['pathnamehash' => $efile->pathnamehash]);
+
+                // In case there is no H5P file we assume the entry was deleted.
+                if ($h5pfile) {
+
+                    $insertfile = new stdClass();
+
+                    $insertfile->fileid = $efile->id;
+                    $insertfile->h5pid = $h5pfile->id;
+                    $insertfile->usermodified = $efile->userid;
+                    $insertfile->timecreated = $efile->timecreated;
+                    $insertfile->timemodified = $efile->timemodified;
+
+                    // To avoid duplicate entries. File IDs should be unique table local_eportfolio.
+                    if (!$DB->get_record('local_eportfolio', ['fileid' => $efile->id])) {
+                        $DB->insert_record('local_eportfolio', $insertfile);
+                    }
+
+                }
+            }
+
+        }
+    }
+
+    if ($oldversion < 2024082101) {
+
+        // Rename field fileid on table local_eportfolio_share to fileid.
+        $table = new xmldb_table('local_eportfolio_share');
+        $field = new xmldb_field('fileitemid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null, 'courseid');
+
+        // Launch rename field fileitemid.
+        $dbman->rename_field($table, $field, 'fileid');
+
+        // Define field usermodified to be added to local_eportfolio_share.
+        $table = new xmldb_table('local_eportfolio_share');
+        $field = new xmldb_field('usermodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'enddate');
+
+        // Conditionally launch add field usermodified.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Define field timemodified to be added to local_eportfolio_share.
+        $table = new xmldb_table('local_eportfolio_share');
+        $field = new xmldb_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'timecreated');
+
+        // Conditionally launch add field timemodified.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Eportfolio savepoint reached.
+        upgrade_plugin_savepoint(true, 2024082101, 'local', 'eportfolio');
+    }
+
+    if ($oldversion < 2024082102) {
+
+        // Define field eportid to be added to local_eportfolio_share.
+        $table = new xmldb_table('local_eportfolio_share');
+        $field = new xmldb_field('eportid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'id');
+
+        // Conditionally launch add field eportid.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Set the default editingteacher and student role.
+        set_config('gradingteacher', '3', 'local_eportfolio');
+        set_config('studentroles', '5', 'local_eportfolio');
+
+        // Eportfolio savepoint reached.
+        upgrade_plugin_savepoint(true, 2024082102, 'local', 'eportfolio');
+    }
+
+    if ($oldversion < 2024082103) {
+
+        // Define field title to be added to local_eportfolio.
+        $table = new xmldb_table('local_eportfolio');
+        $field = new xmldb_field('title', XMLDB_TYPE_CHAR, '255', null, null, null, null, 'id');
+
+        // Conditionally launch add field title.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Define field description to be added to local_eportfolio.
+        $table = new xmldb_table('local_eportfolio');
+        $field = new xmldb_field('description', XMLDB_TYPE_TEXT, null, null, null, null, null, 'title');
+
+        // Conditionally launch add field description.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Eportfolio savepoint reached.
+        upgrade_plugin_savepoint(true, 2024082103, 'local', 'eportfolio');
+    }
+
+    if ($oldversion < 2024082104) {
+
+        // Define field title to be added to local_eportfolio_share.
+        $table = new xmldb_table('local_eportfolio_share');
+        $field = new xmldb_field('title', XMLDB_TYPE_CHAR, '255', null, null, null, null, 'eportid');
+
+        // Conditionally launch add field title.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Eportfolio savepoint reached.
+        upgrade_plugin_savepoint(true, 2024082104, 'local', 'eportfolio');
     }
 
     return true;

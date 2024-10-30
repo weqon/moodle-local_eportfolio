@@ -18,7 +18,6 @@
  * Download page for ePortfolio
  *
  * @package local_eportfolio
- * @category overview
  * @copyright 2023 weQon UG {@link https://weqon.net}
  * @license https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -36,34 +35,36 @@ if (isguestuser()) {
 
 $ids = optional_param('fileids', '0', PARAM_RAW);
 
-if ($ids) {
+$downloadids = [];
 
-    $downloadids = array();
-
+if ($ids != 'fileids' && !empty($ids)) {
     foreach ($ids as $id) {
         $cleanid = clean_param($id, PARAM_INT);
 
         $downloadids[] = $cleanid;
+    }
+} else {
+    $allfiles = $DB->get_records('local_eportfolio', ['usermodified' => $USER->id]);
+
+    foreach ($allfiles as $alf) {
+        $downloadids[] = $alf->fileid;
     }
 }
 
 // Set user context.
 $context = context_user::instance($USER->id);
 
-// Get all files for specific user context.
-$fs = get_file_storage();
-$files = $fs->get_area_files($context->id, 'local_eportfolio', 'eportfolio');
-$files = array_reverse($files);
-
-if (empty($files)) {
+if (empty($downloadids)) {
     throw new \moodle_exception('download:error', 'local_eportfolio');
 }
 
 // Trigger event.
+// ToDo.
 
 // Raise time limit in case a lot of files will be downloaded.
 core_php_time_limit::raise();
 
+// Terminate the current script when the file is sent.
 // Close the session.
 \core\session\manager::write_close();
 
@@ -72,23 +73,15 @@ $username = fullname($USER);
 
 $filenameraw = $plugin . '_' . $username;
 
-$zipname = format_string($filenameraw, true, ["context" => $context]);
-$filename = shorten_filename(clean_filename($zipname . "-" . date("Ymd")) . ".zip");
+$zipname = format_string($filenameraw, true, ['context' => $context]);
+$filename = shorten_filename(clean_filename($zipname . '-' . date('Ymd')) . '.zip');
 $zipwriter = \core_files\archive_writer::get_stream_writer($filename, \core_files\archive_writer::ZIP_WRITER);
 
-foreach ($files as $file) {
-    if ($file->is_directory()) {
-        continue;
-    }
+foreach ($downloadids as $did) {
+    $fs = get_file_storage();
+    $file = $fs->get_file_by_id($did);
 
-    // Only download specified files.
-    if ($downloadids) {
-
-        if (in_array($file->get_id(), $downloadids)) {
-            $pathinzip = $file->get_filepath() . $file->get_filename();
-            $zipwriter->add_file_from_stored_file($pathinzip, $file);
-        }
-    } else {
+    if (!$file->is_directory()) {
         $pathinzip = $file->get_filepath() . $file->get_filename();
         $zipwriter->add_file_from_stored_file($pathinzip, $file);
     }

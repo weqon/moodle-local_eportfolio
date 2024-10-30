@@ -1,0 +1,18 @@
+<div class="row pt-3 mb-3">
+    <div class="col-6">
+        <div class="alert alert-info">
+
+            <h5>{{#str}} sharing:alreadyshared:info, local_eportfolio {{/str}}</h5>
+
+            <ul>
+                {{#shared}}
+                    <li class="mb-2">
+                        <b>{{#str}} sharing:alreadyshared:course, local_eportfolio {{/str}}:</b> {{course}}<br>
+                        <b>{{#str}} sharing:alreadyshared:shareoption, local_eportfolio {{/str}}:</b> {{shareoption}}
+                    </li>
+
+                {{/shared}}
+            </ul>
+        </div>
+    </div>
+</div>

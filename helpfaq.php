@@ -18,7 +18,6 @@
  * Overview page for eportfolio
  *
  * @package local_eportfolio
- * @category overview
  * @copyright 2023 weQon UG {@link https://weqon.net}
  * @license https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

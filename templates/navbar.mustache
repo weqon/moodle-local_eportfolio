@@ -1,0 +1,50 @@
+<div class="row pt-3 mb-3">
+    <div class="col">
+        <ul class="nav nav-pills" role="menubar">
+            <li class="nav-item" role="none">
+                <a href="{{myurl}}" title="{{#str}}navbar:tab:myeportfolios, local_eportfolio{{/str}}"
+                   class="nav-link {{myactive}}" type="button"
+                   role="menuitem" aria-controls="myeportfolios" aria-selected="{{myselected}}">
+                    {{#str}}navbar:tab:myeportfolios, local_eportfolio{{/str}}
+                </a>
+            </li>
+            <li class="nav-item" role="none">
+                <a href="{{mysharedurl}}" title="{{#str}}navbar:tab:mysharedeportfolios, local_eportfolio{{/str}}"
+                   class="nav-link {{mysharedactive}}" type="button"
+                   role="menuitem" aria-controls="mysharedeportfolios" aria-selected="{{mysharedselected}}">
+                    {{#str}}navbar:tab:mysharedeportfolios, local_eportfolio{{/str}}
+                </a>
+            </li>
+            <li class="nav-item" role="none">
+                <a href="{{mygradeurl}}" title="{{#str}}navbar:tab:mysharedeportfoliosgrade, local_eportfolio{{/str}}"
+                   class="nav-link {{mygradeactive}}" type="button"
+                   role="menuitem" aria-controls="mysharedeportfoliosgrade" aria-selected="{{mygradeselected}}">
+                    {{#str}}navbar:tab:mysharedeportfoliosgrade, local_eportfolio{{/str}}
+                </a>
+            </li>
+            <li class="nav-item" role="none">
+                <a href="{{sharedurlurl}}" title="{{#str}}navbar:tab:sharedeportfolios, local_eportfolio{{/str}}"
+                   class="nav-link {{sharedactive}}" type="button"
+                   role="menuitem" aria-controls="sharedeportfolios" aria-selected="{{sharedselected}}">
+                    {{#str}}navbar:tab:sharedeportfolios, local_eportfolio{{/str}}
+                </a>
+            </li>
+            {{#sharedeportfoliosgrade}}
+                <li class="nav-item" role="none">
+                    <a href="{{gradeurl}}" title="{{#str}}navbar:sharedeportfoliosgrade, local_eportfolio{{/str}}"
+                       class="nav-link {{gradeactive}}" type="button"
+                       role="menuitem" aria-controls="sharedeportfoliosgrade" aria-selected="{{gradeselected}}">
+                        {{#str}}navbar:tab:sharedeportfoliosgrade, local_eportfolio{{/str}}
+                    </a>
+                </li>
+            {{/sharedeportfoliosgrade}}
+            <li class="nav-item" role="none">
+                <a href="{{templateurl}}" title="{{#str}}navbar:tab:sharedtemplates, local_eportfolio{{/str}}"
+                   class="nav-link {{templateactive}}" type="button"
+                   role="menuitem" aria-controls="sharedtemplates" aria-selected="{{templateselected}}">
+                    {{#str}}navbar:tab:sharedtemplates, local_eportfolio{{/str}}
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

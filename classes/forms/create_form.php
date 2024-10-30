@@ -14,6 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Create new H5P content file.
+ *
+ * @package local_eportfolio
+ * @copyright 2023 weQon UG {@link https://weqon.net}
+ * @license https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 namespace local_eportfolio\forms;
 
 use contenttype_h5p\content;
@@ -26,14 +34,37 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once("$CFG->libdir/formslib.php");
 
-class createform extends \moodleform {
+/**
+ * Display the H5P editor form.
+ *
+ * @package local_eportfolio
+ * @copyright 2023 weQon UG {@link https://weqon.net}
+ * @license https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class create_form extends \moodleform {
 
+    /**
+     * @var mixed
+     */
     protected $contextid;
 
+    /**
+     * @var mixed
+     */
     protected $id;
 
+    /**
+     * @var \stdClass
+     */
     private $h5peditor;
 
+    /**
+     * Prepare all relevant data.
+     *
+     * @param string|null $action
+     * @param array|null $customdata
+     * @param string $method
+     */
     public function __construct(string $action = null, array $customdata = null, string $method = 'post') {
         parent::__construct($action, $customdata, $method);
         $this->contextid = $customdata['contextid'];
@@ -47,6 +78,11 @@ class createform extends \moodleform {
         $this->_form->setType('id', PARAM_INT);
     }
 
+    /**
+     * Build the form.
+     *
+     * @return void
+     */
     protected function definition() {
         global $OUTPUT;
 
@@ -62,10 +98,20 @@ class createform extends \moodleform {
             throw new \moodle_exception('invalidcontentid', 'error', $returnurl);
         }
 
+        $mform->addElement('html', '<h2>' . get_string('contenteditor', 'local_eportfolio') . '</h2>');
+
+        $mform->addElement('text', 'title', get_string('uploadform:title', 'local_eportfolio'));
+        $mform->setType('title', PARAM_TEXT);
+        $mform->addRule('title', get_string('form:field:required', 'local_eportfolio'), 'required', '', 'client');
+
+        $mform->addElement('textarea', 'description', get_string('uploadform:description', 'local_eportfolio'));
+        $mform->setType('description', PARAM_TEXT);
+
+        $mform->addElement('html', '<div class="divider my-5"></div>');
+
         $this->h5peditor = new h5peditor();
 
         $this->set_display_vertical();
-        $mform->addElement('html', $OUTPUT->heading(get_string('contenteditor', 'local_eportfolio'), 2));
 
         // The H5P editor needs the H5P content type library name for a new content.
         $mform->addElement('hidden', 'library', $library);
@@ -73,7 +119,7 @@ class createform extends \moodleform {
         $this->h5peditor->set_library($library, $this->_customdata['contextid'], 'local_eportfolio', 'eportfolio');
 
         $mformid = 'coolh5peditor';
-        $mform->setAttributes(array('id' => $mformid) + $mform->getAttributes());
+        $mform->setAttributes(['id' => $mformid] + $mform->getAttributes());
 
         if ($errors || $notifications) {
             // Show the error messages and a Cancel button.
@@ -90,8 +136,13 @@ class createform extends \moodleform {
         }
     }
 
+    /**
+     * Save the H5P file.
+     *
+     * @param \stdClass $data
+     * @return mixed
+     */
     public function save_content(\stdClass $data) {
-        global $DB;
 
         // The H5P libraries expect data->id as the H5P content id.
         // The method H5PCore::saveContent throws an error if id is set but empty.

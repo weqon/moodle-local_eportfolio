@@ -13,25 +13,34 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+
 /**
- * Lib.php of eportfolio.
+ * lib.php for ePortfolio.
  *
  * @package     local_eportfolio
  * @copyright   2023 weQon UG <info@weqon.net>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
+/**
+ * Add entry to main navigation.
+ *
+ * @return void
+ */
 function local_eportfolio_before_http_headers() {
     global $PAGE;
 
-    $context = context_system::instance();
+    // Get eportfolionavbar from settings.
+    $config = get_config('local_eportfolio');
 
-    if (has_capability('local/eportfolio:view_eport', $context) || is_siteadmin()) {
-        $PAGE->navbar->ignore_active();
-        $PAGE->primarynav->add(get_string('navbar', 'local_eportfolio'),
-                new moodle_url('/local/eportfolio/index.php'));
+    if ($config->eportfolionavbar) {
+
+        $context = context_system::instance();
+
+        if (has_capability('local/eportfolio:view_eport', $context) || has_capability('moodle/site:config', $context)) {
+            $PAGE->primarynav->add(get_string('navbar', 'local_eportfolio'),
+                    new moodle_url('/local/eportfolio/index.php'));
+        }
     }
 
 }

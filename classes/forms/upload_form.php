@@ -16,7 +16,6 @@
 
 /**
  *
- *
  * @package     local_eportfolio
  * @copyright   2023 weQon UG {@link https://weqon.net}
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -27,8 +26,20 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/formslib.php');
 require_once($CFG->dirroot . '/local/eportfolio/locallib.php');
 
+/**
+ * Upload form class.
+ *
+ * @package     local_eportfolio
+ * @copyright   2023 weQon UG {@link https://weqon.net}
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class upload_form extends moodleform {
 
+    /**
+     * Build the form.
+     *
+     * @return void
+     */
     public function definition() {
         global $CFG, $DB;
 
@@ -36,20 +47,25 @@ class upload_form extends moodleform {
 
         $filemanageropts = $this->_customdata['filemanageropts'];
 
-        $mform->addElement('html', '<h3 class="mt-5">' . get_string('uploadform:header', 'local_eportfolio') . '</h3><br>');
+        $mform->addElement('text', 'title', get_string('uploadform:title', 'local_eportfolio'));
+        $mform->setType('title', PARAM_TEXT);
+        $mform->addRule('title', get_string('form:field:required', 'local_eportfolio'), 'required', '', 'client');
+
+        $mform->addElement('textarea', 'description', get_string('uploadform:description', 'local_eportfolio'));
+        $mform->setType('description', PARAM_TEXT);
 
         $mform->addElement('filemanager', 'eportfolio', get_string('uploadform:file', 'local_eportfolio'), null, $filemanageropts);
-        $mform->addRule('eportfolio', '', 'required', null, 'client');
+        $mform->addRule('eportfolio', get_string('form:field:required', 'local_eportfolio'), 'required', '', 'client');
 
-        // Get all courses marked as ePortfolio course and the specific user is enrolled.
-        // Currently only default role for editingteacher is allowed.
-        // ToDo: Make this configurable.
-        $roleid = '3';
+        // Get all courses marked as ePortfolio course and the specific user is enrolled as "gradingteacher".
+        // Only "gradingteacher" are allowed to upload files as templates.
+        $config = get_config('local_eportfolio');
+        $roleids = explode(',', $config->gradingteacher);
 
-        $searchcourses = get_eportfolio_courses($roleid);
-        $courses = array();
+        $searchcourses = get_eportfolio_courses($roleids);
+        $courses = [];
 
-        if (!empty($searchcourses)) {
+        if ($searchcourses) {
 
             // Course selection.
             $mform->addElement('header', 'courseselection', get_string('uploadform:template:header', 'local_eportfolio'));
@@ -64,11 +80,11 @@ class upload_form extends moodleform {
                 $courses[$course->id] = $course->fullname . "<br>";
             }
 
-            $options = array(
+            $options = [
                     'multiple' => false,
                     'noselectionstring' => get_string('sharing:form:select:allcourses', 'local_eportfolio'),
                     'placeholder' => get_string('sharing:form:select:singlecourse', 'local_eportfolio'),
-            );
+            ];
             $mform->addElement('autocomplete', 'sharedcourse', get_string('sharing:form:sharedcourses',
                     'local_eportfolio'), $courses, $options);
             $mform->addHelpButton('sharedcourse', 'sharing:form:sharedcourses', 'local_eportfolio');
@@ -78,7 +94,7 @@ class upload_form extends moodleform {
         }
 
         // Add standard buttons.
-        $this->add_action_buttons();
+        $this->add_action_buttons(true, get_string('uploadform:save', 'local_eportfolio'));
 
     }
 

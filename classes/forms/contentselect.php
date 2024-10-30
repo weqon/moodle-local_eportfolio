@@ -14,6 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * H5P content type form for eportfolio.
+ *
+ * @package local_eportfolio
+ * @copyright 2023 weQon UG {@link https://weqon.net}
+ * @license https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 namespace local_eportfolio\forms;
 
 use core_h5p\editor_ajax;
@@ -21,8 +29,20 @@ use core_h5p\file_storage;
 use core_h5p\local\library\autoloader;
 use Moodle\H5PCore;
 
+/**
+ * Display all available H5P content types.
+ *
+ * @package local_eportfolio
+ * @copyright 2023 weQon UG {@link https://weqon.net}
+ * @license https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class contentselect {
 
+    /**
+     * Building the select box for all available H5P content types.
+     *
+     * @return array
+     */
     public static function get_contenttype_types(): array {
         // Get the H5P content types available.
         autoloader::register();

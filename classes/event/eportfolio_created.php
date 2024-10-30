@@ -24,6 +24,13 @@
 
 namespace local_eportfolio\event;
 
+/**
+ * The local_eportfolio created event class.
+ *
+ * @package    local_eportfolio
+ * @copyright   2023 weQon UG <support@weqon.net>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class eportfolio_created extends \core\event\base {
 
     /**

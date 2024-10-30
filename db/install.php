@@ -66,5 +66,9 @@ function xmldb_local_eportfolio_install() {
     // Finally add additional capabilities to the student role.
     assign_capability($cap, CAP_ALLOW, $roleid, $contextid);
 
+    // Add editingteacher as default value for settings.
+    set_config('gradingteacher', '3', 'local_eportfolio');
+    set_config('studentroles', '5', 'local_eportfolio');
+
     return true;
 }

@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -24,12 +23,14 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$messageproviders = array (
-    // ePortfolio sharing notification.
-        'sharing' => array(
-                'defaults' => array(
+defined('MOODLE_INTERNAL') || die();
+
+$messageproviders = [
+    // Settings for ePortfolio sharing notification.
+        'sharing' => [
+                'defaults' => [
                         'pop-up' => MESSAGE_PERMITTED + MESSAGE_DEFAULT_LOGGEDIN + MESSAGE_DEFAULT_LOGGEDOFF,
                         'email' => MESSAGE_PERMITTED + MESSAGE_DEFAULT_LOGGEDIN + MESSAGE_DEFAULT_LOGGEDOFF,
-                ),
-        ),
-);
+                ],
+        ],
+];

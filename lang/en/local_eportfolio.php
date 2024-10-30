@@ -28,7 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 $string['pluginname'] = 'ePortfolio';
 $string['navbar'] = 'ePortfolio';
 
-// db/access - permissions.
+// Set db/access - permissions.
 $string['eportfolio:view_eport'] = 'View ePortfolio';
 
 $string['error:noguestaccess'] = 'You are logged in as a guest. Guest access is not allowed for this plugin.';
@@ -41,12 +41,12 @@ $string['overview:shareoption:grade'] = 'Grading';
 $string['overview:shareoption:template'] = 'Template';
 $string['overview:helpfaq:title'] = 'Help & FAQ';
 
-$string['overview:tab:myeportfolios'] = 'My ePortfolios';
-$string['overview:tab:mysharedeportfolios'] = 'My shared ePortfolios';
-$string['overview:tab:mysharedeportfoliosgrade'] = 'My shared ePortfolios for grading';
-$string['overview:tab:sharedeportfolios'] = 'ePortfolios shared with me';
-$string['overview:tab:sharedeportfoliosgrade'] = 'ePortfolios shared for grading';
-$string['overview:tab:sharedtemplates'] = 'ePortfolio templates';
+$string['navbar:tab:myeportfolios'] = 'My ePortfolios';
+$string['navbar:tab:mysharedeportfolios'] = 'My shared ePortfolios';
+$string['navbar:tab:mysharedeportfoliosgrade'] = 'My shared ePortfolios for grading';
+$string['navbar:tab:sharedeportfolios'] = 'ePortfolios shared with me';
+$string['navbar:tab:sharedeportfoliosgrade'] = 'ePortfolios shared for grading';
+$string['navbar:tab:sharedtemplates'] = 'ePortfolio templates';
 
 $string['overview:table:actions'] = 'Actions';
 $string['overview:table:actions:share'] = 'Share ePortfolio';
@@ -74,21 +74,22 @@ $string['overview:table:shareend'] = 'Shared until';
 $string['overview:table:grading'] = 'Grade';
 $string['overview:table:graded'] = 'Graded?';
 $string['overview:table:graded:pending'] = 'Pending';
-$string['overview:table:graded:done'] = 'Done';
+$string['overview:table:graded:done'] = 'Graded with:';
 $string['overview:table:istemplate'] = 'This file was uploaded or shared as template for other users.';
+$string['overview:table:filedeleted'] = 'You have deleted the ePortfolio from your personal overview.
+ The file shared for grading must be permanently deleted in the course.';
 
 $string['overview:eportfolio:fileselect'] = 'File selection';
 $string['overview:eportfolio:uploadnewfile'] = 'Upload H5P file';
 $string['overview:eportfolio:createnewfile'] = 'Create H5P file';
 $string['overview:eportfolio:downloadfiles'] = 'Download selected ePortfolios';
 
-$string['overview:eportfolio:nofiles:myeportfolios'] = 'You have not yet created or uploaded any files to your ePortfolio.';
-$string['overview:eportfolio:nofiles:mysharedeportfolios'] = 'You have not yet shared any files from your ePortfolio for viewing.';
-$string['overview:eportfolio:nofiles:mysharedeportfoliosgrade'] =
-        'You have not yet shared any files from your ePortfolio for grading.';
-$string['overview:eportfolio:nofiles:sharedeportfolios'] = 'No ePortfolios have been shared with you for viewing yet.';
-$string['overview:eportfolio:nofiles:sharedeportfoliosgrade'] = 'No ePortfolios have been shared with you for grading yet.';
-$string['overview:eportfolio:nofiles:sharedtemplates'] = 'No templates have been shared with you yet.';
+$string['overview:eportfolio:nofiles:my'] = 'You have not yet created or uploaded any files to your ePortfolio.';
+$string['overview:eportfolio:nofiles:myshared'] = 'You have not yet shared any files from your ePortfolio for viewing.';
+$string['overview:eportfolio:nofiles:mygrade'] = 'You have not yet shared any files from your ePortfolio for grading.';
+$string['overview:eportfolio:nofiles:shared'] = 'No ePortfolios have been shared with you for viewing yet.';
+$string['overview:eportfolio:nofiles:grade'] = 'No ePortfolios have been shared with you for grading yet.';
+$string['overview:eportfolio:nofiles:template'] = 'No templates have been shared with you yet.';
 
 // Customfield.
 $string['customfield:name'] = 'ePortfolio';
@@ -112,25 +113,31 @@ $string['sharing:form:select:hint'] = 'Please select a course';
 $string['sharing:form:step:userselection'] = 'Select participants';
 $string['sharing:form:step:confirm'] = 'Share ePortfolio';
 $string['sharing:form:courseselection'] = 'Select a course to share';
+$string['sharing:form:courseselection:desc'] = 'Please select a course in which you would like to share your ePortfolio.<br>
+You can only select courses that have been marked as an ePortfolio course and in which you are enrolled.';
 $string['sharing:form:shareoptionselection'] = 'Select a sharing type';
-$string['sharing:form:sharedcourses'] = 'Select course';
+$string['sharing:form:shareoptionselection:desc'] = 'Please select how you would like to share the ePortfolio.<br><br>
+<b>Share:</b>
+Course participants will only be able to view this ePortfolio.<br>
+<b>Grade:</b>
+Teachers will be able to grade your ePortfolio.<br>
+<b>Template:</b>
+Participants can reuse your ePortfolio as template.<br><br>
+Optionally, you can also select a date for how long the ePortfolio should be available.';
+$string['sharing:form:sharedcourses'] = 'Currently selected course';
 $string['sharing:form:sharedcourses_help'] = 'You can only select courses in which you are enrolled.';
 $string['sharing:form:select:allcourses'] = 'All courses';
 $string['sharing:form:select:singlecourse'] = 'Select course';
 $string['sharing:form:shareoption'] = 'Type of sharing';
-$string['sharing:form:shareoption_help'] = 'Share:<br>
-Course participants will only be able to view this ePortfolio.<br><br>
-Grade:<br>
-Teachers will be able to grade your ePortfolio.<br><br>
-Template:<br>
-Participants can reuse your ePortfolio as template.';
 $string['sharing:form:select:share'] = 'Share';
 $string['sharing:form:select:grade'] = 'Grade';
 $string['sharing:form:select:template'] = 'Template';
-$string['sharing:form:enddate'] = 'Available until';
-$string['sharing:form:enddate_help'] = 'Please activate and select a date by which the ePortfolio will
-be available in the course or to the participants.';
+$string['sharing:form:enddate:enable'] = 'Set enddate';
+$string['sharing:form:enddate:label'] = 'Activate date selection';
+$string['sharing:form:enddate:select'] = 'Available until';
 $string['sharing:form:sharedusers'] = 'Share ePortfolio with whole course or only selected participants';
+$string['sharing:form:sharedusers:desc'] = 'Please select whether you would like to share your ePortfolio with the entire course or with selected participants<br>
+You can share your ePortfolio with all enrolled participants in the course or only with certain roles, participants or course groups.';
 $string['sharing:form:fullcourse'] = 'Share ePortfolio with';
 $string['sharing:form:select:pleaseselect'] = 'Please select';
 $string['sharing:form:select:fullcourse'] = 'Share with complete course';
@@ -142,13 +149,24 @@ $string['sharing:form:enrolledusers_help'] = 'Only selected participants are abl
 $string['sharing:form:groups'] = 'Course groups to share with';
 $string['sharing:form:groups_help'] = 'Only group members are able to view/grade the ePortfolio';
 
+$string['sharing:alreadyshared:info'] = 'The ePortfolio has already been shared in the following courses:';
+$string['sharing:alreadyshared:course'] = 'Course';
+$string['sharing:alreadyshared:shareoption'] = 'Type of sharing';
+
 $string['sharing:share:successful'] = 'You successfully shared your ePortfolio!';
 $string['sharing:share:inserterror'] = 'An error occurred while sharing the ePortfolio. Please try again!';
 $string['sharing:share:alreadyexists'] = 'The ePortfolio has already been shared under the same conditions!';
 
+// Forms general.
+$string['form:field:required'] = 'Please fill in this field!';
+$string['form:cancelled'] = 'The operation has been cancelled!';
+
 // Upload form.
 $string['uploadform:header'] = 'Upload H5P file';
+$string['uploadform:title'] = 'Title/Name';
+$string['uploadform:description'] = 'Description';
 $string['uploadform:file'] = 'Select a file';
+$string['uploadform:save'] = 'Upload file';
 $string['uploadform:template:header'] = 'Share this file as template';
 $string['uploadform:template:check'] = 'This is a template file';
 $string['uploadform:template:check_help'] = 'If you share the portfolio as a template, other users can copy and use it.';
@@ -157,26 +175,6 @@ $string['uploadform:successful'] = 'The file has been uploaded successfully.';
 $string['uploadform:error'] = 'An error occurred while uploading the file! Please try again!';
 $string['uploadform:cancelled'] = 'The operation has been cancelled!';
 
-// HelpFAQ.
-$string['helpfaq:header'] = 'Help & FAQ';
-
-// Delete files & Undo shared files.
-$string['undo:header'] = 'Undo shared file';
-$string['undo:confirm'] = 'Confirm';
-$string['undo:checkconfirm'] = 'Do you really want to undo the shared file?<br><br>
-Filename: {$a->filename}<br><br>Course: {$a->course}<br><br>Share type: {$a->shareoption}';
-$string['undo:success'] = 'Undo successfull!';
-$string['undo:error'] = 'There was an error while undo the sharing for this file! Please try again!';
-$string['delete:header'] = 'Delete file';
-$string['delete:confirm'] = 'Confirm';
-$string['delete:nocourses'] = 'Not shared in any courses.';
-$string['delete:checkconfirm'] = 'Do you really want to delete this file?<br><br>
-Filename: {$a->filename}<br><br>Shared in courses: {$a->courses}';
-$string['delete:success'] = 'The selected file was deleted successfully!';
-$string['delete:error'] = 'There was an error while deleting the file! Please try again!';
-$string['use:template:success'] = 'The template was successfully copied to your ePortfolio for further use!';
-$string['use:template:error'] = 'There was an error while copying the template file! Please try again!!';
-
 // Create new H5P File.
 $string['create:header'] = 'ePortfolio - Create new H5P File';
 $string['contenteditor'] = 'Content Editor';
@@ -184,6 +182,32 @@ $string['create:success'] = 'H5P Content has been created successfully.';
 $string['create:error'] = 'There was a problem creating the new H5P Content.';
 $string['create:library'] = 'Library Select';
 $string['h5plibraries'] = 'H5P Libraries';
+
+// Edit H5P file.
+$string['edit:header'] = 'ePortfolio - edit';
+$string['edit:success'] = 'The H5P content has been successfully updated.';
+$string['edit:error'] = 'An error occurred while saving the changes!';
+
+// HelpFAQ.
+$string['helpfaq:header'] = 'Help & FAQ';
+
+// Delete files & Undo shared files.
+$string['undo:header'] = 'Undo shared ePortfolio';
+$string['undo:confirm'] = 'Confirm';
+$string['undo:checkconfirm'] = 'Do you really want to undo the shared ePortfolio?';
+$string['undo:success'] = 'Undo successfull!';
+$string['undo:error'] = 'There was an error while undo the sharing for this file! Please try again!';
+$string['delete:header'] = 'Delete file';
+$string['delete:confirm'] = 'Confirm';
+$string['delete:nocourses'] = 'Not shared in any courses.';
+$string['delete:checkconfirm'] = 'Do you really want to delete the selected ePortfolio?}';
+$string['delete:success'] = 'The selected file was deleted successfully!';
+$string['delete:error'] = 'There was an error while deleting the file! Please try again!';
+$string['use:template:header'] = 'Use ePortfolio template';
+$string['use:template:confirm'] = 'Confirm';
+$string['use:template:checkconfirm'] = 'Would you like to use the selected ePortfolio template?';
+$string['use:template:success'] = 'The template was successfully copied to your ePortfolio for further use!';
+$string['use:template:error'] = 'There was an error while copying the template file! Please try again!!';
 
 // Events.
 $string['event:eportfolio:viewed:name'] = 'ePortfolio viewed';
@@ -216,3 +240,14 @@ $string['message:contexturlname'] = 'View shared ePortfolio';
 
 // Download ePortfolio.
 $string['download:error'] = 'No files found!';
+
+// Settings.
+$string['settings:general'] = 'Settings';
+$string['settings:gradingteacher'] = 'Roles for grading';
+$string['settings:gradingteacher:desc'] = 'Please select the roles that are allowed to grade shared
+ ePortfolios in the “ePortfolio” activity.';
+$string['settings:studentroles'] = 'Roles for students';
+$string['settings:studentroles:desc'] = 'Please select the roles in which your students are
+enrolled in the course.';
+$string['settings:globalnavbar:enable'] = 'Main navigation entry';
+$string['settings:globalnavbar:enable:desc'] = 'An entry for the ePortfolio is displayed in the main navigation.';

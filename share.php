@@ -15,16 +15,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Upload page for eportfolio
+ * Sharing page for eportfolio
  *
  * @package local_eportfolio
- * @category file upload
  * @copyright 2023 weQon UG {@link https://weqon.net}
  * @license https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-// ToDo: Modal for Sharing.
-// https://docs.moodle.org/dev/Modal_and_AJAX_forms.
 
 require_once('../../config.php');
 require_once('locallib.php');
@@ -43,18 +39,14 @@ if (isguestuser()) {
 
 $id = required_param('id', PARAM_INT);
 
-// Maybe add courseid as optional param?
-// Let's save the data to the current session. Maybe there is a better way.
-
-$url = new moodle_url('/local/eportfolio/sharing.php', array('id' => $id));
-
-$context = context_user::instance($USER->id);
-
 // Reset session in case form was reopened, but already used.
 $referer = $_SERVER['HTTP_REFERER'];
-if (!str_contains($referer, 'sharing.php')) {
+if (!str_contains($referer, 'share.php')) {
     reset_session_data();
 }
+
+// Let's save the data to the current session. Maybe there is a better way.
+save_to_session('id', $id);
 
 // Check, if current step is saved to session.
 if (load_from_session('step', null)) {
@@ -63,7 +55,15 @@ if (load_from_session('step', null)) {
     $step = '0';
 }
 
-save_to_session('id', $id);
+// Build the URL.
+$params = [
+        'id' => $id,
+        'step' => $step,
+];
+
+$url = new moodle_url('/local/eportfolio/share.php', $params);
+
+$context = context_user::instance($USER->id);
 
 $mform1 = new sharing_form_1($url);
 
@@ -79,22 +79,21 @@ if ($step == '0') {
     if ($formdata1 = $mform1->is_cancelled()) {
 
         reset_session_data();
-        redirect(new moodle_url('/local/eportfolio/index.php'));
+
+        $redirecturl = new moodle_url('/local/eportfolio/index.php');
+        redirect($redirecturl, get_string('uploadform:cancelled', 'local_eportfolio'), null,
+                \core\output\notification::NOTIFY_WARNING);
 
     } else if ($formdata1 = $mform1->get_data()) {
 
         save_to_session('sharedcourse', $formdata1->sharedcourse);
         save_to_session('step', '1');
 
-        redirect(new moodle_url('/local/eportfolio/sharing.php', ['id' => $id]));
+        redirect(new moodle_url('/local/eportfolio/share.php', ['id' => $id]));
 
     } else {
 
-        echo $OUTPUT->header();
-
-        $mform1->display();
-
-        echo $OUTPUT->footer();
+        $renderform = $mform1->render();
 
     }
 }
@@ -104,40 +103,38 @@ if ($step == '1') {
     $sharedcourse = load_from_session('sharedcourse', 0);
     $id = load_from_session('id', 0);
 
-    $customdata = array(
-            'sharedcourse' => $sharedcourse,
-    );
+    $customdata['sharedcourse'] = $sharedcourse;
 
     $mform2 = new sharing_form_2($url, $customdata);
 
     if ($formdata2 = $mform2->is_cancelled()) {
 
         reset_session_data();
-        redirect(new moodle_url('/local/eportfolio/index.php'));
+
+        $redirecturl = new moodle_url('/local/eportfolio/index.php');
+        redirect($redirecturl, get_string('uploadform:cancelled', 'local_eportfolio'), null,
+                \core\output\notification::NOTIFY_WARNING);
 
     } else if ($formdata2 = $mform2->get_data()) {
 
         save_to_session('shareoption', $formdata2->shareoption);
 
-        if($formdata2->shareend) {
+        if ($formdata2->shareendenabled) {
             save_to_session('shareend', $formdata2->shareend);
+            save_to_session('shareendenabled', $formdata2->shareendenabled);
         }
 
-        if($formdata2->cmid) {
+        if ($formdata2->cmid) {
             save_to_session('cmid', $formdata2->cmid);
         }
 
         save_to_session('step', '2');
 
-        redirect(new moodle_url('/local/eportfolio/sharing.php', ['id' => $id]));
+        redirect(new moodle_url('/local/eportfolio/share.php', ['id' => $id]));
 
     } else {
 
-        echo $OUTPUT->header();
-
-        $mform2->display();
-
-        echo $OUTPUT->footer();
+        $renderform = $mform2->render();
 
     }
 }
@@ -147,32 +144,40 @@ if ($step == '2') {
     $sharedcourse = load_from_session('sharedcourse', 0);
     $shareoption = load_from_session('shareoption', 0);
     $shareend = load_from_session('shareend', 0);
+    $shareendenabled = load_from_session('shareendenabled', 0);
     $cmid = load_from_session('cmid', 0);
     $id = load_from_session('id', 0);
 
-    $customdata = array(
-            'sharedcourse' => $sharedcourse,
-            'shareoption' => $shareoption,
-    );
+    $customdata['sharedcourse'] = $sharedcourse;
+    $customdata['shareoption'] = $shareoption;
 
     $mform3 = new sharing_form_3($url, $customdata);
 
     if ($formdata3 = $mform3->is_cancelled()) {
 
         reset_session_data();
-        redirect(new moodle_url('/local/eportfolio/index.php'));
+
+        $redirecturl = new moodle_url('/local/eportfolio/index.php');
+        redirect($redirecturl, get_string('uploadform:cancelled', 'local_eportfolio'), null,
+                \core\output\notification::NOTIFY_WARNING);
 
     } else if ($formdata3 = $mform3->get_data()) {
 
+        $eport = $DB->get_record('local_eportfolio', ['id' => $id]);
+
         $data = new stdClass();
 
+        $data->eportid = $eport->id;
+        $data->title = $eport->title;
         $data->userid = $USER->id;
         $data->courseid = load_from_session('sharedcourse', 0);
         $data->cmid = '0';
-        $data->fileitemid = $id;
+        $data->fileid = $eport->fileid;
         $data->shareoption = $shareoption;
-        $data->enddate = (isset($shareend)) ? $shareend : '';
+        $data->enddate = (isset($shareendenabled)) ? $shareend : '';
         $data->timecreated = time();
+        $data->timemodified = time();
+        $data->usermodified = $USER->id;
         $data->h5pid = '0'; // Default value.
 
         // Only relevant when ePortfolios is shared for grading.
@@ -183,43 +188,46 @@ if ($step == '2') {
         // Let's collect the target groups.
         $data->fullcourse = ($formdata3->fullcourse == '1') ? $formdata3->fullcourse : '';
 
-        $roles = array();
+        $roles = [];
 
-        foreach ($formdata3->roles as $key => $value) {
-            if ($value) {
-                $roles[] = $key;
+        // We only need the following steps, if ePortfolio isn't shared for the complete course.
+        if ($data->fullcourse === '2') {
+            foreach ($formdata3->roles as $key => $value) {
+                if ($value) {
+                    $roles[] = $key;
+                }
             }
-        }
 
-        $data->roles = implode(', ', $roles);
+            $data->roles = implode(', ', $roles);
 
-        $enrolled = array();
-        foreach ($formdata3->enrolled as $key => $value) {
-            if ($value) {
-                $enrolled[] = $key;
+            $enrolled = [];
+            foreach ($formdata3->enrolled as $key => $value) {
+                if ($value) {
+                    $enrolled[] = $key;
+                }
             }
-        }
 
-        $data->enrolled = implode(', ', $enrolled);
+            $data->enrolled = implode(', ', $enrolled);
 
-        $groups = array();
-        foreach ($formdata3->groups as $key => $value) {
-            if ($value) {
-                $groups[] = $key;
+            $groups = [];
+            foreach ($formdata3->groups as $key => $value) {
+                if ($value) {
+                    $groups[] = $key;
+                }
             }
-        }
 
-        $data->coursegroups = implode(', ', $groups);
+            $data->coursegroups = implode(', ', $groups);
+        }
 
         reset_session_data();
 
         // Check, if the user already shared this file in the specific course with the same option.
         if (!$DB->get_record('local_eportfolio_share', ['userid' => $data->userid, 'courseid' => $data->courseid,
-                'shareoption' => $data->shareoption, 'fileitemid' => $data->fileitemid])) {
+                'shareoption' => $data->shareoption, 'fileid' => $data->fileid])) {
 
             // Get the file we want to create a copy of and for sending a message to the users this ePortfolio was shared with.
             $fs = get_file_storage();
-            $file = $fs->get_file_by_id($id);
+            $file = $fs->get_file_by_id($data->fileid);
 
             $pathnamehash = $file->get_pathnamehash();
 
@@ -262,6 +270,7 @@ if ($step == '2') {
             if ($DB->insert_record('local_eportfolio_share', $data)) {
 
                 // Let's send a message to the users shared with.
+                // ToDo: Make this an adhoc task.
                 $participants = get_shared_participants($data->courseid, $data->fullcourse,
                         $data->enrolled, $data->roles, $data->coursegroups, true);
 
@@ -274,7 +283,7 @@ if ($step == '2') {
                 \local_eportfolio\event\eportfolio_shared::create([
                         'other' => [
                                 'description' => get_string('event:eportfolio:shared:' . $data->shareoption, 'local_eportfolio',
-                                        array('userid' => $USER->id, 'filename' => $file->get_filename(), 'itemid' => $id)),
+                                        ['userid' => $USER->id, 'filename' => $file->get_filename(), 'itemid' => $id]),
                         ],
                 ])->trigger();
 
@@ -297,10 +306,26 @@ if ($step == '2') {
 
     } else {
 
-        echo $OUTPUT->header();
+        $renderform = $mform3->render();
 
-        $mform3->display();
-
-        echo $OUTPUT->footer();
     }
 }
+
+echo $OUTPUT->header();
+
+$data = new stdClass();
+
+$data->renderform = $renderform;
+
+// Check, if this ePortfolio was already shared in any way and inform user.
+$eport = $DB->get_record('local_eportfolio', ['id' => $id]);
+$alreadyshared = check_already_shared($eport->id, $eport->fileid);
+
+if ($alreadyshared) {
+    $data->alreadyshared = true;
+    $data->shared = $alreadyshared;
+}
+
+echo $OUTPUT->render_from_template('local_eportfolio/share', $data);
+
+echo $OUTPUT->footer();
