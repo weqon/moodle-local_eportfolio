@@ -44,7 +44,6 @@ $PAGE->set_title(get_string('create:header', 'local_eportfolio'));
 $PAGE->set_heading(get_string('create:header', 'local_eportfolio'));
 $PAGE->set_pagelayout('base');
 $PAGE->add_body_class('limitedwith');
-$PAGE->set_pagetype('user-files');
 
 $redirecturl = new moodle_url('/local/eportfolio/index.php');
 
@@ -58,7 +57,7 @@ if (empty($library)) {
             'baseurl' => $url->out(false),
             'backurl' => $redirecturl->out(false),
     ];
-    echo $OUTPUT->render_from_template('local_eportfolio/eportfolio_create_select', $renderparams);
+    echo $OUTPUT->render_from_template('local_eportfolio/create_select', $renderparams);
 
     echo $OUTPUT->box_end();
     echo $OUTPUT->footer();

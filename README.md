@@ -9,6 +9,7 @@ A teacher also has the option of making H5P content available as a
 
 Also, a H5P content type has been developed for the ePortfolio-Plugin:
 https://www.olivertacke.de/labs/2022/10/25/show-what-you-can-do-with-h5p-portfolio/
+
 ## Installing via uploaded ZIP file ##
 
 1. Log in to your Moodle site as an admin and go to _Site administration >
@@ -31,6 +32,9 @@ Alternatively, you can run
     $ php admin/cli/upgrade.php
 
 to complete the installation from the command line.
+
+## Please read before updating ##
+
 
 ## License ##
 

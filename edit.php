@@ -49,7 +49,6 @@ $PAGE->set_title(get_string('edit:header', 'local_eportfolio'));
 $PAGE->set_heading(get_string('edit:header', 'local_eportfolio'));
 $PAGE->set_pagelayout('base');
 $PAGE->add_body_class('limitedwith');
-$PAGE->set_pagetype('user-files');
 
 $redirecturl = new moodle_url('/local/eportfolio/index.php');
 

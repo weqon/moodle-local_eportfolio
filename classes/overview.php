@@ -43,6 +43,7 @@ class overview {
      * @param $tsort
      * @param $tdir
      */
+
     public function __construct($url, $section, $tsort = '', $tdir = '') {
         $this->url = $url;
         $this->section = $section;
@@ -55,6 +56,7 @@ class overview {
      *
      * @return void
      */
+
     public function display() {
         global $OUTPUT;
 
@@ -154,6 +156,7 @@ class overview {
      *
      * @return mixed
      */
+
     public function get_eportfolios() {
         global $DB, $USER;
 
@@ -247,6 +250,7 @@ class overview {
      * @param $sortorder
      * @return int|void
      */
+
     private function get_sort_order($sortorder) {
         switch ($sortorder) {
             case '3':
@@ -265,6 +269,7 @@ class overview {
      *
      * @return string|string[]
      */
+
     private function get_table_columns() {
 
         $columns = '';
@@ -334,6 +339,7 @@ class overview {
      *
      * @return array|string
      */
+
     private function get_table_headers() {
 
         $headers = '';
@@ -403,6 +409,7 @@ class overview {
      * @param $ent
      * @return array|void
      */
+
     private function get_table_data($ent) {
         global $DB, $USER;
 
@@ -683,6 +690,7 @@ class overview {
      * @param $url
      * @return mixed
      */
+
     public function action_button_view($url) {
         global $OUTPUT;
 
@@ -696,6 +704,7 @@ class overview {
      * @param $url
      * @return mixed
      */
+
     public function action_button_share($url) {
         global $OUTPUT;
 
@@ -709,6 +718,7 @@ class overview {
      * @param $url
      * @return mixed
      */
+
     public function action_button_edit($url) {
         global $OUTPUT;
 
@@ -723,6 +733,7 @@ class overview {
      * @param $filename
      * @return mixed
      */
+
     public function action_button_delete($url, $filename) {
         global $OUTPUT;
 
@@ -740,6 +751,7 @@ class overview {
      * @param $filename
      * @return mixed
      */
+
     public function action_button_undo($url, $filename) {
         global $OUTPUT;
 
@@ -756,6 +768,7 @@ class overview {
      * @param $url
      * @return mixed
      */
+
     public function action_button_grade($url) {
         global $OUTPUT;
 
@@ -770,6 +783,7 @@ class overview {
      * @param $filename
      * @return mixed
      */
+
     public function action_button_reuse($url, $filename) {
         global $OUTPUT;
 
@@ -786,6 +800,7 @@ class overview {
      * @param $section
      * @return \stdClass
      */
+
     private function generate_navbar() {
         global $DB, $USER;
 
@@ -804,26 +819,32 @@ class overview {
             case 'my':
                 $navitems->myactive = 'active';
                 $navitems->myselected = 'true';
+                $navitems->myariaselected = 'aria-selected="true"';
                 break;
             case 'myshared':
                 $navitems->mysharedactive = 'active';
                 $navitems->mysharedselected = 'true';
+                $navitems->mysharedariaselected = 'aria-selected="true"';
                 break;
             case 'mygrade':
                 $navitems->mygradeactive = 'active';
                 $navitems->mygradeselected = 'true';
+                $navitems->mygradeariaselected = 'aria-selected="true"';
                 break;
             case 'shared':
                 $navitems->sharedactive = 'active';
                 $navitems->sharedselected = 'true';
+                $navitems->sharedariaselected = 'aria-selected="true"';
                 break;
             case 'grade':
                 $navitems->gradeactive = 'active';
                 $navitems->gradeselected = 'true';
+                $navitems->gradeariaselected = 'aria-selected="true"';
                 break;
             case 'template':
                 $navitems->templateactive = 'active';
                 $navitems->templateselected = 'true';
+                $navitems->templateariaselected = 'aria-selected="true"';
                 break;
         }
 
@@ -871,6 +892,7 @@ class overview {
      * @param $pathnamehash
      * @return void
      */
+
     public function get_h5p_title($pathnamehash) {
         global $DB;
 
@@ -893,5 +915,4 @@ class overview {
             }
         }
     }
-
 }

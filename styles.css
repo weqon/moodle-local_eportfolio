@@ -4,8 +4,12 @@
     justify-content: center;
 }
 
-.page-context-header .header-button-group {
-    display: inline-flex !important;
+#page-local-eportfolio-create .page-context-header .header-button-group,
+#page-local-eportfolio-edit .page-context-header .header-button-group,
+#page-local-eportfolio-upload .page-context-header .header-button-group,
+#page-local-eportfolio-view .page-context-header .header-button-group,
+#page-local-eportfolio-index .page-context-header .header-button-group {
+    display: inline-flex;
     float: left;
     align-items: center;
     justify-content: center;
@@ -20,12 +24,22 @@
 }
 
 .icon-round {
-    display: inline-flex !important;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 45px;
     height: 45px;
     border-radius: 50%;
     color: #fff;
-    font-size: 1.2rem !important;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.icon-round-primary {
+    background-color: var(--primary);
+}
+
+.icon-round-secondary {
+    color: #000;
+    background-color: var(--secondary);
 }

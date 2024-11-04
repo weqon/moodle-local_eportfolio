@@ -65,7 +65,7 @@ class create_form extends \moodleform {
      * @param array|null $customdata
      * @param string $method
      */
-    public function __construct(string $action = null, array $customdata = null, string $method = 'post') {
+    public function __construct(string $action = '', array $customdata = [], string $method = 'post') {
         parent::__construct($action, $customdata, $method);
         $this->contextid = $customdata['contextid'];
         $this->id = $customdata['id'];

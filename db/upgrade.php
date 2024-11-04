@@ -315,6 +315,24 @@ function xmldb_local_eportfolio_upgrade($oldversion) {
             $dbman->add_field($table, $field);
         }
 
+        // Update local_eportfolio_share to add eportid.
+        // First get all files for component local_eportfolio_share.
+        $eportfoliofiles = $DB->get_records('local_eportfolio_share');
+
+        foreach ($eportfoliofiles as $efile) {
+
+            // Get eport entry.
+            $eport = $DB->get_record('local_eportfolio', ['fileid' => $efile->fileid]);
+
+            // In case there is no entry we assume the entry was deleted.
+            if ($eport) {
+                $updatedata = $efile;
+                $efile->eportid = $eport->id;
+                $DB->update_record('local_eportfolio_share', $updatedata);
+            }
+
+        }
+
         // Set the default editingteacher and student role.
         set_config('gradingteacher', '3', 'local_eportfolio');
         set_config('studentroles', '5', 'local_eportfolio');

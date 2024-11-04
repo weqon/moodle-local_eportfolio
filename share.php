@@ -74,7 +74,6 @@ $PAGE->set_title(get_string('sharing:header', 'local_eportfolio'));
 $PAGE->set_heading(get_string('sharing:header', 'local_eportfolio'));
 $PAGE->set_pagelayout('base');
 $PAGE->add_body_class('limitedwith');
-$PAGE->set_pagetype('user-files');
 
 if ($step == '0') {
     if ($formdata1 = $mform1->is_cancelled()) {

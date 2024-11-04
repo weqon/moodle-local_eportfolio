@@ -48,19 +48,19 @@ class sharing_form_1 extends moodleform {
         $mform->addElement('html', '<div role="group" aria-label="progress">');
 
         $mform->addElement('html',
-                '<span class="icon-round badge badge-pill badge-primary mr-2 mt-4 mb-5" aria-current="true">1. </span>' .
+                '<span class="icon-round icon-round-primary mr-2 mt-4 mb-5" aria-current="true">1. </span>' .
                 get_string('sharing:form:step:courseselection', 'local_eportfolio'));
         $mform->addElement('html', '<span class="fa fa-arrow-right mx-3"></span>');
         $mform->addElement('html',
-                '<span class="icon-round badge badge-pill badge-secondary mr-2 mt-4 mb-5">2. </span>' .
+                '<span class="icon-round icon-round-secondary mr-2 mt-4 mb-5">2. </span>' .
                 get_string('sharing:form:step:shareoptionselection', 'local_eportfolio'));
         $mform->addElement('html', '<span class="fa fa-arrow-right mx-3"></span>');
         $mform->addElement('html',
-                '<span class="icon-round badge badge-pill badge-secondary mr-2 mt-4 mb-5">3. </span>' .
+                '<span class="icon-round icon-round-secondary mr-2 mt-4 mb-5">3. </span>' .
                 get_string('sharing:form:step:userselection', 'local_eportfolio'));
         $mform->addElement('html', '<span class="fa fa-arrow-right mx-3"></span>');
         $mform->addElement('html',
-                '<span class="icon-round badge badge-pill badge-secondary mr-2 mt-4 mb-5">4. </span>' .
+                '<span class="icon-round icon-round-secondary mr-2 mt-4 mb-5">4. </span>' .
                 get_string('sharing:form:step:confirm', 'local_eportfolio'));
 
         $mform->addElement('html', '</div>');
@@ -130,19 +130,19 @@ class sharing_form_2 extends moodleform {
         $mform->addElement('html', '<div role="group" aria-label="progress">');
 
         $mform->addElement('html',
-                '<span class="icon-round badge badge-pill badge-secondary mr-2 mt-4 mb-5">1. </span>' .
+                '<span class="icon-round icon-round-secondary mr-2 mt-4 mb-5">1. </span>' .
                 get_string('sharing:form:step:courseselection', 'local_eportfolio'));
         $mform->addElement('html', '<span class="fa fa-arrow-right mx-3"></span>');
         $mform->addElement('html',
-                '<span class="icon-round badge badge-pill badge-primary mr-2 mt-4 mb-5" aria-current="true">2. </span>' .
+                '<span class="icon-round icon-round-primary mr-2 mt-4 mb-5" aria-current="true">2. </span>' .
                 get_string('sharing:form:step:shareoptionselection', 'local_eportfolio'));
         $mform->addElement('html', '<span class="fa fa-arrow-right mx-3"></span>');
         $mform->addElement('html',
-                '<span class="icon-round badge badge-pill badge-secondary mr-2 mt-4 mb-5">3. </span>' .
+                '<span class="icon-round icon-round-secondary mr-2 mt-4 mb-5">3. </span>' .
                 get_string('sharing:form:step:userselection', 'local_eportfolio'));
         $mform->addElement('html', '<span class="fa fa-arrow-right mx-3"></span>');
         $mform->addElement('html',
-                '<span class="icon-round badge badge-pill badge-secondary mr-2 mt-4 mb-5">4. </span>' .
+                '<span class="icon-round icon-round-secondary mr-2 mt-4 mb-5">4. </span>' .
                 get_string('sharing:form:step:confirm', 'local_eportfolio'));
 
         $mform->addElement('html', '</div>');
@@ -233,19 +233,19 @@ class sharing_form_3 extends moodleform {
         $mform->addElement('html', '<div role="group" aria-label="progress">');
 
         $mform->addElement('html',
-                '<span class="icon-round badge badge-pill badge-secondary mr-2 mt-4 mb-5">1. </span>' .
+                '<span class="icon-round icon-round-secondary mr-2 mt-4 mb-5">1. </span>' .
                 get_string('sharing:form:step:courseselection', 'local_eportfolio'));
         $mform->addElement('html', '<span class="fa fa-arrow-right mx-3"></span>');
         $mform->addElement('html',
-                '<span class="icon-round badge badge-pill badge-secondary mr-2 mt-4 mb-5">2. </span>' .
+                '<span class="icon-round icon-round-secondary mr-2 mt-4 mb-5">2. </span>' .
                 get_string('sharing:form:step:shareoptionselection', 'local_eportfolio'));
         $mform->addElement('html', '<span class="fa fa-arrow-right mx-3"></span>');
         $mform->addElement('html',
-                '<span class="icon-round badge badge-pill badge-primary mr-2 mt-4 mb-5" aria-current="true">3. </span>' .
+                '<span class="icon-round icon-round-primary mr-2 mt-4 mb-5" aria-current="true">3. </span>' .
                 get_string('sharing:form:step:userselection', 'local_eportfolio'));
         $mform->addElement('html', '<span class="fa fa-arrow-right mx-3"></span>');
         $mform->addElement('html',
-                '<span class="icon-round badge badge-pill badge-secondary mr-2 mt-4 mb-5">4. </span>' .
+                '<span class="icon-round icon-round-secondary mr-2 mt-4 mb-5">4. </span>' .
                 get_string('sharing:form:step:confirm', 'local_eportfolio'));
 
         $mform->addElement('html', '</div>');

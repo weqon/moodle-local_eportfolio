@@ -71,7 +71,6 @@ $PAGE->set_title(get_string('overview:header', 'local_eportfolio'));
 $PAGE->set_heading($setheading);
 $PAGE->set_pagelayout('base');
 $PAGE->add_body_class('limitedwith');
-$PAGE->set_pagetype('user-files');
 
 // Print the header.
 echo $OUTPUT->header();

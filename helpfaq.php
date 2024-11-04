@@ -44,7 +44,6 @@ $PAGE->set_title(get_string('helpfaq:header', 'local_eportfolio'));
 $PAGE->set_heading(get_string('helpfaq:header', 'local_eportfolio'));
 $PAGE->set_pagelayout('base');
 $PAGE->add_body_class('limitedwith');
-$PAGE->set_pagetype('user-files');
 
 // Print the header.
 echo $OUTPUT->header();
@@ -54,6 +53,6 @@ $data = new stdClass();
 $data->backurl = new moodle_url('/local/eportfolio/index.php');
 $data->backurlstring = get_string('view:eportfolio:button:backtoeportfolio', 'local_eportfolio');
 
-echo $OUTPUT->render_from_template('local_eportfolio/eportfolio_helpfaq', $data);
+echo $OUTPUT->render_from_template('local_eportfolio/helpfaq', $data);
 
 echo $OUTPUT->footer();

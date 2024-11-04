@@ -45,7 +45,6 @@ $PAGE->set_title(get_string('uploadform:header', 'local_eportfolio'));
 $PAGE->set_heading(get_string('uploadform:header', 'local_eportfolio'));
 $PAGE->set_pagelayout('base');
 $PAGE->add_body_class('limitedwith');
-$PAGE->set_pagetype('user-files');
 
 // ToDo: Make this configurable.
 $filemanageropts = [

@@ -28,6 +28,7 @@
  * @param $roleid
  * @return array
  */
+
 function get_eportfolio_courses($roleids = '') {
     global $DB, $USER;
 
@@ -76,6 +77,7 @@ function get_eportfolio_courses($roleids = '') {
  * @param $groupids
  * @return array
  */
+
 function get_shared_participants($courseid, $fullcourse = false, $enrolled = null, $roleids = null, $groupids = null) {
     global $DB;
 
@@ -155,6 +157,7 @@ function get_shared_participants($courseid, $fullcourse = false, $enrolled = nul
  * @param $courseid
  * @return array
  */
+
 function get_course_user_to_share($courseid) {
     global $USER;
 
@@ -180,6 +183,7 @@ function get_course_user_to_share($courseid) {
  * @param $courseid
  * @return array
  */
+
 function get_course_roles_to_share($courseid) {
     global $DB;
 
@@ -211,6 +215,7 @@ function get_course_roles_to_share($courseid) {
  * @param $courseid
  * @return array
  */
+
 function get_course_groups_to_share($courseid) {
 
     // Get course groups by course id.
@@ -232,6 +237,7 @@ function get_course_groups_to_share($courseid) {
  * @param $fromform
  * @return false|void
  */
+
 function get_eportfolio_cm($courseid, $fromform = false) {
     global $DB;
 
@@ -291,6 +297,7 @@ function get_eportfolio_cm($courseid, $fromform = false) {
  *
  * @return void
  */
+
 function reset_session_data() {
     global $SESSION;
 
@@ -306,6 +313,7 @@ function reset_session_data() {
  * @param $save
  * @return mixed
  */
+
 function load_from_session($name, $default, $save = false) {
     global $SESSION;
 
@@ -327,6 +335,7 @@ function load_from_session($name, $default, $save = false) {
  * @param $default
  * @return void
  */
+
 function save_to_session($name, $value, $default = null) {
     global $SESSION;
 
@@ -348,6 +357,7 @@ function save_to_session($name, $value, $default = null) {
  * @param $coursecontextid
  * @return mixed
  */
+
 function get_assigned_role_by_course($roleid, $coursecontextid) {
     global $DB, $USER;
 
@@ -368,6 +378,7 @@ function get_assigned_role_by_course($roleid, $coursecontextid) {
  * @param $sortorder
  * @return int|void
  */
+
 function get_sort_order($sortorder) {
     switch ($sortorder) {
         case '3':
@@ -388,6 +399,7 @@ function get_sort_order($sortorder) {
  * @param $fileid
  * @return array|false
  */
+
 function check_already_shared($id, $fileid) {
     global $DB;
 
@@ -439,6 +451,7 @@ function check_already_shared($id, $fileid) {
  * @param $itemid
  * @return void
  */
+
 function eportfolio_send_message($courseid, $userfrom, $userto, $shareoption, $filename, $itemid) {
     global $DB, $USER;
 
