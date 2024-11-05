@@ -35,7 +35,7 @@ if (isguestuser()) {
             null, \core\output\notification::NOTIFY_ERROR);
 }
 
-if (!has_capability('local/eportfolio:view_eport', context_system::instance()) || !is_siteadmin()) {
+if (!has_capability('local/eportfolio:view_eport', context_system::instance())) {
     redirect(new moodle_url($CFG->wwwroot),
             get_string('error:missingcapability', 'local_eportfolio'),
             null, \core\output\notification::NOTIFY_ERROR);

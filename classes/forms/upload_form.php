@@ -41,7 +41,7 @@ class upload_form extends moodleform {
      * @return void
      */
     public function definition() {
-        global $CFG, $DB;
+        global $DB;
 
         $mform = $this->_form; // Don't forget the underscore!
 

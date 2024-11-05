@@ -463,7 +463,7 @@ class overview {
                 $checktemplate = $DB->get_record('local_eportfolio_share', ['eportid' => $ent->id, 'userid' => $USER->id,
                         'shareoption' => 'template', 'fileid' => $ent->fileid]);
 
-                if ($checktemplate) {
+                if (!empty($checktemplate)) {
 
                     $istemplatefile =
                             \html_writer::tag('i', '', ['class' => 'icon fa fa-info-circle fa-fw ml-3', 'data-toggle' => 'tooltip',

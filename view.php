@@ -34,6 +34,12 @@ if (isguestuser()) {
             null, \core\output\notification::NOTIFY_ERROR);
 }
 
+if (!has_capability('local/eportfolio:view_eport', context_system::instance())) {
+    redirect(new moodle_url($CFG->wwwroot),
+            get_string('error:missingcapability', 'local_eportfolio'),
+            null, \core\output\notification::NOTIFY_ERROR);
+}
+
 $id = required_param('id', PARAM_INT);
 $courseid = optional_param('course', 0, PARAM_INT);
 $cmid = optional_param('cmid', 0, PARAM_INT);
