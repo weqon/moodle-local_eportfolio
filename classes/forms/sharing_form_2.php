@@ -84,13 +84,19 @@ class sharing_form_2 extends moodleform {
             $mform->addElement('hidden', 'cmid', $cmid);
         }
 
-        // If current user is enrolled as editingteacher in the selected course show the share as template option.
-        // Currently only default role for editingteacher is allowed.
-        // ToDo: Make this configurable.
-        $roleid = '3';
+        // If current user is enrolled as grading teacher in the selected course show the share as template option.
+        $config = get_config('local_eportfolio');
+        $roleids = explode(',', $config->gradingteacher);
         $coursecontext = context_course::instance($sharedcourseid);
 
-        $roleassigned = get_assigned_role_by_course($roleid, $coursecontext->id);
+        $roleassigned = false;
+        
+        foreach ($roleids as $rid) {
+            $hasrole = get_assigned_role_by_course($rid, $coursecontext->id);
+            if (!empty($hasrole)) {
+                $roleassigned = true;
+            }
+        }
 
         if ($roleassigned) {
             $selectvalues['template'] = get_string('sharing:form:select:template', 'local_eportfolio');

@@ -194,12 +194,12 @@ if ($step == '2') {
         }
 
         // Let's collect the target groups.
-        $data->fullcourse = ($formdata3->fullcourse == '1') ? $formdata3->fullcourse : '';
+        $data->fullcourse = ($formdata3->fullcourse == '1') ? $formdata3->fullcourse : '0';
 
         $roles = [];
 
         // We only need the following steps, if ePortfolio isn't shared for the complete course.
-        if ($data->fullcourse === '2') {
+        if ($formdata3->fullcourse === '2') {
             foreach ($formdata3->roles as $key => $value) {
                 if ($value) {
                     $roles[] = $key;
@@ -207,7 +207,6 @@ if ($step == '2') {
             }
 
             $data->roles = implode(', ', $roles);
-
             $enrolled = [];
             foreach ($formdata3->enrolled as $key => $value) {
                 if ($value) {

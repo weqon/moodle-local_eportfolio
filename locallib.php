@@ -355,17 +355,18 @@ function save_to_session($name, $value, $default = null) {
  *
  * @param $roleid
  * @param $coursecontextid
+ * @param $userid
  * @return mixed
  */
 
-function get_assigned_role_by_course($roleid, $coursecontextid) {
+function get_assigned_role_by_course($roleid, $coursecontextid, $userid = '') {
     global $DB, $USER;
 
     // Just return course where the user has the specified role assigned.
     $sql = "SELECT * FROM {role_assignments} WHERE contextid = ? AND userid = ? AND roleid = ?";
     $params = [
             'contextid' => $coursecontextid,
-            'userid' => $USER->id,
+            'userid' => (!empty($userid)) ? $userid : $USER->id,
             'roleid' => $roleid,
     ];
 
