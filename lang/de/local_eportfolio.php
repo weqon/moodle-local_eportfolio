@@ -31,7 +31,8 @@ $string['navbar'] = 'ePortfolio';
 // Set db/access - permissions.
 $string['eportfolio:view_eport'] = 'ePortfolio anzeigen';
 
-$string['error:noguestaccess'] = 'Sie sind als Gast angemeldet. Der Gastzugriff ist für dieses Plugin nicht erlaubt.';
+$string['error:noguestaccess'] = 'Sie sind als Gast angemeldet. Der Gastzugriff ist für dieses Plugin nicht erlaubt!';
+$string['error:missingcapability'] = 'Sie haben nicht die erforderlichen Berechtigungen, um auf das Plung "eportfolio" zuzugreifen!';
 
 // Overview.
 $string['overview:header'] = 'ePortfolio - Übersicht';

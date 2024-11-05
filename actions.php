@@ -31,6 +31,19 @@ $section = optional_param('section', 'my', PARAM_ALPHA);
 $courseid = optional_param('courseid', 0, PARAM_INT);
 
 require_login();
+
+if (isguestuser()) {
+    redirect(new moodle_url($CFG->wwwroot),
+            get_string('error:noguestaccess', 'local_eportfolio'),
+            null, \core\output\notification::NOTIFY_ERROR);
+}
+
+if (!has_capability('local/eportfolio:view_eport', context_system::instance()) || !is_siteadmin()) {
+    redirect(new moodle_url($CFG->wwwroot),
+            get_string('error:missingcapability', 'local_eportfolio'),
+            null, \core\output\notification::NOTIFY_ERROR);
+}
+
 require_sesskey();
 
 $redirecturl = new moodle_url('/local/eportfolio/index.php', ['section' => $section]);

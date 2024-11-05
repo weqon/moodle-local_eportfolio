@@ -35,6 +35,12 @@ if (isguestuser()) {
             null, \core\output\notification::NOTIFY_ERROR);
 }
 
+if (!has_capability('local/eportfolio:view_eport', context_system::instance()) || !is_siteadmin()) {
+    redirect(new moodle_url($CFG->wwwroot),
+            get_string('error:missingcapability', 'local_eportfolio'),
+            null, \core\output\notification::NOTIFY_ERROR);
+}
+
 $url = new moodle_url('/local/eportfolio/upload.php');
 $systemcontext = context_system::instance();
 $usercontext = context_user::instance($USER->id);
