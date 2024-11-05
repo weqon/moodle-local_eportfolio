@@ -30,7 +30,7 @@ class canedit {
      *
      * @return true
      */
-    
+
     public static function can_edit_content() {
         return true;
     }

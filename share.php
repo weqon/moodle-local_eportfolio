@@ -24,7 +24,9 @@
 
 require_once('../../config.php');
 require_once('locallib.php');
-require_once('classes/forms/sharing_form.php');
+require_once('classes/forms/sharing_form_1.php');
+require_once('classes/forms/sharing_form_2.php');
+require_once('classes/forms/sharing_form_3.php');
 require_once($CFG->dirroot . '/course/modlib.php');
 require_once($CFG->dirroot . '/mod/h5pactivity/lib.php');
 
