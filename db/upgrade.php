@@ -187,16 +187,6 @@ function xmldb_local_eportfolio_upgrade($oldversion) {
 
         }
 
-        // Add required capabilities to student role.
-        // Unfortunately there is no other option. We have tested it and without this capability an error message appears.
-        // Otherwise, other participants cannot access the file.
-        $cap = 'moodle/h5p:deploy'; // Required for students to create and share H5P files.
-        $roleid = '5'; // Default role id for student.
-        $contextid = context_system::instance()->id;
-
-        // Finally add additional capabilities to the student role.
-        assign_capability($cap, CAP_ALLOW, $roleid, $contextid);
-
         // Eportfolio savepoint reached.
         upgrade_plugin_savepoint(true, 2023091202, 'local', 'eportfolio');
 

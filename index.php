@@ -81,7 +81,15 @@ $PAGE->add_body_class('limitedwith');
 // Print the header.
 echo $OUTPUT->header();
 
-$renderer = new local_eportfolio\overview\overview($url, $section, $tsort = '', $tdir = '');
-$renderer->display();
+// To use this plugin the user needs the moodle/h5p:deploy capability.
+// Otherwise, the user can't create and share H5P content.
+
+if (has_capability('moodle/h5p:deploy', $usercontext)) {
+    $data = new stdClass();
+    echo $OUTPUT->render_from_template('local_eportfolio/missingconfiguration', $data);
+} else {
+    $renderer = new local_eportfolio\overview\overview($url, $section, $tsort = '', $tdir = '');
+    $renderer->display();
+}
 
 echo $OUTPUT->footer();

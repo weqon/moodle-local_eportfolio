@@ -58,18 +58,9 @@ function xmldb_local_eportfolio_install() {
 
     $DB->insert_record('customfield_field', $addfield);
 
-    // Add required capabilities to student role.
-    // Unfortunately there is no other option. We have tested it and without this capability an error message appears.
-    // Otherwise, other participants cannot access the file.
-    $cap = 'moodle/h5p:deploy'; // Required for students to create and share H5P files.
-    $roleid = '5'; // Default role id for student.
-    $contextid = context_system::instance()->id;
-
-    // Finally add additional capabilities to the student role.
-    assign_capability($cap, CAP_ALLOW, $roleid, $contextid);
-
     // Add editingteacher as default value for settings.
     set_config('gradingteacher', '3', 'local_eportfolio');
+    // Add user as default value for settings.
     set_config('studentroles', '5', 'local_eportfolio');
 
     return true;

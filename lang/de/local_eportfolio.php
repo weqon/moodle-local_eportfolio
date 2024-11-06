@@ -34,6 +34,10 @@ $string['eportfolio:view_eport'] = 'ePortfolio anzeigen';
 $string['error:noguestaccess'] = 'Sie sind als Gast angemeldet. Der Gastzugriff ist für dieses Plugin nicht erlaubt!';
 $string['error:missingcapability'] = 'Sie haben nicht die erforderlichen Berechtigungen, um auf das Plung "eportfolio" zuzugreifen!';
 
+$string['error:missingconfig'] = 'Kontaktieren Sie Ihre/n Moodle-Administrator/in.';
+$string['error:missingconfig:description'] = 'Das ePortfolio wurde noch nicht vollständig konfiguriert.<br>
+Bitte die Installations-Anweisungen für das Plugin beachten.';
+
 // Overview.
 $string['overview:header'] = 'ePortfolio - Übersicht';
 
