@@ -84,7 +84,7 @@ echo $OUTPUT->header();
 // To use this plugin the user needs the moodle/h5p:deploy capability.
 // Otherwise, the user can't create and share H5P content.
 
-if (has_capability('moodle/h5p:deploy', $usercontext)) {
+if (!has_capability('moodle/h5p:deploy', $context)) {
     $data = new stdClass();
     echo $OUTPUT->render_from_template('local_eportfolio/missingconfiguration', $data);
 } else {
