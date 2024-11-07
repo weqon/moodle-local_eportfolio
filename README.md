@@ -34,7 +34,7 @@ Alternatively, you can run
 to complete the installation from the command line.
 
 ### After installation ###
-Set the capability "moodle/h5p/deploy" for role "user".  
+Set the capability "moodle/h5p:deploy" for role "user".  
 
 *The default "user" role requires the capability "moodle/h5p:deploy".  
 Without this capability user can't share H5P content and other participants cannot access the file.*
@@ -61,7 +61,7 @@ Set the default roles for "students" and "grading teacher" in the plugin setting
   - Info box, if and where an ePortfolio file was already shared
   - Removed hard coded role IDs
 - Several code improvements & quality check
-  - Removed capability assignment from isntall.php and upgrade.php
+  - Removed capability assignment from install.php and upgrade.php
   - Removed hard coded role IDs
   - Preparations to upload the plugin to the Moodle plugin repo
 

@@ -68,14 +68,11 @@ class create_form extends \moodleform {
     public function __construct(string $action = '', array $customdata = [], string $method = 'post') {
         parent::__construct($action, $customdata, $method);
         $this->contextid = $customdata['contextid'];
-        $this->id = $customdata['id'];
 
         $mform =& $this->_form;
         $mform->addElement('hidden', 'contextid', $this->contextid);
         $this->_form->setType('contextid', PARAM_INT);
 
-        $mform->addElement('hidden', 'id', $this->id);
-        $this->_form->setType('id', PARAM_INT);
     }
 
     /**

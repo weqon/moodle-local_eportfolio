@@ -74,14 +74,14 @@ $url = new moodle_url('/local/eportfolio/share.php', $params);
 
 $context = context_user::instance($USER->id);
 
-$mform1 = new sharing_form_1($url);
-
 $PAGE->set_url($url);
 $PAGE->set_context($context);
 $PAGE->set_title(get_string('sharing:header', 'local_eportfolio'));
 $PAGE->set_heading(get_string('sharing:header', 'local_eportfolio'));
 $PAGE->set_pagelayout('base');
 $PAGE->add_body_class('limitedwith');
+
+$mform1 = new sharing_form_1($url);
 
 if ($step == '0') {
     if ($formdata1 = $mform1->is_cancelled()) {

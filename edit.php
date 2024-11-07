@@ -151,7 +151,7 @@ if ($contenturl) {
                 // Check, if the file was shared.
                 $getshared = $DB->get_records('local_eportfolio_share', ['eportid' => $formdata->eportid]);
 
-                if ($getshared) {
+                if (!empty($getshared)) {
 
                     foreach ($getshared as $sh) {
 
@@ -183,6 +183,8 @@ if ($contenturl) {
 
                         $filecontentcopy = $fs->create_file_from_storedfile($newh5p, $file);
 
+                        $oldh5fileid = $h5pfile->id;
+
                         unset($h5pfile->id);
                         unset($h5pfile->contenthash);
                         unset($h5pfile->pathnamehash);
@@ -196,7 +198,7 @@ if ($contenturl) {
                         $newh5pfileid = $DB->insert_record('h5p', $newh5pfile);
 
                         $h5pcontentfiles = $DB->get_records('files',
-                                ['itemid' => $h5pfile->id, 'component' => 'core_h5p', 'filearea' => 'content']);
+                                ['itemid' => $oldh5fileid, 'component' => 'core_h5p', 'filearea' => 'content']);
 
                         // Now create a copy of the images!
                         foreach ($h5pcontentfiles as $h5pcontent) {

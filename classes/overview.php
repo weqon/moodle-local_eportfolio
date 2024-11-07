@@ -111,7 +111,7 @@ class overview {
 
                 echo \html_writer::empty_tag('input',
                         ['id' => 'fileids', 'type' => 'hidden', 'name' => 'fileids', 'value' => 'fileids',
-                                'alt' => get_string('overview:eportfolio:selectfile', 'local_eportfolio')]);
+                                'alt' => get_string('overview:eportfolio:fileselect', 'local_eportfolio')]);
             }
 
             foreach ($entries as $ent) {
@@ -455,7 +455,7 @@ class overview {
                 // Add a checkbox to download the file.
                 $checkboxform = \html_writer::empty_tag('input', ['id' => $ent->fileid, 'type' => 'checkbox',
                         'value' => $ent->fileid, 'name' => 'fileids[]', 'class' => 'mr-3',
-                        'alt' => get_string('overview:eportfolio:selectfile', 'local_eportfolio')]);
+                        'alt' => get_string('overview:eportfolio:fileselect', 'local_eportfolio')]);
 
                 // Add a hint if file is uploaded/shared as template and an undo icon to stop sharing as template.
                 $istemplatefile = '';
@@ -474,11 +474,15 @@ class overview {
                     // Undo URL.
                     // We need the entry from local_eportfolio_share.
                     $eportshared = $DB->get_record('local_eportfolio_share', ['eportid' => $ent->id, 'fileid' => $ent->fileid,
-                            'shareoption' => 'template', 'h5pid' => $ent->h5pid]);
-                    $undourl =
-                            new \moodle_url('/local/eportfolio/actions.php', ['id' => $eportshared->id, 'section' => $this->section,
-                                    'sesskey' => sesskey(), 'action' => 'undo']);
-                    $actions .= self::action_button_undo($undourl, $filename);
+                            'shareoption' => 'template']);
+
+                    if (!empty($eportshared)) {
+                        $undourl =
+                                new \moodle_url('/local/eportfolio/actions.php',
+                                        ['id' => $eportshared->id, 'section' => $this->section,
+                                                'sesskey' => sesskey(), 'action' => 'undo']);
+                        $actions .= self::action_button_undo($undourl, $filename);
+                    }
 
                 }
 
@@ -772,7 +776,7 @@ class overview {
     public function action_button_grade($url) {
         global $OUTPUT;
 
-        $icon = $OUTPUT->pix_icon('e/table', get_string('overview:table:actions:grade:template', 'local_eportfolio'));
+        $icon = $OUTPUT->pix_icon('e/table', get_string('overview:table:actions:viewgradeform', 'local_eportfolio'));
         return \html_writer::link($url, $icon, ['class' => 'mr-2']);
     }
 

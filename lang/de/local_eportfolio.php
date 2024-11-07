@@ -28,6 +28,8 @@ defined('MOODLE_INTERNAL') || die();
 $string['pluginname'] = 'ePortfolio';
 $string['navbar'] = 'ePortfolio';
 
+$string['actions:header'] = 'Aktion ausführen';
+
 // Set db/access - permissions.
 $string['eportfolio:view_eport'] = 'ePortfolio anzeigen';
 

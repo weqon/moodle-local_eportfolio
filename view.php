@@ -62,6 +62,14 @@ if ($cmid) {
     $context = context_system::instance();
 }
 
+// Set page layout.
+$PAGE->set_url($url);
+$PAGE->set_context(context_user::instance($USER->id));
+$PAGE->set_title(get_string('view:header', 'local_eportfolio'));
+$PAGE->set_heading(get_string('view:header', 'local_eportfolio'));
+$PAGE->set_pagelayout('base');
+$PAGE->add_body_class('limitedwith');
+
 // Get the ePortfolio entry and file storage.
 $fs = get_file_storage();
 
@@ -72,6 +80,7 @@ if ($section === 'my') {
     $file = $fs->get_file_by_id($eport->fileid);
 
     // We need a better solution for this.
+    // Move this to edit.php and also update local_eportfolio_shared, in case file was uploaded as template.
     $getpathnamehash = $file->get_pathnamehash();
     $h5pbypathnamehash = $DB->get_record('h5p', ['pathnamehash' => $getpathnamehash]);
 
@@ -142,14 +151,6 @@ $eportfolio->h5pplayer = \core_h5p\player::display($fileurl, $config, false, 'lo
                         ['userid' => $USER->id, 'filename' => $file->get_filename(), 'itemid' => $id]),
         ],
 ])->trigger();
-
-// Set page layout.
-$PAGE->set_url($url);
-$PAGE->set_context(context_user::instance($USER->id));
-$PAGE->set_title(get_string('view:header', 'local_eportfolio'));
-$PAGE->set_heading(get_string('view:header', 'local_eportfolio'));
-$PAGE->set_pagelayout('base');
-$PAGE->add_body_class('limitedwith');
 
 echo $OUTPUT->header();
 

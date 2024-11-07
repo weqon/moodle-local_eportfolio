@@ -125,7 +125,7 @@ class sharing_form_3 extends moodleform {
                     $enrolled[] = &$mform->createElement('advcheckbox', $key, '', $value,
                             ['name' => $key, 'group' => 2], $key);
                     $mform->setDefault("enrolled[$key]", false);
-                } else  {
+                } else {
                     // Check, if user is enrolled as grading teacher.
                     $config = get_config('local_eportfolio');
                     $roleids = explode(',', $config->gradingteacher);
@@ -140,7 +140,7 @@ class sharing_form_3 extends moodleform {
                     }
                 }
             }
-            
+
             $mform->addGroup($enrolled, 'enrolled', get_string('sharing:form:enrolledusers', 'local_eportfolio'));
             $this->add_checkbox_controller(2, ' ');
             $mform->addHelpButton('enrolled', 'sharing:form:enrolledusers', 'local_eportfolio');

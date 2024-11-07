@@ -27,6 +27,7 @@ require_once('locallib.php');
 
 $id = required_param('id', PARAM_INT);  // Entry ID.
 $action = required_param('action', PARAM_ALPHA);
+$sesskey = required_param('sesskey', PARAM_ALPHANUM);
 $section = optional_param('section', 'my', PARAM_ALPHA);
 $courseid = optional_param('courseid', 0, PARAM_INT);
 
@@ -45,6 +46,28 @@ if (!has_capability('local/eportfolio:view_eport', context_system::instance())) 
 }
 
 require_sesskey();
+
+$urlparams = [
+        'id' => $id,
+        'sesskey' => $sesskey,
+        'action' => $action,
+        'section' => $section,
+];
+
+if ($courseid) {
+    $urlparams['courseid'] = $courseid;
+}
+
+$url = new moodle_url('/local/eportfolio/actions.php', $urlparams);
+
+
+// Set page layout.
+$PAGE->set_url($url);
+$PAGE->set_context(context_user::instance($USER->id));
+$PAGE->set_title(get_string('actions:header', 'local_eportfolio'));
+$PAGE->set_heading(get_string('actions:header', 'local_eportfolio'));
+$PAGE->set_pagelayout('base');
+$PAGE->add_body_class('limitedwith');
 
 $redirecturl = new moodle_url('/local/eportfolio/index.php', ['section' => $section]);
 

@@ -82,6 +82,7 @@ class sharing_form_2 extends moodleform {
 
             // Also submit the cm id as hidden value.
             $mform->addElement('hidden', 'cmid', $cmid);
+            $this->_form->setType('cmid', PARAM_INT);
         }
 
         // If current user is enrolled as grading teacher in the selected course show the share as template option.
@@ -90,7 +91,7 @@ class sharing_form_2 extends moodleform {
         $coursecontext = context_course::instance($sharedcourseid);
 
         $roleassigned = false;
-        
+
         foreach ($roleids as $rid) {
             $hasrole = get_assigned_role_by_course($rid, $coursecontext->id);
             if (!empty($hasrole)) {
