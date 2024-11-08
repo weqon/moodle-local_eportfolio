@@ -38,12 +38,11 @@ class overview {
     /**
      * Construct the base stuff.
      *
-     * @param $url
-     * @param $section
-     * @param $tsort
-     * @param $tdir
+     * @param string $url
+     * @param string $section
+     * @param string $tsort
+     * @param int $tdir
      */
-
     public function __construct($url, $section, $tsort = '', $tdir = '') {
         $this->url = $url;
         $this->section = $section;
@@ -56,7 +55,6 @@ class overview {
      *
      * @return void
      */
-
     public function display() {
         global $OUTPUT;
 
@@ -156,7 +154,6 @@ class overview {
      *
      * @return mixed
      */
-
     public function get_eportfolios() {
         global $DB, $USER;
 
@@ -247,10 +244,9 @@ class overview {
     /**
      *  Output content based on set sort order.
      *
-     * @param $sortorder
+     * @param int $sortorder
      * @return int|void
      */
-
     private function get_sort_order($sortorder) {
         switch ($sortorder) {
             case '3':
@@ -269,7 +265,6 @@ class overview {
      *
      * @return string|string[]
      */
-
     private function get_table_columns() {
 
         $columns = '';
@@ -339,7 +334,6 @@ class overview {
      *
      * @return array|string
      */
-
     private function get_table_headers() {
 
         $headers = '';
@@ -406,10 +400,9 @@ class overview {
     /**
      * Get data to fill the table.
      *
-     * @param $ent
+     * @param \stdClass $ent
      * @return array|void
      */
-
     private function get_table_data($ent) {
         global $DB, $USER;
 
@@ -691,10 +684,9 @@ class overview {
     /**
      * Generate view button.
      *
-     * @param $url
+     * @param string $url
      * @return mixed
      */
-
     public function action_button_view($url) {
         global $OUTPUT;
 
@@ -705,10 +697,9 @@ class overview {
     /**
      * Generate share button.
      *
-     * @param $url
+     * @param string $url
      * @return mixed
      */
-
     public function action_button_share($url) {
         global $OUTPUT;
 
@@ -719,10 +710,9 @@ class overview {
     /**
      * Generate edit button.
      *
-     * @param $url
+     * @param string $url
      * @return mixed
      */
-
     public function action_button_edit($url) {
         global $OUTPUT;
 
@@ -733,11 +723,10 @@ class overview {
     /**
      * Generate delete button.
      *
-     * @param $url
-     * @param $filename
+     * @param string $url
+     * @param string $filename
      * @return mixed
      */
-
     public function action_button_delete($url, $filename) {
         global $OUTPUT;
 
@@ -751,11 +740,10 @@ class overview {
     /**
      * Generate undo button.
      *
-     * @param $url
-     * @param $filename
+     * @param string $url
+     * @param string $filename
      * @return mixed
      */
-
     public function action_button_undo($url, $filename) {
         global $OUTPUT;
 
@@ -769,10 +757,9 @@ class overview {
     /**
      * Generate grading button.
      *
-     * @param $url
+     * @param string $url
      * @return mixed
      */
-
     public function action_button_grade($url) {
         global $OUTPUT;
 
@@ -783,11 +770,10 @@ class overview {
     /**
      * Generate reuse button.
      *
-     * @param $url
-     * @param $filename
+     * @param string $url
+     * @param string $filename
      * @return mixed
      */
-
     public function action_button_reuse($url, $filename) {
         global $OUTPUT;
 
@@ -801,12 +787,10 @@ class overview {
     /**
      * Generate the navbar.
      *
-     * @param $section
      * @return \stdClass
      */
-
     private function generate_navbar() {
-        global $DB, $USER;
+        global $DB;
 
         $navitems = new \stdClass();
 
@@ -893,10 +877,9 @@ class overview {
     /**
      * Get H5P title.
      *
-     * @param $pathnamehash
+     * @param string $pathnamehash
      * @return void
      */
-
     public function get_h5p_title($pathnamehash) {
         global $DB;
 
