@@ -370,5 +370,20 @@ function xmldb_local_eportfolio_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2024082104, 'local', 'eportfolio');
     }
 
+    if ($oldversion < 2024111100) {
+
+        // Define field userid to be dropped from local_eportfolio_share.
+        $table = new xmldb_table('local_eportfolio_share');
+        $field = new xmldb_field('userid');
+
+        // Conditionally launch drop field title.
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+
+        // Eportfolio savepoint reached.
+        upgrade_plugin_savepoint(true, 2024111100, 'local', 'eportfolio');
+    }
+
     return true;
 }

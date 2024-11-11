@@ -264,3 +264,7 @@ im Kurs eingeschrieben sind.';
 $string['settings:globalnavbar:enable'] = 'Eintrag Hauptnavigation';
 $string['settings:globalnavbar:enable:desc'] = 'In der Hauptnavigation wird ein Eintrag für das ePortfolio angezeigt.';
 
+// Privacy provider.
+$string['privacy:metadata:local_eportfolio'] = 'Vom ePortfolio-Plugin freigegebene Daten';
+$string['privacy:metadata:local_eportfolio:usermodified'] = 'Nutzer:innen ID, die die ePortfolio-Daten angelegt/freigegeben hat';
+$string['privacy:metadata:local_eportfolio:enrolled'] = 'Nutzer:innen IDs, mit denen die ePortfolio-Daten geteilt wurden';

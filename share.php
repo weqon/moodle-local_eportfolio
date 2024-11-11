@@ -177,7 +177,6 @@ if ($step == '2') {
 
         $data->eportid = $eport->id;
         $data->title = $eport->title;
-        $data->userid = $USER->id;
         $data->courseid = load_from_session('sharedcourse', 0);
         $data->cmid = '0';
         $data->fileid = $eport->fileid;
@@ -229,7 +228,7 @@ if ($step == '2') {
         reset_session_data();
 
         // Check, if the user already shared this file in the specific course with the same option.
-        if (!$DB->get_record('local_eportfolio_share', ['userid' => $data->userid, 'courseid' => $data->courseid,
+        if (!$DB->get_record('local_eportfolio_share', ['usermodified' => $data->usermodified, 'courseid' => $data->courseid,
                 'shareoption' => $data->shareoption, 'fileid' => $data->fileid])) {
 
             // Get the file we want to create a copy of and for sending a message to the users this ePortfolio was shared with.
@@ -282,7 +281,7 @@ if ($step == '2') {
                         $data->enrolled, $data->roles, $data->coursegroups, true);
 
                 foreach ($participants as $key => $value) {
-                    $message = eportfolio_send_message($data->courseid, $data->userid, $key,
+                    $message = eportfolio_send_message($data->courseid, $data->usermodified, $key,
                             $data->shareoption, $filename, $data->fileidcontext);
                 }
 

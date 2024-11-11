@@ -258,3 +258,8 @@ $string['settings:studentroles:desc'] = 'Please select the roles in which your s
 enrolled in the course.';
 $string['settings:globalnavbar:enable'] = 'Main navigation entry';
 $string['settings:globalnavbar:enable:desc'] = 'An entry for the ePortfolio is displayed in the main navigation.';
+
+// Privacy provider.
+$string['privacy:metadata:local_eportfolio'] = 'Data shared by the ePortfolio plugin';
+$string['privacy:metadata:local_eportfolio:usermodified'] = 'The ID of the user who created/shared the ePortfolio data';
+$string['privacy:metadata:local_eportfolio:enrolled'] = 'The ID of the user with whom the ePortfolio data was shared';

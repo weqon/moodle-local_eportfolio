@@ -177,34 +177,34 @@ class overview {
             case 'myshared': // My ePortfolios shared for viewing.
                 $params['shareoption'] = 'share';
                 $whereclauses[] = 'shareoption = :shareoption';
-                $params['userid'] = $USER->id;
-                $whereclauses[] = 'userid = :userid';
+                $params['usermodified'] = $USER->id;
+                $whereclauses[] = 'usermodified = :usermodified';
                 break;
             case 'mygrade': // My ePortfolios shared for grading.
                 $params['shareoption'] = 'grade';
                 $whereclauses[] = 'shareoption = :shareoption';
-                $params['userid'] = $USER->id;
-                $whereclauses[] = 'userid = :userid';
+                $params['usermodified'] = $USER->id;
+                $whereclauses[] = 'usermodified = :usermodified';
                 break;
             case 'shared': // Shared ePortfolios with me for viewing.
                 // We will sort the results later. First we take all results.
                 // ToDo: Might be a performance issue, if there are too many results.
                 $params['shareoption'] = 'share';
                 $whereclauses[] = 'shareoption = :shareoption';
-                $params['userid'] = $USER->id;
-                $whereclauses[] = 'userid != :userid';
+                $params['usermodified'] = $USER->id;
+                $whereclauses[] = 'usermodified != :usermodified';
                 break;
             case 'grade': // Shared ePortfolios with me for grading.
                 $params['shareoption'] = 'grade';
                 $whereclauses[] = 'shareoption = :shareoption';
-                $params['userid'] = $USER->id;
-                $whereclauses[] = 'userid != :userid';
+                $params['usermodified'] = $USER->id;
+                $whereclauses[] = 'usermodified != :usermodified';
                 break;
             case 'template': // Shared ePortfolios as template.
                 $params['shareoption'] = 'template';
                 $whereclauses[] = 'shareoption = :shareoption';
-                $params['userid'] = $USER->id;
-                $whereclauses[] = 'userid != :userid';
+                $params['usermodified'] = $USER->id;
+                $whereclauses[] = 'usermodified != :usermodified';
                 break;
         }
 
@@ -407,6 +407,7 @@ class overview {
         global $DB, $USER;
 
         $actions = '';
+        $filewasdeleted = false;
 
         // View url - same for all.
         $viewurl = new \moodle_url('/local/eportfolio/view.php', ['id' => $ent->id, 'section' => $this->section]);
@@ -418,11 +419,12 @@ class overview {
         if ($ent->title) {
             $file = $fs->get_file_by_id($ent->fileid);
             $filename = $ent->title;
-        } else if ($ent->shareoption === 'grade' && $ent->fileid === '0') {
+        } else if (!empty($ent->shareoption) && $ent->shareoption === 'grade' && $ent->fileid === '0') {
             // In case, the file was deleted, but still shared for grading.
             $file = $fs->get_file_by_id($ent->fileidcontext);
             $filename = $file->get_filename();
             $filewasdeleted = true; // Hint, that the shared for grading eportfolio was deleted by the user.
+
         } else {
             $file = $fs->get_file_by_id($ent->fileid);
             $filename = self::get_h5p_title($file->get_pathnamehash());
@@ -453,7 +455,7 @@ class overview {
                 // Add a hint if file is uploaded/shared as template and an undo icon to stop sharing as template.
                 $istemplatefile = '';
 
-                $checktemplate = $DB->get_record('local_eportfolio_share', ['eportid' => $ent->id, 'userid' => $USER->id,
+                $checktemplate = $DB->get_record('local_eportfolio_share', ['eportid' => $ent->id, 'usermodified' => $USER->id,
                         'shareoption' => 'template', 'fileid' => $ent->fileid]);
 
                 if (!empty($checktemplate)) {

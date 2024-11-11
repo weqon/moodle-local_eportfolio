@@ -105,7 +105,7 @@ if ($formdata = $mform->is_cancelled()) {
 
         if ($formdata->uploadtemplate) {
 
-            if (!$DB->get_record('local_eportfolio_share', ['userid' => $USER->id, 'courseid' => $formdata->sharedcourse,
+            if (!$DB->get_record('local_eportfolio_share', ['usermodified' => $USER->id, 'courseid' => $formdata->sharedcourse,
                     'shareoption' => 'template', 'fileid' => $file->get_id()])) {
 
                 // Create a copy of the file in course context as well, so that other users can use it.
@@ -122,7 +122,6 @@ if ($formdata = $mform->is_cancelled()) {
 
                 $data->eportid = $eportid;
                 $data->title = $formdata->title;
-                $data->userid = $USER->id;
                 $data->courseid = $formdata->sharedcourse;
                 $data->cmid = '';
                 $data->fileid = $file->get_id();
