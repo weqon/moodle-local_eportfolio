@@ -43,6 +43,16 @@ Set the default roles for "students" and "grading teacher" in the plugin setting
 
 ## Relase notes ##
 
+**Version 0.2.2**  
+
+- Added privacy provider class
+- Removed duplicate DB field from local_eportfolio_share
+  - Field "userid" had no additional purpose.
+
+**Version 0.2.1**  
+
+- Quality check iteration.
+
 **Version 0.2.0**  
 ***Please make a backup before updating!***  
 
