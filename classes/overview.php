@@ -543,7 +543,7 @@ class overview {
                 if ($cmid) {
                     // Check, if grade exists.
                     $gradeexists = $DB->get_record('eportfolio_grade',
-                            ['courseid' => $ent->courseid, 'userid' => $ent->userid, 'itemid' => $ent->fileidcontext,
+                            ['courseid' => $ent->courseid, 'userid' => $ent->usermodified, 'itemid' => $ent->fileidcontext,
                                     'cmid' => $cmid]);
 
                     if ($gradeexists) {
@@ -588,7 +588,7 @@ class overview {
                 $sharestart = date('d.m.Y', $ent->timecreated);
                 $shareend = (!empty($ent->enddate)) ? date('d.m.Y', $ent->enddate) : './.';
 
-                $user = $DB->get_record('user', ['id' => $ent->userid]);
+                $user = $DB->get_record('user', ['id' => $ent->usermodified]);
                 $userfullname = fullname($user);
 
                 $tabledata = [
@@ -613,12 +613,12 @@ class overview {
                 if ($cmid) {
                     // Grade URL is only visible, if the CM is available and visible.
                     $gradeurl = new \moodle_url('/mod/eportfolio/view.php', ['id' => $cmid, 'fileid' => $ent->fileidcontext,
-                            'userid' => $ent->userid, 'action' => 'grade']);
+                            'userid' => $ent->usermodified, 'action' => 'grade']);
                     $actions .= self::action_button_grade($gradeurl);
 
                     // Check, if grade exists.
                     $gradeexists = $DB->get_record('eportfolio_grade',
-                            ['courseid' => $ent->courseid, 'userid' => $ent->userid, 'itemid' => $ent->fileidcontext,
+                            ['courseid' => $ent->courseid, 'userid' => $ent->usermodified, 'itemid' => $ent->fileidcontext,
                                     'cmid' => $cmid]);
 
                     if ($gradeexists) {
@@ -636,7 +636,7 @@ class overview {
                 // Additional entry details.
                 $sharestart = date('d.m.Y', $ent->timecreated);
 
-                $user = $DB->get_record('user', ['id' => $ent->userid]);
+                $user = $DB->get_record('user', ['id' => $ent->usermodified]);
                 $userfullname = fullname($user);
 
                 $tabledata = [
@@ -662,7 +662,7 @@ class overview {
                 $courseurl = new \moodle_url('/course/view.php', ['id' => $ent->courseid]);
                 $courseurlfull = \html_writer::link($courseurl, $course->fullname);
 
-                $user = $DB->get_record('user', ['id' => $ent->userid]);
+                $user = $DB->get_record('user', ['id' => $ent->usermodified]);
                 $userfullname = fullname($user);
 
                 $sharestart = date('d.m.Y', $ent->timecreated);
