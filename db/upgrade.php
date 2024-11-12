@@ -236,7 +236,7 @@ function xmldb_local_eportfolio_upgrade($oldversion) {
 
         foreach ($eportfoliofiles as $efile) {
 
-            if ($efile->filename != '.') {
+            if ($efile->filename != '.' && $efile->itemid != '0') {
 
                 // Get the H5P file.
                 $h5pfile = $DB->get_record('h5p', ['pathnamehash' => $efile->pathnamehash]);
@@ -279,6 +279,18 @@ function xmldb_local_eportfolio_upgrade($oldversion) {
         // Conditionally launch add field usermodified.
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
+        }
+
+        // Migrate userid to usermodified.
+        $eportfolios = $DB->get_records('local_eportfolio_share');
+
+        foreach ($eportfolios as $eport) {
+
+            $data = $eport;
+            $eport->usermodified = $eport->userid;
+
+            $DB->update_record('local_eportfolio_share', $data);
+
         }
 
         // Define field timemodified to be added to local_eportfolio_share.
