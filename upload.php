@@ -103,7 +103,7 @@ if ($formdata = $mform->is_cancelled()) {
 
     if ($eportid = $DB->insert_record('local_eportfolio', $data)) {
 
-        if ($formdata->uploadtemplate) {
+        if (!empty($formdata->uploadtemplate)) {
 
             if (!$DB->get_record('local_eportfolio_share', ['usermodified' => $USER->id, 'courseid' => $formdata->sharedcourse,
                     'shareoption' => 'template', 'fileid' => $file->get_id()])) {

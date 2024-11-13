@@ -236,7 +236,7 @@ function xmldb_local_eportfolio_upgrade($oldversion) {
 
         foreach ($eportfoliofiles as $efile) {
 
-            if ($efile->filename != '.' && $efile->itemid != '0') {
+            if ($efile->filename != '.') {
 
                 // Get the H5P file.
                 $h5pfile = $DB->get_record('h5p', ['pathnamehash' => $efile->pathnamehash]);
