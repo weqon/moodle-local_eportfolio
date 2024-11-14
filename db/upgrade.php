@@ -161,30 +161,29 @@ function xmldb_local_eportfolio_upgrade($oldversion) {
         // Get the h5p id for shared ePortfolios to fill the new field h5pid for existing entries.
         $eportfolios = $DB->get_records('local_eportfolio_share');
 
-        foreach ($eportfolios as $eport) {
+        if (!empty($eportfolios)) {
+            foreach ($eportfolios as $eport) {
 
-            $sql = "SELECT h.id FROM {files} f
+                $sql = "SELECT h.id FROM {files} f
                             JOIN {h5p} h
                             ON f.pathnamehash = h.pathnamehash
                             WHERE f.id = :fileid";
 
-            $params = [
-                    'fileid' => $eport->fileidcontext,
-            ];
+                $params = [
+                        'fileid' => $eport->fileidcontext,
+                ];
 
-            $h5pfile = $DB->get_record_sql($sql, $params);
+                $h5pfile = $DB->get_record_sql($sql, $params);
 
-            if ($h5pfile) {
+                if (!empty($h5pfile)) {
+                    $data = new stdClass();
 
-                $data = new stdClass();
+                    $data->id = $eport->id;
+                    $data->h5pid = $h5pfile->id;
 
-                $data->id = $eport->id;
-                $data->h5pid = $h5pfile->id;
-
-                $DB->update_record('local_eportfolio_share', $data);
-
+                    $DB->update_record('local_eportfolio_share', $data);
+                }
             }
-
         }
 
         // Eportfolio savepoint reached.
@@ -234,32 +233,33 @@ function xmldb_local_eportfolio_upgrade($oldversion) {
         // First get all files for component local_eportfolio.
         $eportfoliofiles = $DB->get_records('files', ['component' => 'local_eportfolio', 'filearea' => 'eportfolio']);
 
-        foreach ($eportfoliofiles as $efile) {
+        if (!empty($eportfoliofiles)) {
+            foreach ($eportfoliofiles as $efile) {
 
-            if ($efile->filename != '.') {
+                if ($efile->filename != '.') {
 
-                // Get the H5P file.
-                $h5pfile = $DB->get_record('h5p', ['pathnamehash' => $efile->pathnamehash]);
+                    // Get the H5P file.
+                    $h5pfile = $DB->get_record('h5p', ['pathnamehash' => $efile->pathnamehash]);
 
-                // In case there is no H5P file we assume the entry was deleted.
-                if ($h5pfile) {
+                    // In case there is no H5P file we assume the entry was deleted.
+                    if ($h5pfile) {
 
-                    $insertfile = new stdClass();
+                        $insertfile = new stdClass();
 
-                    $insertfile->fileid = $efile->id;
-                    $insertfile->h5pid = $h5pfile->id;
-                    $insertfile->usermodified = $efile->userid;
-                    $insertfile->timecreated = $efile->timecreated;
-                    $insertfile->timemodified = $efile->timemodified;
+                        $insertfile->fileid = $efile->id;
+                        $insertfile->h5pid = $h5pfile->id;
+                        $insertfile->usermodified = $efile->userid;
+                        $insertfile->timecreated = $efile->timecreated;
+                        $insertfile->timemodified = $efile->timemodified;
 
-                    // To avoid duplicate entries. File IDs should be unique table local_eportfolio.
-                    if (!$DB->get_record('local_eportfolio', ['fileid' => $efile->id])) {
-                        $DB->insert_record('local_eportfolio', $insertfile);
+                        // To avoid duplicate entries. File IDs should be unique table local_eportfolio.
+                        if (!$DB->get_record('local_eportfolio', ['fileid' => $efile->id])) {
+                            $DB->insert_record('local_eportfolio', $insertfile);
+                        }
+
                     }
-
                 }
             }
-
         }
     }
 
@@ -284,13 +284,13 @@ function xmldb_local_eportfolio_upgrade($oldversion) {
         // Migrate userid to usermodified.
         $eportfolios = $DB->get_records('local_eportfolio_share');
 
-        foreach ($eportfolios as $eport) {
+        if (!empty($eportfolios)) {
+            foreach ($eportfolios as $eport) {
+                $data = $eport;
+                $eport->usermodified = $eport->userid;
 
-            $data = $eport;
-            $eport->usermodified = $eport->userid;
-
-            $DB->update_record('local_eportfolio_share', $data);
-
+                $DB->update_record('local_eportfolio_share', $data);
+            }
         }
 
         // Define field timemodified to be added to local_eportfolio_share.
@@ -321,18 +321,18 @@ function xmldb_local_eportfolio_upgrade($oldversion) {
         // First get all files for component local_eportfolio_share.
         $eportfoliofiles = $DB->get_records('local_eportfolio_share');
 
-        foreach ($eportfoliofiles as $efile) {
+        if (!empty($eportfoliofiles)) {
+            foreach ($eportfoliofiles as $efile) {
+                // Get eport entry.
+                $eport = $DB->get_record('local_eportfolio', ['fileid' => $efile->fileid]);
 
-            // Get eport entry.
-            $eport = $DB->get_record('local_eportfolio', ['fileid' => $efile->fileid]);
-
-            // In case there is no entry we assume the entry was deleted.
-            if ($eport) {
-                $updatedata = $efile;
-                $efile->eportid = $eport->id;
-                $DB->update_record('local_eportfolio_share', $updatedata);
+                // In case there is no entry we assume the entry was deleted.
+                if (!empty($eport)) {
+                    $updatedata = $efile;
+                    $efile->eportid = $eport->id;
+                    $DB->update_record('local_eportfolio_share', $updatedata);
+                }
             }
-
         }
 
         // Set the default editingteacher and student role.

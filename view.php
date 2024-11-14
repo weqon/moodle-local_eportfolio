@@ -45,7 +45,7 @@ $courseid = optional_param('course', 0, PARAM_INT);
 $cmid = optional_param('cmid', 0, PARAM_INT);
 $userid = optional_param('userid', 0, PARAM_INT);
 $tocourse = optional_param('tocourse', 0, PARAM_INT);
-$section = optional_param('section', 'my', PARAM_ALPHA);
+$section = optional_param('section', '', PARAM_ALPHA);
 
 $url = new moodle_url('/local/eportfolio/view.php', ['id' => $id, 'section' => $section]);
 
@@ -90,6 +90,7 @@ if ($section === 'my') {
     $DB->update_record('local_eportfolio', $updatedata);
 
 } else {
+    // File view was accessed from course or course module.
     $eport = $DB->get_record('local_eportfolio_share', ['id' => $id]);
 
     // Get the file for shared context.
