@@ -134,6 +134,8 @@ if ($contenturl) {
             $fs = get_file_storage();
             $file = $fs->get_file_by_id($fileid);
 
+            $filename = $file->get_filename();
+
             $h5pfile = $DB->get_record('h5p', ['pathnamehash' => $file->get_pathnamehash()]);
 
             $data = new stdClass();
@@ -231,11 +233,18 @@ if ($contenturl) {
                 }
 
                 // Trigger event for editing ePortfolio.
+                if (!empty($eport->title)) {
+                    $filename = $eport->title;
+                } else {
+                    $filename = $file->get_filename();
+                }
+
                 // ToDo: Add event for editing.
-                \local_eportfolio\event\eportfolio_created::create([
+                \local_eportfolio\event\eportfolio_edited::create([
+                        'objectid' => $fileid,
                         'other' => [
-                                'description' => get_string('event:eportfolio:created', 'local_eportfolio',
-                                        ['userid' => $USER->id, 'filename' => '', 'itemid' => $fileid]),
+                                'description' => get_string('event:eportfolio:edited', 'local_eportfolio',
+                                        ['userid' => $USER->id, 'filename' => $filename, 'fileid' => $fileid]),
                         ],
                 ])->trigger();
 

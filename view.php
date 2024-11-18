@@ -73,8 +73,13 @@ $PAGE->add_body_class('limitedwith');
 // Get the ePortfolio entry and file storage.
 $fs = get_file_storage();
 
+// Set objectid for triggering the event.
+$objectid = 0;
+
 if ($section === 'my') {
     $eport = $DB->get_record('local_eportfolio', ['id' => $id]);
+
+    $objectid = $eport->fileid;
 
     // Get the file for user context.
     $file = $fs->get_file_by_id($eport->fileid);
@@ -93,6 +98,8 @@ if ($section === 'my') {
     // File view was accessed from course or course module.
     $eport = $DB->get_record('local_eportfolio_share', ['id' => $id]);
 
+    $objectid = $eport->fileidcontext;
+
     // Get the file for shared context.
     $file = $fs->get_file_by_id($eport->fileidcontext);
 }
@@ -101,7 +108,7 @@ if ($section === 'my') {
 // Convert display options to a valid object.
 $factory = new \core_h5p\factory();
 $core = $factory->get_core();
-$config = core_h5p\helper::decode_display_options($core, $context->displayoptions);
+$config = core_h5p\helper::decode_display_options($core, 0);
 
 $fileurl = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(),
         $file->get_filearea(), $file->get_itemid(), $file->get_filepath(),
@@ -135,21 +142,29 @@ if ($USER->id == $file->get_userid() && !$tocourse && $file->get_component() != 
 // Prepare data for template files.
 $eportfolio = new stdClass();
 
-$eportfolio->title = $eport->title;
-$eportfolio->description = $eport->description;
+$eportfolio->title = (!empty($eport->title)) ? $eport->title : '';
+$eportfolio->description = (!empty($eport->description)) ? $eport->description : '';
 $eportfolio->backurl = $backurl;
 $eportfolio->backurlstring = $backurlstring;
 $eportfolio->editurl = $editurl;
 $eportfolio->userfullname = $userfullname;
-$eportfolio->timecreated = date('d.m.Y', $h5pfile->timecreated);
-$eportfolio->timemodified = date('d.m.Y', $h5pfile->timemodified);
+$eportfolio->timecreated = date('d.m.Y', $eport->timecreated);
+$eportfolio->timemodified = date('d.m.Y', $eport->timemodified);
 $eportfolio->h5pplayer = \core_h5p\player::display($fileurl, $config, false, 'local_eportfolio', false);;
 
 // Trigger event for viewing ePortfolio.
+$filename = '';
+if (!empty($eport->title)) {
+    $filename = $eport->title;
+} else {
+    $filename = $file->get_filename();
+}
+
 \local_eportfolio\event\eportfolio_viewed::create([
+        'objectid' => $objectid,
         'other' => [
                 'description' => get_string('event:eportfolio:viewed', 'local_eportfolio',
-                        ['userid' => $USER->id, 'filename' => $file->get_filename(), 'itemid' => $id]),
+                        ['userid' => $USER->id, 'filename' => $filename, 'fileid' => $objectid]),
         ],
 ])->trigger();
 

@@ -43,6 +43,8 @@ Set the default roles for "students" and "grading teacher" in the plugin setting
 
 ## Relase notes ##
 
+### Please note: This plugin is a "Release Candidate" and should not be used in productive systems. ###
+
 **Version 0.2.2**  
 
 - Added privacy provider class

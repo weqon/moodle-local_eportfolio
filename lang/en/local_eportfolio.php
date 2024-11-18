@@ -220,21 +220,24 @@ $string['use:template:error'] = 'There was an error while copying the template f
 $string['event:eportfolio:viewed:name'] = 'ePortfolio viewed';
 $string['event:eportfolio:shared:name'] = 'ePortfolio sharing';
 $string['event:eportfolio:created:name'] = 'ePortfolio created';
+$string['event:eportfolio:edited:name'] = 'ePortfolio edited';
 $string['event:eportfolio:deleted:name'] = 'ePortfolio deleted';
 $string['event:eportfolio:viewed'] =
-        'The user with the id \'{$a->userid}\' viewed the ePortfolio {$a->filename} (itemid: \'{$a->itemid}\')';
+        'The user with the id \'{$a->userid}\' viewed the ePortfolio {$a->filename} (fileid: \'{$a->fileid}\')';
 $string['event:eportfolio:shared:share'] =
-        'The user with the id \'{$a->userid}\' shared the ePortfolio {$a->filename} (itemid: \'{$a->itemid}\')';
+        'The user with the id \'{$a->userid}\' shared the ePortfolio {$a->filename} (fileid: \'{$a->fileid}\')';
 $string['event:eportfolio:shared:grade'] =
-        'The user with the id \'{$a->userid}\' shared the ePortfolio {$a->filename} for grading (itemid: \'{$a->itemid}\')';
+        'The user with the id \'{$a->userid}\' shared the ePortfolio {$a->filename} for grading (fileid: \'{$a->fileid}\')';
 $string['event:eportfolio:shared:template'] =
-        'The user with the id \'{$a->userid}\' shared the ePortfolio {$a->filename} as template (itemid: \'{$a->itemid}\')';
+        'The user with the id \'{$a->userid}\' shared the ePortfolio {$a->filename} as template (fileid: \'{$a->fileid}\')';
 $string['event:eportfolio:undo'] =
-        'The user with the id \'{$a->userid}\' withdrawn the sharing of the ePortfolio {$a->filename} (itemid: \'{$a->itemid}\')';
+        'The user with the id \'{$a->userid}\' withdrawn the sharing of the ePortfolio {$a->filename} (fileid: \'{$a->fileid}\')';
 $string['event:eportfolio:created'] =
-        'The user with the id \'{$a->userid}\' created a new ePortfolio {$a->filename} (itemid: \'{$a->itemid}\')';
+        'The user with the id \'{$a->userid}\' created a new ePortfolio {$a->filename} (fileid: \'{$a->fileid}\')';
+$string['event:eportfolio:edited'] =
+        'The user with the id \'{$a->userid}\' edited the ePortfolio {$a->filename} (fileid: \'{$a->fileid}\')';
 $string['event:eportfolio:deleted'] =
-        'The user with the id \'{$a->userid}\' deleted ePortfolio {$a->filename} (itemid: \'{$a->itemid}\')';
+        'The user with the id \'{$a->userid}\' deleted ePortfolio {$a->filename} (fileid: \'{$a->fileid}\')';
 
 // Message provider.
 $string['messageprovider:sharing'] = 'Message about a shared ePortfolio';

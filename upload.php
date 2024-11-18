@@ -91,6 +91,8 @@ if ($formdata = $mform->is_cancelled()) {
     $files = array_reverse($files);
     $file = reset($files);
 
+    $filename= $file->get_filename();
+
     $data = new stdClass();
 
     $data->title = $formdata->title;
@@ -146,10 +148,15 @@ if ($formdata = $mform->is_cancelled()) {
         $editurl = new moodle_url('/local/eportfolio/edit.php', ['id' => $eportid]);
 
         // Trigger event for creating ePortfolio.
+        if (!empty($data->title)) {
+            $filename = $data->title;
+        }
+
         \local_eportfolio\event\eportfolio_created::create([
+                'objectid' => $data->fileid,
                 'other' => [
                         'description' => get_string('event:eportfolio:created', 'local_eportfolio',
-                                ['userid' => $USER->id, 'filename' => $file->get_filename(), 'itemid' => $file->get_id()]),
+                                ['userid' => $USER->id, 'filename' => $filename, 'fileid' => $data->fileid]),
                 ],
         ])->trigger();
 

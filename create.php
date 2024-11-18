@@ -102,10 +102,15 @@ if (empty($library)) {
 
 
                 // Trigger event for creating ePortfolio.
+                $filename = '';
+                if (!empty($eport->title)) {
+                    $filename = $eport->title;
+                }
+
                 \local_eportfolio\event\eportfolio_created::create([
                         'other' => [
                                 'description' => get_string('event:eportfolio:created', 'local_eportfolio',
-                                        ['userid' => $USER->id, 'filename' => '', 'itemid' => $fileid]),
+                                        ['userid' => $USER->id, 'filename' => $filename, 'fileid' => $fileid]),
                         ],
                 ])->trigger();
 

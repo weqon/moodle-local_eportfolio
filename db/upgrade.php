@@ -236,7 +236,8 @@ function xmldb_local_eportfolio_upgrade($oldversion) {
         if (!empty($eportfoliofiles)) {
             foreach ($eportfoliofiles as $efile) {
 
-                if ($efile->filename != '.') {
+                // If the current file id is in the table local_eportfolio_share as fileidcontext -skip!
+                if ($efile->filename != '.' && !$DB->record_exists('local_eportfolio_share', ['fileidcontext' => $efile->id])) {
 
                     // Get the H5P file.
                     $h5pfile = $DB->get_record('h5p', ['pathnamehash' => $efile->pathnamehash]);
@@ -335,10 +336,6 @@ function xmldb_local_eportfolio_upgrade($oldversion) {
             }
         }
 
-        // Set the default editingteacher and student role.
-        set_config('gradingteacher', '3', 'local_eportfolio');
-        set_config('studentroles', '5', 'local_eportfolio');
-
         // Eportfolio savepoint reached.
         upgrade_plugin_savepoint(true, 2024082102, 'local', 'eportfolio');
     }
@@ -394,7 +391,23 @@ function xmldb_local_eportfolio_upgrade($oldversion) {
         }
 
         // Eportfolio savepoint reached.
-        upgrade_plugin_savepoint(true, 2024111100, 'local', 'eportfolio');
+        upgrade_plugin_savepoint(true, 2024111101, 'local', 'eportfolio');
+    }
+
+    if ($oldversion < 2024111500) {
+        global $CFG;
+
+        // Get custommenuitems - Site administration -> Appearance -> Themes -> Theme settings.
+        $custommenuitem = $CFG->custommenuitems;
+
+        // Remove old menu entry for ePortfolio.
+        $custommenuitem = str_replace('ePortfolio|/local/eportfolio/index.php', '', $custommenuitem);
+
+        // Update the config entry.
+        set_config('custommenuitems', $custommenuitem);
+        
+        // Eportfolio savepoint reached.
+        upgrade_plugin_savepoint(true, 2024111101, 'local', 'eportfolio');
     }
 
     return true;

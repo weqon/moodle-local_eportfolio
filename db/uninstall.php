@@ -31,6 +31,7 @@ function xmldb_local_eportfolio_uninstall() {
 
     // Remove entries for customfield category, field and data.
     // First we need to collect some data from customfield_field.
+    // ToDo: Check, if there is a core function/API available to remove it.
     $customfieldfield = $DB->get_record('customfield_field', ['shortname' => 'eportfolio_course']);
 
     // We need the id and categoryid for the next steps.
@@ -56,12 +57,16 @@ function xmldb_local_eportfolio_uninstall() {
 
             $h5pfile = $DB->get_record('h5p', ['pathnamehash' => $eport->pathnamehash]);
 
-            if ($h5pfile) {
+            if (!empty($h5pfile)) {
                 $DB->delete_records('h5p', ['id' => $h5pfile->id]);
             }
         }
 
     }
+
+    // Finally delete all related files. Files are stored in system context by default.
+    $context = context_system::instance();
+    delete_area_files($context->id, 'local_eportfolio', 'eportfolio');
 
     return true;
 }

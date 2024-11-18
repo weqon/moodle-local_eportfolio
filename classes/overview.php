@@ -237,6 +237,23 @@ class overview {
 
         $eportfolios = $DB->get_records_sql($sql, $params);
 
+        $returneports = [];
+
+        // Check, if user is enrolled in same course as the ePortfolio was shared.
+        if ($this->section === 'shared' || $this->section === 'grade' || $this->section === 'template') {
+
+            foreach ($eportfolios as $eport) {
+                $coursecontext = \context_course::instance($eport->courseid);
+
+                if (is_enrolled($coursecontext, $USER) || is_siteadmin($USER->id)) {
+                    $returneports[] = $eport;
+                }
+            }
+
+            return $returneports;
+
+        }
+
         return $eportfolios;
 
     }
@@ -419,12 +436,14 @@ class overview {
         if ($ent->title) {
             $file = $fs->get_file_by_id($ent->fileid);
             $filename = $ent->title;
-        } else if (!empty($ent->shareoption) && $ent->shareoption === 'grade' && $ent->fileid === '0') {
-            // In case, the file was deleted, but still shared for grading.
+        } else if (!empty($ent->shareoption) && $ent->shareoption === 'grade') {
             $file = $fs->get_file_by_id($ent->fileidcontext);
             $filename = $file->get_filename();
-            $filewasdeleted = true; // Hint, that the shared for grading eportfolio was deleted by the user.
-
+            if ($ent->fileid === '0') {
+                // In case, the file was deleted, but still shared for grading.
+                // Show hint, that the shared for grading eportfolio was deleted by the user.
+                $filewasdeleted = true;
+            }
         } else {
             $file = $fs->get_file_by_id($ent->fileid);
             $filename = self::get_h5p_title($file->get_pathnamehash());

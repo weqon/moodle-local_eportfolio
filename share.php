@@ -192,37 +192,47 @@ if ($step == '2') {
             $data->cmid = $cmid;
         }
 
+        // Set empty values to avoid undefined property warning.
+        $data->roles = '';
+        $data->enrolled = '';
+        $data->coursegroups = '';
+
         // Let's collect the target groups.
         $data->fullcourse = ($formdata3->fullcourse == '1') ? $formdata3->fullcourse : '0';
 
-        $roles = [];
-
         // We only need the following steps, if ePortfolio isn't shared for the complete course.
         if ($formdata3->fullcourse === '2') {
-            foreach ($formdata3->roles as $key => $value) {
-                if ($value) {
-                    $roles[] = $key;
+
+            $roles = [];
+
+            if (isset($formdata3->roles)) {
+                foreach ($formdata3->roles as $key => $value) {
+                    if ($value) {
+                        $roles[] = $key;
+                    }
                 }
+                $data->roles = implode(', ', $roles);
             }
 
-            $data->roles = implode(', ', $roles);
-            $enrolled = [];
-            foreach ($formdata3->enrolled as $key => $value) {
-                if ($value) {
-                    $enrolled[] = $key;
+            if (isset($formdata3->enrolled)) {
+                $enrolled = [];
+                foreach ($formdata3->enrolled as $key => $value) {
+                    if ($value) {
+                        $enrolled[] = $key;
+                    }
                 }
+                $data->enrolled = implode(', ', $enrolled);
             }
 
-            $data->enrolled = implode(', ', $enrolled);
-
-            $groups = [];
-            foreach ($formdata3->groups as $key => $value) {
-                if ($value) {
-                    $groups[] = $key;
+            if (isset($formdata3->groups)) {
+                $groups = [];
+                foreach ($formdata3->groups as $key => $value) {
+                    if ($value) {
+                        $groups[] = $key;
+                    }
                 }
+                $data->coursegroups = implode(', ', $groups);
             }
-
-            $data->coursegroups = implode(', ', $groups);
         }
 
         reset_session_data();
@@ -286,10 +296,15 @@ if ($step == '2') {
                 }
 
                 // Trigger event for sharing ePortfolio.
+                if (!empty($eport->title)) {
+                    $filename = $eport->title;
+                }
+
                 \local_eportfolio\event\eportfolio_shared::create([
+                        'objectid' => $eport->fileid,
                         'other' => [
                                 'description' => get_string('event:eportfolio:shared:' . $data->shareoption, 'local_eportfolio',
-                                        ['userid' => $USER->id, 'filename' => $file->get_filename(), 'itemid' => $id]),
+                                        ['userid' => $USER->id, 'filename' => $filename, 'fileid' => $eport->fileid]),
                         ],
                 ])->trigger();
 

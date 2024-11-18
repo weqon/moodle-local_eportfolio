@@ -97,10 +97,17 @@ if ($action === 'undo') {
     if ($DB->delete_records('local_eportfolio_share', ['id' => $eport->id])) {
 
         // Trigger event for withdrawing sharing of ePortfolio.
+        $filename = '';
+        if (!empty($eport->title)) {
+            $filename = $eport->title;
+        } else {
+            $filename = $file->get_filename();
+        }
         \local_eportfolio\event\eportfolio_shared::create([
+                'objectid' => $eport->fileid,
                 'other' => [
                         'description' => get_string('event:eportfolio:undo', 'local_eportfolio',
-                                ['userid' => $USER->id, 'filename' => $file->get_filename(), 'itemid' => $eport->fileid]),
+                                ['userid' => $USER->id, 'filename' => $filename, 'fileid' => $eport->fileid]),
                 ],
         ])->trigger();
 
@@ -174,10 +181,18 @@ if ($action === 'delete') {
     if ($DB->delete_records('local_eportfolio', ['id' => $eport->id])) {
 
         // Trigger event for withdrawing sharing of ePortfolio.
+        $filename = '';
+        if (!empty($eport->title)) {
+            $filename = $eport->title;
+        } else {
+            $filename = $file->get_filename();
+        }
+
         \local_eportfolio\event\eportfolio_deleted::create([
+                'objectid' => $eport->fileid,
                 'other' => [
                         'description' => get_string('event:eportfolio:deleted', 'local_eportfolio',
-                                ['userid' => $USER->id, 'filename' => $file->get_filename(),
+                                ['userid' => $USER->id, 'filename' => $filename,
                                         'itemid' => $file->get_id()]),
                 ],
         ])->trigger();
