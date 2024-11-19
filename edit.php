@@ -157,79 +157,94 @@ if ($contenturl) {
 
                     foreach ($getshared as $sh) {
 
-                        $newh5p = new stdClass();
+                        // Only ePortfolios with share option "template" and "share" can be updated.
+                        if ($sh->shareoption != 'grade') {
 
-                        if ($sh->shareoption === 'grade') {
-                            $modcontext = context_module::instance($sh->cmid);
+                            $newh5p = new stdClass();
 
-                            $newh5p->component = 'mod_eportfolio';
-                            $newh5p->contextid = $modcontext->id; // Coursemodule context.
-
-                        } else {
                             // Get course context for the new file.
                             $coursecontext = context_course::instance($sh->courseid);
 
                             $newh5p->component = 'local_eportfolio';
                             $newh5p->contextid = $coursecontext->id; // Coursemodule context.
-                        }
 
-                        // First create a copy of the original h5p file in the right context!
-                        $fs = get_file_storage();
-                        $file = $fs->get_file_by_hash($h5pfile->pathnamehash);
+                            // First create a copy of the original h5p file in the right context!
+                            $fs = get_file_storage();
+                            $file = $fs->get_file_by_hash($h5pfile->pathnamehash);
 
-                        $itemid = file_get_unused_draft_itemid();
+                            $itemid = file_get_unused_draft_itemid();
 
-                        $newh5p->userid = $USER->id;
-                        $newh5p->itemid = $itemid;
-                        $newh5p->component = 'mod_eportfolio';
+                            $newh5p->userid = $USER->id;
+                            $newh5p->itemid = $itemid;
+                            $newh5p->component = 'local_eportfolio';
 
-                        $filecontentcopy = $fs->create_file_from_storedfile($newh5p, $file);
+                            $filecontentcopy = $fs->create_file_from_storedfile($newh5p, $file);
 
-                        $oldh5fileid = $h5pfile->id;
+                            if (!empty($filecontentcopy)) {
+                                // Update fileidcontext in local_eportfolio_share and delete old context file.
+                                $oldfileidcontext = $sh->fileidcontext;
 
-                        unset($h5pfile->id);
-                        unset($h5pfile->contenthash);
-                        unset($h5pfile->pathnamehash);
+                                $update = $sh;
+                                $update->fileidcontext = $filecontentcopy->get_id();
 
-                        // Create a copy for h5p to get a unique item id for media content.
-                        $newh5pfile = $h5pfile;
+                                $DB->update_record('local_eportfolio_share', $update);
 
-                        $newh5pfile->contenthash = $filecontentcopy->get_contenthash();
-                        $newh5pfile->pathnamehash = $filecontentcopy->get_pathnamehash();
+                                // Also delete old fileidcontext from files table.
+                                $oldcontextfile = $fs->get_file_by_id($oldfileidcontext);
+                                $oldcontextfile->delete();
+                            }
 
-                        $newh5pfileid = $DB->insert_record('h5p', $newh5pfile);
+                            $oldh5fileid = $h5pfile->id;
 
-                        $h5pcontentfiles = $DB->get_records('files',
-                                ['itemid' => $oldh5fileid, 'component' => 'core_h5p', 'filearea' => 'content']);
+                            unset($h5pfile->id);
+                            unset($h5pfile->contenthash);
+                            unset($h5pfile->pathnamehash);
 
-                        // Now create a copy of the images!
-                        foreach ($h5pcontentfiles as $h5pcontent) {
-                            if ($h5pcontent->filename != '.') {
+                            // Create a copy for h5p to get a unique item id for media content.
+                            $newh5pfile = $h5pfile;
 
-                                // Get the file we want to create a copy of.
-                                $fs = get_file_storage();
-                                $contentfile = $fs->get_file_by_id($h5pcontent->id);
+                            $newh5pfile->contenthash = $filecontentcopy->get_contenthash();
+                            $newh5pfile->pathnamehash = $filecontentcopy->get_pathnamehash();
 
-                                $itemidcontent = $newh5pfileid;
+                            $newh5pfileid = $DB->insert_record('h5p', $newh5pfile);
 
-                                $newcontentfile = new stdClass();
-                                $newcontentfile->contextid = '1'; // Must be system context.
-                                $newcontentfile->userid = $USER->id;
-                                $newcontentfile->itemid = $itemidcontent;
-                                $newcontentfile->timecreated = time();
-                                $newcontentfile->timemodified = time();
+                            $h5pcontentfiles = $DB->get_records('files',
+                                    ['itemid' => $oldh5fileid, 'component' => 'core_h5p', 'filearea' => 'content']);
 
-                                $newcontentfile->component = 'core_h5p';
-                                $newcontentfile->filearea = 'content';
-                                $newcontentfile->filename = $h5pcontent->filename;
-                                $newcontentfile->filepath = $h5pcontent->filepath;
+                            // Now create a copy of the images!
+                            foreach ($h5pcontentfiles as $h5pcontent) {
+                                if ($h5pcontent->filename != '.') {
 
-                                $filecontentcopy = $fs->create_file_from_storedfile($newcontentfile, $contentfile);
+                                    // Get the file we want to create a copy of.
+                                    $fs = get_file_storage();
+                                    $contentfile = $fs->get_file_by_id($h5pcontent->id);
 
+                                    $itemidcontent = $newh5pfileid;
+
+                                    $newcontentfile = new stdClass();
+                                    $newcontentfile->contextid = '1'; // Must be system context.
+                                    $newcontentfile->userid = $USER->id;
+                                    $newcontentfile->itemid = $itemidcontent;
+                                    $newcontentfile->timecreated = time();
+                                    $newcontentfile->timemodified = time();
+
+                                    $newcontentfile->component = 'core_h5p';
+                                    $newcontentfile->filearea = 'content';
+                                    $newcontentfile->filename = $h5pcontent->filename;
+                                    $newcontentfile->filepath = $h5pcontent->filepath;
+
+                                    $filecontentcopy = $fs->create_file_from_storedfile($newcontentfile, $contentfile);
+                                }
+                            }
+
+                            // Delete old H5P file.
+                            if (!empty($newh5pfileid)) {
+                                $DB->delete_records('h5p', ['id' => $oldh5fileid]);
+                                // H5P content files are always stored in system context.
+                                $fs->delete_area_files('1', 'core_h5p', 'content', $oldh5fileid);
                             }
                         }
                     }
-
                 }
 
                 // Trigger event for editing ePortfolio.

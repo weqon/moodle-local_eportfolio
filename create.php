@@ -108,6 +108,7 @@ if (empty($library)) {
                 }
 
                 \local_eportfolio\event\eportfolio_created::create([
+                        'objectid' => $fileid,
                         'other' => [
                                 'description' => get_string('event:eportfolio:created', 'local_eportfolio',
                                         ['userid' => $USER->id, 'filename' => $filename, 'fileid' => $fileid]),

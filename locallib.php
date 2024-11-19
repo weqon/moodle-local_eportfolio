@@ -430,6 +430,32 @@ function check_already_shared($id, $fileid) {
 }
 
 /**
+ * Check, if the plugin was configured properly.
+ *
+ * @param stdClass $context
+ * @return stdClass
+ */
+function check_config($context) {
+
+    $config = get_config('local_eportfolio');
+
+    $configset = new stdClass();
+
+    if (empty($config->gradingteacher)) {
+        $configset->missinggradingteacher = true;
+    }
+    if (empty($config->studentroles)) {
+        $configset->missingstudentroles = true;
+    }
+
+    if (!has_capability('moodle/h5p:deploy', $context)) {
+        $configset->missingh5pcapability = true;
+    }
+
+    return $configset;
+}
+
+/**
  * Send message to user after ePortfolio was shared.
  *
  * @param int $courseid

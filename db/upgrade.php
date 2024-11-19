@@ -236,14 +236,14 @@ function xmldb_local_eportfolio_upgrade($oldversion) {
         if (!empty($eportfoliofiles)) {
             foreach ($eportfoliofiles as $efile) {
 
-                // If the current file id is in the table local_eportfolio_share as fileidcontext -skip!
+                // If the current file id is in the table local_eportfolio_share as fileidcontext - skip!
                 if ($efile->filename != '.' && !$DB->record_exists('local_eportfolio_share', ['fileidcontext' => $efile->id])) {
 
                     // Get the H5P file.
                     $h5pfile = $DB->get_record('h5p', ['pathnamehash' => $efile->pathnamehash]);
 
                     // In case there is no H5P file we assume the entry was deleted.
-                    if ($h5pfile) {
+                    if (empty($h5pfile)) {
 
                         $insertfile = new stdClass();
 
@@ -400,12 +400,14 @@ function xmldb_local_eportfolio_upgrade($oldversion) {
         // Get custommenuitems - Site administration -> Appearance -> Themes -> Theme settings.
         $custommenuitem = $CFG->custommenuitems;
 
-        // Remove old menu entry for ePortfolio.
-        $custommenuitem = str_replace('ePortfolio|/local/eportfolio/index.php', '', $custommenuitem);
+        if (!empty($custommenuitem)) {
+            // Remove old menu entry for ePortfolio.
+            $custommenuitem = str_replace('ePortfolio|/local/eportfolio/index.php', '', $custommenuitem);
 
-        // Update the config entry.
-        set_config('custommenuitems', $custommenuitem);
-        
+            // Update the config entry.
+            set_config('custommenuitems', $custommenuitem);
+        }
+
         // Eportfolio savepoint reached.
         upgrade_plugin_savepoint(true, 2024111101, 'local', 'eportfolio');
     }

@@ -33,7 +33,7 @@ function local_eportfolio_before_http_headers() {
     // Get eportfolionavbar from settings.
     $config = get_config('local_eportfolio');
 
-    if ($config->eportfolionavbar) {
+    if (!empty($config->eportfolionavbar)) {
 
         $context = context_system::instance();
 

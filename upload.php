@@ -91,7 +91,7 @@ if ($formdata = $mform->is_cancelled()) {
     $files = array_reverse($files);
     $file = reset($files);
 
-    $filename= $file->get_filename();
+    $filename = $file->get_filename();
 
     $data = new stdClass();
 

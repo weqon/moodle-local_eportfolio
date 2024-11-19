@@ -203,9 +203,8 @@ if ($step == '2') {
         // We only need the following steps, if ePortfolio isn't shared for the complete course.
         if ($formdata3->fullcourse === '2') {
 
-            $roles = [];
-
             if (isset($formdata3->roles)) {
+                $roles = [];
                 foreach ($formdata3->roles as $key => $value) {
                     if ($value) {
                         $roles[] = $key;
@@ -342,7 +341,7 @@ $data->renderform = $renderform;
 $eport = $DB->get_record('local_eportfolio', ['id' => $id]);
 $alreadyshared = check_already_shared($eport->id, $eport->fileid);
 
-if ($alreadyshared) {
+if (!empty($alreadyshared)) {
     $data->alreadyshared = true;
     $data->shared = $alreadyshared;
 }

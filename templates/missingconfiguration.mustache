@@ -35,7 +35,7 @@
 
 
 <div class="row pt-3 mb-3">
-    <div class="col-4-lg col-6-sm">
+    <div class="col-lg-6 col-sm-6">
         <div class="alert alert-danger">
 
             <h5>
@@ -45,6 +45,18 @@
             <p>
                 {{#str}} error:missingconfig:description, local_eportfolio {{/str}}
             </p>
+
+            <ul>
+                {{#missinggradingteacher}}
+                    <li>Grading teacher missing</li>
+                {{/missinggradingteacher}}
+                {{#missingstudentroles}}
+                    <li>Grading teacher missing</li>
+                {{/missingstudentroles}}
+                {{#missingh5pcapability}}
+                    <li>Grading teacher missing</li>
+                {{/missingh5pcapability}}
+            </ul>
 
         </div>
     </div>

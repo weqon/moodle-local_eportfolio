@@ -81,18 +81,22 @@ if ($section === 'my') {
 
     $objectid = $eport->fileid;
 
-    // Get the file for user context.
-    $file = $fs->get_file_by_id($eport->fileid);
+    if (empty($empty->h5pid)) {
+        // Get the file for user context.
+        $file = $fs->get_file_by_id($eport->fileid);
 
-    // We need a better solution for this.
-    // Move this to edit.php and also update local_eportfolio_shared, in case file was uploaded as template.
-    $getpathnamehash = $file->get_pathnamehash();
-    $h5pbypathnamehash = $DB->get_record('h5p', ['pathnamehash' => $getpathnamehash]);
+        // We need a better solution for this.
+        // Move this to edit.php and also update local_eportfolio_shared, in case file was uploaded as template.
+        $getpathnamehash = $file->get_pathnamehash();
+        $h5pbypathnamehash = $DB->get_record('h5p', ['pathnamehash' => $getpathnamehash]);
 
-    $updatedata = $eport;
-    $updatedata->h5pid = $h5pbypathnamehash->id;
+        if (!empty($h5pbypathnamehash)) {
+            $updatedata = $eport;
+            $updatedata->h5pid = $h5pbypathnamehash->id;
 
-    $DB->update_record('local_eportfolio', $updatedata);
+            $DB->update_record('local_eportfolio', $updatedata);
+        }
+    }
 
 } else {
     // File view was accessed from course or course module.
@@ -108,7 +112,7 @@ if ($section === 'my') {
 // Convert display options to a valid object.
 $factory = new \core_h5p\factory();
 $core = $factory->get_core();
-$config = core_h5p\helper::decode_display_options($core, 0);
+$config = core_h5p\helper::decode_display_options($core, $context->id);
 
 $fileurl = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(),
         $file->get_filearea(), $file->get_itemid(), $file->get_filepath(),

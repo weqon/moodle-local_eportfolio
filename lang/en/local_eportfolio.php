@@ -36,9 +36,12 @@ $string['eportfolio:view_eport'] = 'View ePortfolio';
 $string['error:noguestaccess'] = 'You are logged in as a guest. Guest access is not allowed for this plugin!';
 $string['error:missingcapability'] = 'You do not have the necessary capability to access the “eportfolio” plugin!';
 
-$string['error:missingconfig'] = 'Contact your Moodle administrator.';
+$string['error:missingconfig'] = 'Please contact your Moodle administrator.';
 $string['error:missingconfig:description'] = 'The ePortfolio has not been fully configured yet.<br>
 Please follow the installation instructions for the plugin.';
+$string['error:missingconfig:gradingteacher'] = 'Role for grading not configured.';
+$string['error:missingconfig:studentroles'] = 'Role for students not configured.';
+$string['error:missingconfig:missingh5pcapability'] = 'Capability for H5P not configured.';
 
 // Overview.
 $string['overview:header'] = 'ePortfolio - Overview';
