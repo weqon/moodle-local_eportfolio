@@ -562,7 +562,7 @@ class overview {
                 if ($cmid) {
                     // Check, if grade exists.
                     $gradeexists = $DB->get_record('eportfolio_grade',
-                            ['courseid' => $ent->courseid, 'userid' => $ent->usermodified, 'itemid' => $ent->fileidcontext,
+                            ['courseid' => $ent->courseid, 'userid' => $ent->usermodified, 'fileidcontext' => $ent->fileidcontext,
                                     'cmid' => $cmid]);
 
                     if ($gradeexists) {
@@ -637,7 +637,7 @@ class overview {
 
                     // Check, if grade exists.
                     $gradeexists = $DB->get_record('eportfolio_grade',
-                            ['courseid' => $ent->courseid, 'userid' => $ent->usermodified, 'itemid' => $ent->fileidcontext,
+                            ['courseid' => $ent->courseid, 'userid' => $ent->usermodified, 'fileidcontext' => $ent->fileidcontext,
                                     'cmid' => $cmid]);
 
                     if ($gradeexists) {
