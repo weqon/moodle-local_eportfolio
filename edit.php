@@ -40,13 +40,13 @@ if (!has_capability('local/eportfolio:view_eport', context_system::instance())) 
 
 $id = required_param('id', PARAM_INT);
 $contenturl = optional_param('contenturl', 0, PARAM_LOCALURL);
-
-$url = new moodle_url('/local/eportfolio/edit.php', ['id' => $id]);
+$section = optional_param('section', '', PARAM_ALPHA);
 
 $context = context_system::instance();
 
+$url = new moodle_url('/local/eportfolio/edit.php', ['id' => $id, 'section' => $section]);
+
 $eport = $DB->get_record('local_eportfolio', ['id' => $id], '*', MUST_EXIST);
-$fileid = $eport->fileid;
 
 // Set page layout.
 $PAGE->set_url($url);
@@ -102,7 +102,7 @@ if ($contenturl) {
         }
     }
 
-    $returnurl = new moodle_url('/local/eportfolio/edit.php', ['id' => $id]);
+    $returnurl = new moodle_url('/local/eportfolio/edit.php', ['id' => $id, 'section' => $section]);
 
     if (empty($contentid)) {
         throw new \moodle_exception('error:emptycontentid', 'core_h5p', $redirecturl);
@@ -116,11 +116,10 @@ if ($contenturl) {
     $customdata['returnurl'] = $returnurl;
     $customdata['contextid'] = $context->id;
 
-    $mform = new \local_eportfolio\forms\edit_form($returnurl, $customdata);
+    $mform = new \local_eportfolio\forms\edit_form($returnurl->out(false), $customdata);
     $mform->set_data($eport);
 
     if ($formdata = $mform->is_cancelled()) {
-
 
         redirect($redirecturl, get_string('form:cancelled', 'local_eportfolio'),
                 null, \core\output\notification::NOTIFY_WARNING);

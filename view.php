@@ -79,6 +79,7 @@ $objectid = 0;
 if ($section === 'my') {
     $eport = $DB->get_record('local_eportfolio', ['id' => $id]);
 
+    $editid = $eport->id;
     $objectid = $eport->fileid;
 
     if (empty($empty->h5pid)) {
@@ -101,7 +102,7 @@ if ($section === 'my') {
 } else {
     // File view was accessed from course or course module.
     $eport = $DB->get_record('local_eportfolio_share', ['id' => $id]);
-
+    $editid = $eport->eportid;
     $objectid = $eport->fileidcontext;
 
     // Get the file for shared context.
@@ -135,7 +136,7 @@ $userfullname = '';
 
 // Let's check if user "owns" the ePortfolio and can edit it and also, if user isn't in course context.
 if ($USER->id == $file->get_userid() && !$tocourse && $file->get_component() != 'mod_eportfolio') {
-    $editurl = new moodle_url('/local/eportfolio/edit.php', ['id' => $id]);
+    $editurl = new moodle_url('/local/eportfolio/edit.php', ['id' => $editid, 'section' => $section]);
 } else {
     $editurl = '';
 
@@ -150,7 +151,7 @@ $eportfolio->title = (!empty($eport->title)) ? $eport->title : '';
 $eportfolio->description = (!empty($eport->description)) ? $eport->description : '';
 $eportfolio->backurl = $backurl;
 $eportfolio->backurlstring = $backurlstring;
-$eportfolio->editurl = $editurl;
+$eportfolio->editurl = $editurl->out(false);
 $eportfolio->userfullname = $userfullname;
 $eportfolio->timecreated = date('d.m.Y', $eport->timecreated);
 $eportfolio->timemodified = date('d.m.Y', $eport->timemodified);
