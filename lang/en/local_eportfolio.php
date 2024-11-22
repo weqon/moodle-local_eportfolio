@@ -245,9 +245,11 @@ $string['event:eportfolio:deleted'] =
 // Message provider.
 $string['messageprovider:sharing'] = 'Message about a shared ePortfolio';
 $string['message:emailmessage'] =
-        '<p>New ePortfolio shared with you. Type: {$a->shareoption}<br>Shared by{$a->userfrom}<br>Filename: {$a->filename}<br>URL: {$a->viewurl}</p>';
+        '<p>New ePortfolio shared with you. Type: {$a->shareoption}<br>Shared by{$a->userfrom}<br>
+ePortfolio: {$a->filename}<br>URL: <a href="{$a->viewurl}">{$a->viewurl}</a></p>';
 $string['message:smallmessage'] =
-        '<p>New ePortfolio shared with you. Type: {$a->shareoption}<br>Shared by{$a->userfrom}<br>Filename: {$a->filename}<br>URL: {$a->viewurl}</p>';
+        '<p>New ePortfolio shared with you. Type: {$a->shareoption}<br>Shared by{$a->userfrom}<br>
+ePortfolio: {$a->filename}<br>URL: <a href="{$a->viewurl}">{$a->viewurl}</a></p>';
 $string['message:subject'] = 'Message about a shared ePortfolio';
 $string['message:contexturlname'] = 'View shared ePortfolio';
 

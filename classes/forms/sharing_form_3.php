@@ -95,7 +95,7 @@ class sharing_form_3 extends moodleform {
         // Get assigned course roles.
         $courseroles = get_course_roles_to_share($sharedcourseid);
 
-        if ($courseroles) {
+        if (!empty($courseroles)) {
             $roles = [];
             foreach ($courseroles as $key => $value) {
                 if ($shareoption != 'grade') {
@@ -117,7 +117,7 @@ class sharing_form_3 extends moodleform {
         // Get course context.
         $coursecontext = context_course::instance($sharedcourseid);
 
-        if ($enrolledusers) {
+        if (!empty($enrolledusers)) {
             $enrolled = [];
             foreach ($enrolledusers as $key => $value) {
 

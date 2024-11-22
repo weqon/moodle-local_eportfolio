@@ -88,7 +88,7 @@ function get_shared_participants($courseid, $fullcourse = false, $enrolled = nul
     $coursecontext = context_course::instance($courseid);
 
     // In case of shared with full course.
-    if ($fullcourse) {
+    if (!empty($fullcourse)) {
 
         $getenrolledusers = get_enrolled_users($coursecontext);
 
@@ -98,7 +98,7 @@ function get_shared_participants($courseid, $fullcourse = false, $enrolled = nul
 
     }
 
-    if ($enrolled) {
+    if (!empty($enrolled)) {
 
         $enrolled = explode(', ', $enrolled);
 
@@ -111,7 +111,7 @@ function get_shared_participants($courseid, $fullcourse = false, $enrolled = nul
         }
     }
 
-    if ($roleids) {
+    if (!empty($roleids)) {
 
         $roleids = explode(', ', $roleids);
 
@@ -127,7 +127,7 @@ function get_shared_participants($courseid, $fullcourse = false, $enrolled = nul
         }
     }
 
-    if ($groupids) {
+    if (!empty($groupids)) {
 
         // A little mess. Clean up...
         $groupids = explode(', ', $groupids);
@@ -163,15 +163,17 @@ function get_course_user_to_share($courseid) {
     // Get enrolled users by course id.
     $enrolledusers = get_enrolled_users($coursecontext);
 
-    $returnusers = [];
+    if (!empty($enrolledusers)) {
+        $returnusers = [];
 
-    foreach ($enrolledusers as $eu) {
-        if ($eu->id != $USER->id) {
-            $returnusers[$eu->id] = fullname($eu);
+        foreach ($enrolledusers as $eu) {
+            if ($eu->id != $USER->id) {
+                $returnusers[$eu->id] = fullname($eu);
+            }
         }
-    }
 
-    return $returnusers;
+        return $returnusers;
+    }
 }
 
 /**
@@ -364,25 +366,6 @@ function get_assigned_role_by_course($roleid, $coursecontextid, $userid = '') {
 }
 
 /**
- * Get the sort order for overview tables.
- *
- * @param int $sortorder
- * @return int|void
- */
-function get_sort_order($sortorder) {
-    switch ($sortorder) {
-        case '3':
-            return SORT_DESC;
-            break;
-        case '4':
-            return SORT_ASC;
-            break;
-        default:
-            $dir = SORT_ASC;
-    }
-}
-
-/**
  * Check if ePortfolio was already shared.
  *
  * @param int $id
@@ -453,80 +436,4 @@ function check_config($context) {
     }
 
     return $configset;
-}
-
-/**
- * Send message to user after ePortfolio was shared.
- *
- * @param int $courseid
- * @param int $userfrom
- * @param int $userto
- * @param string $shareoption
- * @param string $filename
- * @param int $itemid
- * @return void
- */
-function eportfolio_send_message($courseid, $userfrom, $userto, $shareoption, $filename, $itemid) {
-    global $DB, $USER;
-
-    // ToDo: Adhoc Tasks!
-
-    // If the ePortfolio is shared for grading we need the course module and the right context.
-    if ($shareoption === 'grade') {
-        $cmid = get_eportfolio_cm($courseid);
-    }
-
-    // View url for shared ePortfolio.
-    // If shared for grading add URL to mod_eportfolio.
-    if ($shareoption === 'grade') {
-        $contexturl = new moodle_url('/mod/eportfolio/view.php', ['id' => $cmid]);
-    } else {
-        $contexturl = new moodle_url('/local/eportfolio/view.php',
-                ['id' => $itemid, 'course' => $courseid, 'userid' => $userfrom]);
-    }
-
-    // Holds values for the string for the email message.
-    $a = new stdClass;
-
-    $a->shareoption = get_string('overview:shareoption:' . $shareoption, 'local_eportfolio');
-
-    $userfromdata = $DB->get_record('user', ['id' => $userfrom]);
-    $a->userfrom = fullname($userfromdata);
-
-    $a->filename = $filename;
-    $a->viewurl = (string) $contexturl;
-
-    // Fetch message HTML and plain text formats.
-    $messagehtml = get_string('message:emailmessage', 'local_eportfolio', $a);
-    $plaintext = format_text_email($messagehtml, FORMAT_HTML);
-
-    $smallmessage = get_string('message:smallmessage', 'local_eportfolio', $a);
-    $smallmessage = format_text_email($smallmessage, FORMAT_HTML);
-
-    // Subject.
-    $subject = get_string('message:subject', 'local_eportfolio');
-
-    $message = new \core\message\message();
-
-    $message->courseid = $courseid;
-    $message->component = 'local_eportfolio'; // Your plugin's name.
-    $message->name = 'sharing'; // Your notification name from message.php.
-
-    $message->userfrom = core_user::get_noreply_user();
-
-    $usertodata = $DB->get_record('user', ['id' => $userto]);
-    $message->userto = $usertodata;
-
-    $message->subject = $subject;
-    $message->smallmessage = $smallmessage;
-    $message->fullmessage = $plaintext;
-    $message->fullmessageformat = FORMAT_PLAIN;
-    $message->fullmessagehtml = $messagehtml;
-    $message->notification = 1; // Because this is a notification generated from Moodle, not a user-to-user message.
-    $message->contexturl = $contexturl->out(false);
-    $message->contexturlname = get_string('message:contexturlname', 'local_eportfolio');
-
-    // Finally send the message.
-    message_send($message);
-
 }

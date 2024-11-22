@@ -248,13 +248,13 @@ if ($step == '2') {
 
             $h5pfile = $DB->get_record('h5p', ['pathnamehash' => $pathnamehash]);
 
-            if ($h5pfile) {
+            if (!empty($h5pfile)) {
                 $data->h5pid = $h5pfile->id;
             }
             $filename = $file->get_filename();
 
             // If the file is shared with a course let's create a copy of it in course context.
-            if ($data->courseid) {
+            if (!empty($data->courseid)) {
 
                 $newfile = new stdClass();
 
@@ -282,23 +282,42 @@ if ($step == '2') {
 
             }
 
-            if ($DB->insert_record('local_eportfolio_share', $data)) {
+            if ($insertid = $DB->insert_record('local_eportfolio_share', $data)) {
+
+                if (!empty($data->title)) {
+                    $filename = $data->title;
+                }
 
                 // Let's send a message to the users shared with.
-                // ToDo: Make this an adhoc task.
                 $participants = get_shared_participants($data->courseid, $data->fullcourse,
                         $data->enrolled, $data->roles, $data->coursegroups, true);
 
                 foreach ($participants as $key => $value) {
-                    $message = eportfolio_send_message($data->courseid, $data->usermodified, $key,
-                            $data->shareoption, $filename, $data->fileidcontext);
+                    // Generate and queue adhoc task.
+
+                    // Prepare task data.
+                    $task = new \local_eportfolio\task\send_messages();
+
+                    $taskdata = new stdClass();
+
+                    $taskdata->courseid = $data->courseid;
+                    $taskdata->cmid = $data->cmid;
+                    $taskdata->userfrom = $data->usermodified;
+                    $taskdata->userto = $key;
+                    $taskdata->shareoption = $data->shareoption;
+                    $taskdata->filename = $filename;
+                    $taskdata->fileid = $data->fileidcontext;
+                    $taskdata->eportid = $data->eportid;
+                    $taskdata->eportshareid = $insertid;
+
+                    $task->set_custom_data($taskdata);
+
+                    // Queue the task.
+                    \core\task\manager::queue_adhoc_task($task);
+
                 }
 
                 // Trigger event for sharing ePortfolio.
-                if (!empty($eport->title)) {
-                    $filename = $eport->title;
-                }
-
                 \local_eportfolio\event\eportfolio_shared::create([
                         'objectid' => $eport->fileid,
                         'other' => [
