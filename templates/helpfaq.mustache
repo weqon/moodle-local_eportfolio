@@ -34,10 +34,20 @@
 }}
 
 <div class="my-2">
-    <a href="{{backurl}}" class="btn btn-primary mt-5"><i class="fa fa-arrow-circle-left"></i> {{backurlstring}}</a>
+    <a href="{{backurl}}" class="btn btn-primary mt-5"><i class="icon fa fa-arrow-circle-left fa-fw"></i> {{backurlstring}}</a>
 </div>
 
-<hr>
+<div class="divider"></div>
+
+<div class="row pt-3">
+    <div class="col-8">
+        <p class="alert alert-info">
+            {{#pix}} docs, core {{/pix}}
+            <b>Please note:</b> We are currently working on an English version of the Help & FAQ page.
+        </p>
+
+    </div>
+</div>
 
 <div class="row pt-3">
     <div class="col-8">
@@ -63,11 +73,12 @@
             </li>
         </ul>
 
-        <hr>
+        <div class="divider"></div>
 
         <h4>Lokales Plugin "ePortfolio"</h4>
         <p>
-            Mit dem lokalen Plugin „ePortfolio“ wird die Kernfunktionalität bereitgestellt. Das „ePortfolio“ liegt im „User-Context“ und ist somit personenbezogen und die darin abgelegten Inhalte sind zunächst nur für die/den angemeldete/n Nutzer/in einsehbar.<br><br>
+            Mit dem lokalen Plugin „ePortfolio“ wird die Kernfunktionalität bereitgestellt. Das „ePortfolio“ liegt im „User-Context“ und ist somit personenbezogen und die darin
+            abgelegten Inhalte sind zunächst nur für die/den angemeldete/n Nutzer/in einsehbar.<br><br>
             Die Übersichtsseite kann über die Hauptnavigation in Moodle mit Klick auf „ePortfolio“ aufgerufen werden.
         </p>
         <img src="pix/uebersichtsseite_eportfolio.png" alt="Übersichtsseite ePortfolio" class="img-fluid mt-5 mb-5">
@@ -115,7 +126,8 @@
                 <ul>
                     <li>
                         In diesem Bereich liegen alle ePortfolios, die mit der/dem Nutzer/in zur Bewertung geteilt wurden.<br>
-                        Hinweis: Die/der Nutzer/in muss in der Rolle „Trainer/in“ in einem „ePortfolio-Kurs“ eingetragen sein und die Aktivität „ePortfolio“ muss in dem Kurs angelegt und zugänglich sein.
+                        Hinweis: Die/der Nutzer/in muss in der Rolle „Trainer/in“ in einem „ePortfolio-Kurs“ eingetragen sein und die Aktivität „ePortfolio“ muss in dem Kurs
+                        angelegt und zugänglich sein.
                     </li>
                 </ul>
             </li>
@@ -139,30 +151,34 @@
                 Vor dem Dateiname kann über eine Checkbox eine oder mehrere Dateien zum Download ausgewählt werden.
             </li>
             <li>
-                <i class="fa fa-share-alt mr-2"></i>
+                {{#pix}} i/publish, core {{/pix}}
                 Öffnet das Formular zum Teilen des ePortfolios.
             </li>
             <li>
-                <i class="fa fa-edit mr-2"></i>
+                {{#pix}} i/permissions, core {{/pix}}
                 Öffnet den H5P-Editor, um den Inhalt zu bearbeiten.
             </li>
             <li>
-                <i class="fa fa-trash mr-2"></i>
+                {{#pix}} t/delete, core {{/pix}}
                 Löscht die ausgewählte Datei und, sofern eine aktive Teilung besteht, die Teilung wird zurück gezogen. Das Löschen der Datei muss gesondert bestätigt werden.
                 Zur Bewertung geteilte ePortfolios werden nur auf Nutzer/innen-Ebene gelöscht. Die eingereichte Datei zur Bewertung bleibt im Kurs bestehen
             </li>
             <li>
-                <i class="fa fa-search mr-2"></i>
+                {{#pix}} i/search, core {{/pix}}
                 Öffnet den H5P-Inhalt zur Ansicht.
             </li>
             <li>
-                <i class="fa fa-table mr-2"></i>
+                {{#pix}} e/table, core {{/pix}}
                 Öffnet die Bewertung in der Aktivität "ePortfolio" im Kurs, für den die Bewertung eingereicht wurde.
             </li>
             <li>
-                <i class="fa fa-undo mr-2"></i>
+                {{#pix}} e/undo, core {{/pix}}
                 Die aktive Teilung wird zurück gezogen. Das Zurückziehen der Teilung muss bestätigt werden, bevor diese wirksam wird.
                 Zur Bewertung geteilte ePortfolios können nicht zurück gezogen werden.
+            </li>
+            <li>
+                {{#pix}} i/addblock, core {{/pix}}
+                Das als Vorlage geteilte ePortfolio wird in das persönliche ePortfolio kopiert.
             </li>
         </ul>
         <p>
@@ -170,11 +186,11 @@
         </p>
         <ul>
             <li>
-                <i class="fa fa-table mr-2"></i>
+                {{#pix}} e/table, core {{/pix}}
                 Öffnet die Bewertungsübersicht für die Rolle „Trainer/in“
             </li>
             <li>
-                <i class="fa fa-info-circle mr-2"></i>
+                {{#pix}} docs, core {{/pix}}
                 Wird ein ePortfolio als „Vorlage“ geteilt, wird für die Rolle „Trainer/in“ eine
                 Information hinter dem Dateinamen ausgegeben.
             </li>
@@ -261,7 +277,7 @@
         </p>
         <img src="pix/benachrichtigungen.png" alt="Benachrichtigungen" class="img-fluid mt-5 mb-5">
 
-        <hr>
+        <div class="divider"></div>
 
         <h4>Block Plugin "ePortfolio"</h4>
         <p>
@@ -276,7 +292,7 @@
             Hinweis: Der Block erfordert das lokale Plugin „ePortfolio“. Alleinstehend kann dieses Plugin nicht verwendet werden.
         </p>
 
-        <hr>
+        <div class="divider"></div>
 
         <h4>Aktivität Plugin "ePortfolio"</h4>
         <p>
@@ -320,8 +336,7 @@
             </li>
         </ul>
 
-        <hr>
-
+        <div class="divider"></div>
         <h4>Bekannte Fehler</h4>
 
         <h5 class="mt-5">Fehlerhafte URL - Sie können die Datei nicht bearbeiten</h5>
@@ -340,8 +355,8 @@
     </div>
 </div>
 
-<hr>
+<div class="divider"></div>
 
 <div class="my-2">
-    <a href="{{backurl}}" class="btn btn-primary"><i class="fa fa-arrow-circle-left"></i> {{backurlstring}}</a>
+    <a href="{{backurl}}" class="btn btn-primary"><i class="icon fa fa-arrow-circle-left fa-fw"></i> {{backurlstring}}</a>
 </div>
