@@ -171,19 +171,19 @@ class overview {
 
         switch ($this->section) {
             case 'my': // My personal ePortfolios.
-                $params['usermodified'] = $USER->id;
+                $params['usermodified'] = (int) $USER->id;
                 $whereclauses[] = 'usermodified = :usermodified';
                 break;
             case 'myshared': // My ePortfolios shared for viewing.
                 $params['shareoption'] = 'share';
                 $whereclauses[] = 'shareoption = :shareoption';
-                $params['usermodified'] = $USER->id;
+                $params['usermodified'] = (int) $USER->id;
                 $whereclauses[] = 'usermodified = :usermodified';
                 break;
             case 'mygrade': // My ePortfolios shared for grading.
                 $params['shareoption'] = 'grade';
                 $whereclauses[] = 'shareoption = :shareoption';
-                $params['usermodified'] = $USER->id;
+                $params['usermodified'] = (int) $USER->id;
                 $whereclauses[] = 'usermodified = :usermodified';
                 break;
             case 'shared': // Shared ePortfolios with me for viewing.
@@ -191,19 +191,19 @@ class overview {
                 // ToDo: Might be a performance issue, if there are too many results.
                 $params['shareoption'] = 'share';
                 $whereclauses[] = 'shareoption = :shareoption';
-                $params['usermodified'] = $USER->id;
+                $params['usermodified'] = (int) $USER->id;
                 $whereclauses[] = 'usermodified != :usermodified';
                 break;
             case 'grade': // Shared ePortfolios with me for grading.
                 $params['shareoption'] = 'grade';
                 $whereclauses[] = 'shareoption = :shareoption';
-                $params['usermodified'] = $USER->id;
+                $params['usermodified'] = (int) $USER->id;
                 $whereclauses[] = 'usermodified != :usermodified';
                 break;
             case 'template': // Shared ePortfolios as template.
                 $params['shareoption'] = 'template';
                 $whereclauses[] = 'shareoption = :shareoption';
-                $params['usermodified'] = $USER->id;
+                $params['usermodified'] = (int) $USER->id;
                 $whereclauses[] = 'usermodified != :usermodified';
                 break;
         }
@@ -559,7 +559,7 @@ class overview {
                 // Check, if the course module is still available and visible.
                 $cmid = get_eportfolio_cm($ent->courseid);
 
-                if ($cmid) {
+                if (!empty($cmid)) {
                     // Check, if grade exists.
                     $gradeexists = $DB->get_record('eportfolio_grade',
                             ['courseid' => $ent->courseid, 'userid' => $ent->usermodified, 'fileidcontext' => $ent->fileidcontext,
@@ -629,7 +629,7 @@ class overview {
                 // Check, if the course module is (still) available and visible.
                 $cmid = get_eportfolio_cm($ent->courseid);
 
-                if ($cmid) {
+                if (!empty($cmid)) {
                     // Grade URL is only visible, if the CM is available and visible.
                     $gradeurl = new \moodle_url('/mod/eportfolio/view.php', ['id' => $cmid, 'fileid' => $ent->fileidcontext,
                             'userid' => $ent->usermodified, 'action' => 'grade']);

@@ -170,7 +170,7 @@ function xmldb_local_eportfolio_upgrade($oldversion) {
                             WHERE f.id = :fileid";
 
                 $params = [
-                        'fileid' => $eport->fileidcontext,
+                        'fileid' => (int) $eport->fileidcontext,
                 ];
 
                 $h5pfile = $DB->get_record_sql($sql, $params);
@@ -409,7 +409,7 @@ function xmldb_local_eportfolio_upgrade($oldversion) {
         }
 
         // Eportfolio savepoint reached.
-        upgrade_plugin_savepoint(true, 2024111101, 'local', 'eportfolio');
+        upgrade_plugin_savepoint(true, 2024111500, 'local', 'eportfolio');
     }
 
     return true;

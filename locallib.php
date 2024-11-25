@@ -188,9 +188,9 @@ function get_course_roles_to_share($courseid) {
     // We need a little more to do here.
     $coursecontext = context_course::instance($courseid);
 
-    $sql = "SELECT roleid FROM {role_assignments} WHERE contextid = ? GROUP BY roleid";
+    $sql = "SELECT roleid FROM {role_assignments} WHERE contextid = :contextid GROUP BY roleid";
     $params = [
-            'contextid' => $coursecontext->id,
+            'contextid' => (int) $coursecontext->id,
     ];
 
     // Get only assigned roles.
@@ -251,11 +251,11 @@ function get_eportfolio_cm($courseid, $fromform = false) {
         FROM {modules} m
         JOIN {course_modules} cm
         ON m.id = cm.module
-        WHERE cm.course = ? AND m.name = ?";
+        WHERE cm.course = :cmcourse AND m.name = :mname";
 
     $params = [
-            'cm.course' => $courseid,
-            'm.name' => 'eportfolio',
+            'cmcourse' => (int) $courseid,
+            'mname' => 'eportfolio',
     ];
 
     $coursemodule = $DB->get_record_sql($sql, $params);
@@ -355,11 +355,11 @@ function get_assigned_role_by_course($roleid, $coursecontextid, $userid = '') {
     global $DB, $USER;
 
     // Just return course where the user has the specified role assigned.
-    $sql = "SELECT * FROM {role_assignments} WHERE contextid = ? AND userid = ? AND roleid = ?";
+    $sql = "SELECT * FROM {role_assignments} WHERE contextid = :contextid AND userid = :userid AND roleid = :roleid";
     $params = [
-            'contextid' => $coursecontextid,
-            'userid' => (!empty($userid)) ? $userid : $USER->id,
-            'roleid' => $roleid,
+            'contextid' => (int) $coursecontextid,
+            'userid' => (int) $USER->id,
+            'roleid' => (int) $roleid,
     ];
 
     return $DB->get_record_sql($sql, $params);

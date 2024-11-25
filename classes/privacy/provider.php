@@ -110,7 +110,7 @@ class provider implements
         // Get user specific data from local_eportfolio_share, where current user is enrolled.
         $sql = "SELECT timecreated, usermodified FROM {local_eportfolio_share} WHERE enrolled LIKE :enrolled";
         $params = [
-                'enrolled' => '%' . $userid . '%',
+                'enrolled' => '%' . (int) $userid . '%',
         ];
 
         $data = $DB->get_records_sql($sql, $params);
@@ -157,7 +157,7 @@ class provider implements
     /**
      * Deletes all user data for the specified contexts.
      *
-     * @param   context $context The specific context to delete data for.
+     * @param context $context The specific context to delete data for.
      */
     public static function delete_data_for_all_users_in_context(\context $context) {
         return;
