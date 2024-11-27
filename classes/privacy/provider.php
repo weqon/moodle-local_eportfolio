@@ -31,6 +31,12 @@ use core_privacy\local\request\writer;
 use core_privacy\local\request\approved_userlist;
 use core_privacy\local\request\userlist;
 use core_privacy\local\request\core_userlist_provider;
+use coding_exception;
+use core_privacy\local\request\helper;
+use context;
+use context_system;
+use dml_exception;
+use moodle_exception;
 
 /**
  * Privacy provider implementation for local_eportfolio plugin.
@@ -38,7 +44,7 @@ use core_privacy\local\request\core_userlist_provider;
 class provider implements
         \core_privacy\local\metadata\provider,
         \core_privacy\local\request\plugin\provider,
-        core_userlist_provider {
+        \core_privacy\local\request\core_userlist_provider {
 
     /**
      * Returns metadata about the data stored by the plugin.
@@ -51,9 +57,25 @@ class provider implements
                 'local_eportfolio',
                 [
                         'usermodified' => 'privacy:metadata:local_eportfolio:usermodified',
-                        'userenrolled' => 'privacy:metadata:local_eportfolio:enrolled',
+                        'title' => 'privacy:metadata:local_eportfolio:title',
+                        'timecreated' => 'privacy:metadata:local_eportfolio:timecreated',
+                        'timemodified' => 'privacy:metadata:local_eportfolio:timemodified',
                 ],
                 'privacy:metadata:local_eportfolio'
+        );
+
+        $collection->add_database_table(
+                'local_eportfolio_share',
+                [
+                        'usermodified' => 'privacy:metadata:local_eportfolio_share:usermodified',
+                        'title' => 'privacy:metadata:local_eportfolio_share:title',
+                        'shareoption' => 'privacy:metadata:local_eportfolio_share:shareoption',
+                        'enddate' => 'privacy:metadata:local_eportfolio_share:enddate',
+                        'courseid' => 'privacy:metadata:local_eportfolio_share:courseid',
+                        'timecreated' => 'privacy:metadata:local_eportfolio_share:timecreated',
+                        'timemodified' => 'privacy:metadata:local_eportfolio_share:timemodified',
+                ],
+                'privacy:metadata:local_eportfolio_share'
         );
 
         return $collection;
@@ -66,7 +88,17 @@ class provider implements
      * @return contextlist The list of contexts.
      */
     public static function get_contexts_for_userid(int $userid): contextlist {
-        return contextlist();
+        $contextlist = new contextlist();
+
+        $sql = "
+            SELECT ctx.id
+            FROM {context} ctx
+            WHERE ctx.instanceid = :instanceid
+            ";
+
+        $contextlist->add_from_sql($sql, ['instanceid' => 0]); // System context.
+
+        return $contextlist;
     }
 
     /**
@@ -75,7 +107,25 @@ class provider implements
      * @param userlist $userlist The userlist containing the list of users who have data in this context/plugin combination.
      */
     public static function get_users_in_context(userlist $userlist) {
-        return;
+
+        $context = $userlist->get_context();
+        if ($context->contextlevel != CONTEXT_SYSTEM) {
+            return;
+        }
+
+        $sql = "
+            SELECT usermodified
+            FROM {local_eportfolio}
+            ";
+
+        $userlist->add_from_sql('usermodified', $sql, []);
+
+        $sql = "
+            SELECT usermodified
+            FROM {local_eportfolio_share}
+            ";
+
+        $userlist->add_from_sql('usermodified', $sql, []);
     }
 
     /**
@@ -86,71 +136,82 @@ class provider implements
     public static function export_user_data(approved_contextlist $contextlist) {
         global $DB;
 
-        $userid = $contextlist->get_user()->id;
+        $context = \context_system::instance();
+        $writer = \core_privacy\local\request\writer::with_context($context);
 
-        // Get user specific data from local_eportfolio_share.
-        $data = $DB->get_records('local_eportfolio_share', [
-                'usermodified' => $userid,
-        ]);
+        $user = $contextlist->get_user();
 
-        if (!empty($data)) {
-            $exportdata = [];
-            foreach ($data as $record) {
-                $exportdata[] = [
-                        'record' => $record->usermodified,
-                ];
-            }
+        // Get user specific data from local_eportfolio.
+        $sql = "
+            SELECT le.*, u.firstname, u.lastname
+            FROM {local_eportfolio} le
+            JOIN {user} u ON le.usermodified=u.id
+            WHERE le.usermodified = :usermodified
+            ";
 
-            writer::with_context($context)->export_data(
-                    [],
-                    (object) ['eportfolio' => $exportdata]
-            );
-        }
-
-        // Get user specific data from local_eportfolio_share, where current user is enrolled.
-        $sql = "SELECT timecreated, usermodified FROM {local_eportfolio_share} WHERE enrolled LIKE :enrolled";
         $params = [
-                'enrolled' => '%' . (int) $userid . '%',
+                'usermodified' => $user->id,
         ];
 
         $data = $DB->get_records_sql($sql, $params);
 
         if (!empty($data)) {
-            $exportdata = [];
+            $exportdatale = [];
             foreach ($data as $record) {
-                $exportdata[] = [
-                        'usermodified' => $record->usermodified,
-                        'shared_with_userid' => $userid,
-                        'timecreated' => $record->timecreated,
+                $subcontext = [
+                        get_string('privacy:metadata:myeportfolios', 'local_eportfolio'),
+                        $record->title,
                 ];
-            }
 
-            writer::with_context($context)->export_data(
-                    [],
-                    (object) ['eportfolio_share' => $exportdata]
-            );
+                $exportdatale = (object) [
+                        'usermodified' => $record->firstname . ' - ' . $record->lastname,
+                        'title' => $record->title,
+                        'timecreated' => date('d.m.Y', $record->timecreated),
+                        'timemodified' => date('d.m.Y', $record->timemodified),
+                ];
+
+                $writer->export_data($subcontext, $exportdatale);
+            }
         }
 
-        // Get user specific data from local_eportfolio.
-        $data = $DB->get_records('local_eportfolio', [
-                'usermodified' => $userid,
-        ]);
+        // Get user specific data from local_eportfolio_share.
+        $sql = "
+            SELECT le.*, u.firstname, u.lastname
+            FROM {local_eportfolio_share} le
+            JOIN {user} u ON le.usermodified = u.id
+            WHERE le.usermodified = :usermodified
+            ";
+
+        $params = [
+                'usermodified' => $user->id,
+        ];
+
+        $data = $DB->get_records_sql($sql, $params);
 
         if (!empty($data)) {
-            $exportdata = [];
+            $exportdatales = [];
             foreach ($data as $record) {
-                $exportdata[] = [
-                        'eportfolio_entry' => $record->title,
-                        'eportfolio_description' => $record->description,
-                        'usermodified' => $record->usermodified,
-                        'timecreated' => $record->timecreated,
-                ];
-            }
 
-            writer::with_context($context)->export_data(
-                    [],
-                    (object) ['eportfolio' => $exportdata]
-            );
+                $subcontext = [
+                        get_string('privacy:metadata:mysharedeportfolios', 'local_eportfolio'),
+                        $record->title,
+                ];
+
+                $course = $DB->get_record('course', ['id' => $record->courseid]);
+
+                $exportdatales = (object) [
+                        'usermodified' => $record->firstname . ' - ' . $record->lastname,
+                        'title' => $record->title,
+                        'shareoption' => $record->shareoption,
+                        'enddate' => (!empty($record->enddate)) ? date('d.m.Y', $record->enddate) : './.',
+                        'courseid' => $course->fullname,
+                        'timecreated' => date('d.m.Y', $record->timecreated),
+                        'timemodified' => date('d.m.Y', $record->timemodified),
+                ];
+
+                $writer->export_data($subcontext, $exportdatales);
+
+            }
         }
     }
 

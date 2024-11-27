@@ -22,13 +22,15 @@
  * @license https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * Get courses marked as ePortfolio course.
  *
  * @param array $roleids
  * @return array
  */
-function get_eportfolio_courses($roleids = '') {
+function local_eportfolio_get_eportfolio_courses($roleids = null) {
     global $DB, $USER;
 
     // Get the field id to identify the custm field data.
@@ -51,7 +53,7 @@ function get_eportfolio_courses($roleids = '') {
                 if ($roleids) {
                     // Get only assigned role.
                     foreach ($roleids as $roleid) {
-                        if (get_assigned_role_by_course($roleid, $coursecontext->id)) {
+                        if (local_eportfolio_get_assigned_role_by_course($roleid, $coursecontext->id)) {
                             $courses[] = $cd->instanceid; // Course ID.
                         }
                     }
@@ -76,7 +78,8 @@ function get_eportfolio_courses($roleids = '') {
  * @param array $groupids
  * @return array
  */
-function get_shared_participants($courseid, $fullcourse = false, $enrolled = null, $roleids = null, $groupids = null) {
+function local_eportfolio_get_shared_participants($courseid, $fullcourse = null, $enrolled = null, $roleids = null,
+        $groupids = null) {
     global $DB;
 
     $allenrolledusers = [];
@@ -155,7 +158,7 @@ function get_shared_participants($courseid, $fullcourse = false, $enrolled = nul
  * @param int $courseid
  * @return array
  */
-function get_course_user_to_share($courseid) {
+function local_eportfolio_get_course_user_to_share($courseid) {
     global $USER;
 
     $coursecontext = context_course::instance($courseid);
@@ -182,7 +185,7 @@ function get_course_user_to_share($courseid) {
  * @param int $courseid
  * @return array
  */
-function get_course_roles_to_share($courseid) {
+function local_eportfolio_get_course_roles_to_share($courseid) {
     global $DB;
 
     // We need a little more to do here.
@@ -213,7 +216,7 @@ function get_course_roles_to_share($courseid) {
  * @param int $courseid
  * @return array
  */
-function get_course_groups_to_share($courseid) {
+function local_eportfolio_get_course_groups_to_share($courseid) {
 
     // Get course groups by course id.
     $coursegroups = groups_get_all_groups($courseid);
@@ -234,7 +237,7 @@ function get_course_groups_to_share($courseid) {
  * @param bool $fromform
  * @return false|void
  */
-function get_eportfolio_cm($courseid, $fromform = false) {
+function local_eportfolio_get_eportfolio_cm($courseid, $fromform = null) {
     global $DB;
 
     // There must be a better solution.
@@ -289,61 +292,6 @@ function get_eportfolio_cm($courseid, $fromform = false) {
 }
 
 /**
- * Reset data written into global session.
- *
- * @return void
- */
-function reset_session_data() {
-    global $SESSION;
-
-    unset($SESSION->eportfolio);
-    save_to_session('step', 0);
-}
-
-/**
- * Load data from global session.
- *
- * @param string $name
- * @param string $default
- * @param bool $save
- * @return mixed
- */
-function load_from_session($name, $default, $save = false) {
-    global $SESSION;
-
-    if (!isset($SESSION->eportfolio) || !array_key_exists($name, $SESSION->eportfolio)) {
-        if ($save) {
-            save_to_session($name, $default);
-        }
-        return $default;
-    }
-
-    return $SESSION->eportfolio[$name];
-}
-
-/**
- * Save data into global session.
- *
- * @param string $name
- * @param string $value
- * @param string $default
- * @return void
- */
-function save_to_session($name, $value, $default = null) {
-    global $SESSION;
-
-    if (!isset($SESSION->eportfolio)) {
-        $SESSION->eportfolio = [];
-    }
-
-    if (isset($value)) {
-        $SESSION->eportfolio[$name] = $value;
-    } else if (isset($default)) {
-        $SESSION->eportfolio[$name] = $default;
-    }
-}
-
-/**
  * Get roles by course.
  *
  * @param int $roleid
@@ -351,15 +299,15 @@ function save_to_session($name, $value, $default = null) {
  * @param int $userid
  * @return mixed
  */
-function get_assigned_role_by_course($roleid, $coursecontextid, $userid = '') {
+function local_eportfolio_get_assigned_role_by_course($roleid, $coursecontextid, $userid = null) {
     global $DB, $USER;
 
     // Just return course where the user has the specified role assigned.
-    $sql = "SELECT * FROM {role_assignments} WHERE contextid = :contextid AND userid = :userid AND roleid = :roleid";
+    $sql = "SELECT * FROM {role_assignments} WHERE contextid = :contextid AND roleid = :roleid AND userid = :userid";
     $params = [
             'contextid' => (int) $coursecontextid,
-            'userid' => (int) $USER->id,
             'roleid' => (int) $roleid,
+            'userid' => (int) $USER->id,
     ];
 
     return $DB->get_record_sql($sql, $params);
@@ -372,7 +320,7 @@ function get_assigned_role_by_course($roleid, $coursecontextid, $userid = '') {
  * @param int $fileid
  * @return array|false
  */
-function check_already_shared($id, $fileid) {
+function local_eportfolio_check_already_shared($id, $fileid) {
     global $DB;
 
     $eport = $DB->get_records('local_eportfolio_share', ['eportid' => $id, 'fileid' => $fileid]);
@@ -418,7 +366,7 @@ function check_already_shared($id, $fileid) {
  * @param stdClass $context
  * @return stdClass
  */
-function check_config($context) {
+function local_eportfolio_check_config($context) {
 
     $config = get_config('local_eportfolio');
 

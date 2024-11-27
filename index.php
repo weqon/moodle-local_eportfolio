@@ -22,11 +22,9 @@
  * @license https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use local_eportfolio\output\renderer;
-
 require_once('../../config.php');
 require_once('locallib.php');
-require_once('classes/overview.php');
+require_once('classes/local/overview.php');
 require_once($CFG->libdir . '/tablelib.php');
 
 // First check, if user is logged in before accessing this page.
@@ -85,14 +83,14 @@ echo $OUTPUT->header();
 // Also check, if the other settings were set, before using this plugin.
 // Otherwise, the user can't create and share H5P content.
 
-$configcheck = check_config($context);
+$configcheck = local_eportfolio_check_config($context);
 
 if (!empty((array) $configcheck)) {
     $data = new stdClass();
     $data = $configcheck;
     echo $OUTPUT->render_from_template('local_eportfolio/missingconfiguration', $data);
 } else {
-    $renderer = new local_eportfolio\overview\overview($url, $section, $tsort = '', $tdir = '');
+    $renderer = new local_eportfolio\local\overview\overview($url, $section, $tsort = '', $tdir = '');
     $renderer->display();
 }
 

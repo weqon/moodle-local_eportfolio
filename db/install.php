@@ -58,10 +58,5 @@ function xmldb_local_eportfolio_install() {
 
     $DB->insert_record('customfield_field', $addfield);
 
-    // Add editingteacher as default value for settings.
-    set_config('gradingteacher', '3', 'local_eportfolio');
-    // Add user as default value for settings.
-    set_config('studentroles', '5', 'local_eportfolio');
-
     return true;
 }

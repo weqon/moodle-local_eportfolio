@@ -16,14 +16,14 @@
     padding-bottom: 1.5rem;
 }
 
-.divider {
+.path-local-eportfolio .divider {
     height: 0;
     margin: 1rem 0;
     overflow: hidden;
     border-top: 2px solid #ced4da;
 }
 
-.icon-round {
+.path-local-eportfolio .icon-round {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -35,11 +35,11 @@
     font-weight: bold;
 }
 
-.icon-round-primary {
+.path-local-eportfolio .icon-round-primary {
     background-color: var(--primary);
 }
 
-.icon-round-secondary {
+.path-local-eportfolio .icon-round-secondary {
     color: #000;
     background-color: var(--secondary);
 }

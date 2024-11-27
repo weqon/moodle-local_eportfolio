@@ -47,19 +47,20 @@ if (!has_capability('local/eportfolio:view_eport', context_system::instance())) 
 
 $id = required_param('id', PARAM_INT);
 
+$cache = cache::make_from_params(cache_store::MODE_SESSION, 'local_eportfolio', 'sharing');
+
 // Reset session in case form was reopened, but already used.
 $referer = $_SERVER['HTTP_REFERER'];
 // Codechecker error: The function str_contains() is not present in PHP version 7.4 or earlier.
 if (!str_contains($referer, 'share.php')) {
-    reset_session_data();
+    $cache->purge();
 }
 
 // Let's save the data to the current session. Maybe there is a better way.
-save_to_session('id', $id);
+$cache->set('id', $id);
 
-// Check, if current step is saved to session.
-if (load_from_session('step', null)) {
-    $step = load_from_session('step', null);
+if ($laststep = $cache->get('step')) {
+    $step = $laststep;
 } else {
     $step = '0';
 }
@@ -86,7 +87,7 @@ $mform1 = new sharing_form_1($url);
 if ($step == '0') {
     if ($formdata1 = $mform1->is_cancelled()) {
 
-        reset_session_data();
+        $cache->purge();
 
         $redirecturl = new moodle_url('/local/eportfolio/index.php');
         redirect($redirecturl, get_string('uploadform:cancelled', 'local_eportfolio'), null,
@@ -94,22 +95,20 @@ if ($step == '0') {
 
     } else if ($formdata1 = $mform1->get_data()) {
 
-        save_to_session('sharedcourse', $formdata1->sharedcourse);
-        save_to_session('step', '1');
+        $cache->set('sharedcourse', $formdata1->sharedcourse);
+        $cache->set('step', '1');
 
         redirect(new moodle_url('/local/eportfolio/share.php', ['id' => $id]));
 
     } else {
-
         $renderform = $mform1->render();
-
     }
 }
 
 if ($step == '1') {
 
-    $sharedcourse = load_from_session('sharedcourse', 0);
-    $id = load_from_session('id', 0);
+    $sharedcourse = $cache->get('sharedcourse', '1');
+    $id = $cache->get('id', '1');
 
     $customdata['sharedcourse'] = $sharedcourse;
 
@@ -117,7 +116,7 @@ if ($step == '1') {
 
     if ($formdata2 = $mform2->is_cancelled()) {
 
-        reset_session_data();
+        $cache->purge();
 
         $redirecturl = new moodle_url('/local/eportfolio/index.php');
         redirect($redirecturl, get_string('uploadform:cancelled', 'local_eportfolio'), null,
@@ -125,36 +124,34 @@ if ($step == '1') {
 
     } else if ($formdata2 = $mform2->get_data()) {
 
-        save_to_session('shareoption', $formdata2->shareoption);
+        $cache->set('shareoption', $formdata2->shareoption);
 
-        if ($formdata2->shareendenabled) {
-            save_to_session('shareend', $formdata2->shareend);
-            save_to_session('shareendenabled', $formdata2->shareendenabled);
+        if (!empty($formdata2->shareendenabled)) {
+            $cache->set('shareend', $formdata2->shareend);
+            $cache->set('shareendenabled', $formdata2->shareendenabled);
         }
 
-        if ($formdata2->cmid) {
-            save_to_session('cmid', $formdata2->cmid);
+        if (!empty($formdata2->cmid)) {
+            $cache->set('cmid', $formdata2->cmid);
         }
 
-        save_to_session('step', '2');
+        $cache->set('step', '2');
 
         redirect(new moodle_url('/local/eportfolio/share.php', ['id' => $id]));
 
     } else {
-
         $renderform = $mform2->render();
-
     }
 }
 
 if ($step == '2') {
 
-    $sharedcourse = load_from_session('sharedcourse', 0);
-    $shareoption = load_from_session('shareoption', 0);
-    $shareend = load_from_session('shareend', 0);
-    $shareendenabled = load_from_session('shareendenabled', 0);
-    $cmid = load_from_session('cmid', 0);
-    $id = load_from_session('id', 0);
+    $sharedcourse = $cache->get('sharedcourse');
+    $shareoption = $cache->get('shareoption');
+    $shareend = $cache->get('shareend');
+    $shareendenabled = $cache->get('shareendenabled');
+    $cmid = $cache->get('cmid');
+    $id = $cache->get('id');
 
     $customdata['sharedcourse'] = $sharedcourse;
     $customdata['shareoption'] = $shareoption;
@@ -163,7 +160,7 @@ if ($step == '2') {
 
     if ($formdata3 = $mform3->is_cancelled()) {
 
-        reset_session_data();
+        $cache->purge();
 
         $redirecturl = new moodle_url('/local/eportfolio/index.php');
         redirect($redirecturl, get_string('uploadform:cancelled', 'local_eportfolio'), null,
@@ -177,7 +174,7 @@ if ($step == '2') {
 
         $data->eportid = $eport->id;
         $data->title = $eport->title;
-        $data->courseid = load_from_session('sharedcourse', 0);
+        $data->courseid = $cache->get('sharedcourse');
         $data->cmid = '0';
         $data->fileid = $eport->fileid;
         $data->shareoption = $shareoption;
@@ -234,7 +231,7 @@ if ($step == '2') {
             }
         }
 
-        reset_session_data();
+        $cache->purge();
 
         // Check, if the user already shared this file in the specific course with the same option.
         if (!$DB->get_record('local_eportfolio_share', ['usermodified' => $data->usermodified, 'courseid' => $data->courseid,
@@ -289,7 +286,7 @@ if ($step == '2') {
                 }
 
                 // Let's send a message to the users shared with.
-                $participants = get_shared_participants($data->courseid, $data->fullcourse,
+                $participants = local_eportfolio_get_shared_participants($data->courseid, $data->fullcourse,
                         $data->enrolled, $data->roles, $data->coursegroups, true);
 
                 foreach ($participants as $key => $value) {
@@ -358,7 +355,7 @@ $data->renderform = $renderform;
 
 // Check, if this ePortfolio was already shared in any way and inform user.
 $eport = $DB->get_record('local_eportfolio', ['id' => $id]);
-$alreadyshared = check_already_shared($eport->id, $eport->fileid);
+$alreadyshared = local_eportfolio_check_already_shared($eport->id, $eport->fileid);
 
 if (!empty($alreadyshared)) {
     $data->alreadyshared = true;

@@ -77,7 +77,7 @@ class sharing_form_2 extends moodleform {
         $selectvalues = [];
         $selectvalues['share'] = get_string('sharing:form:select:share', 'local_eportfolio');
 
-        if ($cmid = get_eportfolio_cm($sharedcourseid, true)) {
+        if ($cmid = local_eportfolio_get_eportfolio_cm($sharedcourseid, true)) {
             $selectvalues['grade'] = get_string('sharing:form:select:grade', 'local_eportfolio');
 
             // Also submit the cm id as hidden value.
@@ -93,7 +93,7 @@ class sharing_form_2 extends moodleform {
         $roleassigned = false;
 
         foreach ($roleids as $rid) {
-            $hasrole = get_assigned_role_by_course($rid, $coursecontext->id);
+            $hasrole = local_eportfolio_get_assigned_role_by_course($rid, $coursecontext->id);
             if (!empty($hasrole)) {
                 $roleassigned = true;
             }

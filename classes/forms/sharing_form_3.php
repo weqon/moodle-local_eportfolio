@@ -93,7 +93,7 @@ class sharing_form_3 extends moodleform {
                 'nonzero', null, 'client');
 
         // Get assigned course roles.
-        $courseroles = get_course_roles_to_share($sharedcourseid);
+        $courseroles = local_eportfolio_get_course_roles_to_share($sharedcourseid);
 
         if (!empty($courseroles)) {
             $roles = [];
@@ -112,7 +112,7 @@ class sharing_form_3 extends moodleform {
         }
 
         // Get enrolled users.
-        $enrolledusers = get_course_user_to_share($sharedcourseid);
+        $enrolledusers = local_eportfolio_get_course_user_to_share($sharedcourseid);
 
         // Get course context.
         $coursecontext = context_course::instance($sharedcourseid);
@@ -131,7 +131,7 @@ class sharing_form_3 extends moodleform {
                     $roleids = explode(',', $config->gradingteacher);
 
                     foreach ($roleids as $rid) {
-                        $hasrole = get_assigned_role_by_course($rid, $coursecontext->id, $key);
+                        $hasrole = local_eportfolio_get_assigned_role_by_course($rid, $coursecontext->id, $key);
                         if (!empty($hasrole)) {
                             $enrolled[] = &$mform->createElement('advcheckbox', $key, '', $value,
                                     ['name' => $key, 'group' => 2], $key);
@@ -148,7 +148,7 @@ class sharing_form_3 extends moodleform {
 
         // Get available course groups only if it's not shared for grading.
         if ($shareoption != 'grade') {
-            $coursegroups = get_course_groups_to_share($sharedcourseid);
+            $coursegroups = local_eportfolio_get_course_groups_to_share($sharedcourseid);
 
             if ($coursegroups) {
                 $groups = [];

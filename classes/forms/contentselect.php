@@ -29,6 +29,8 @@ use core_h5p\file_storage;
 use core_h5p\local\library\autoloader;
 use Moodle\H5PCore;
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * Display all available H5P content types.
  *

@@ -66,7 +66,8 @@ function xmldb_local_eportfolio_uninstall() {
 
     // Finally delete all related files. Files are stored in system context by default.
     $context = context_system::instance();
-    delete_area_files($context->id, 'local_eportfolio', 'eportfolio');
+    $fs = get_file_storage();
+    $fs->delete_area_files($context->id, 'local_eportfolio', 'eportfolio');
 
     return true;
 }

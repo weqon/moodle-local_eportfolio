@@ -62,7 +62,7 @@ class upload_form extends moodleform {
         $config = get_config('local_eportfolio');
         $roleids = explode(',', $config->gradingteacher);
 
-        $searchcourses = get_eportfolio_courses($roleids);
+        $searchcourses = local_eportfolio_get_eportfolio_courses($roleids);
         $courses = [];
 
         if ($searchcourses) {

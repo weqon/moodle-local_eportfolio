@@ -45,6 +45,16 @@ Set the default roles for "students" and "grading teacher" in the plugin setting
 
 ### Please note: This plugin is a "Release Candidate" and should not be used in productive systems. ###
 
+**Version 0.2.4**  
+
+- Switched from custom session handling to Moodle core Cache API
+- Reworking the privacy provider
+- Removed deprecated constants from message provider
+- Moved Help & FAQ page to the Github Wiki
+- English translation Help & FAQ page
+- Fixed error when uninstalling the plugin
+- Changed field courseid in local_eportfolio_share from char to bigint
+
 **Version 0.2.3**  
 
 - Added adhoc task for sending notifications

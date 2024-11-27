@@ -204,9 +204,6 @@ $string['edit:header'] = 'ePortfolio - bearbeiten';
 $string['edit:success'] = 'Der H5P Inhalt wurde erfolgreich aktualisiert.';
 $string['edit:error'] = 'Beim Speichern der Änderungen trat ein Fehler auf!';
 
-// HelpFAQ.
-$string['helpfaq:header'] = 'Hilfe & FAQ';
-
 // Delete files & Undo shared files.
 $string['undo:header'] = 'Geteiltes ePortfolio zurückziehen';
 $string['undo:confirm'] = 'Bestätigen';
@@ -274,6 +271,21 @@ $string['settings:globalnavbar:enable'] = 'Eintrag Hauptnavigation';
 $string['settings:globalnavbar:enable:desc'] = 'In der Hauptnavigation wird ein Eintrag für das ePortfolio angezeigt.';
 
 // Privacy provider.
-$string['privacy:metadata:local_eportfolio'] = 'Vom ePortfolio-Plugin freigegebene Daten';
+$string['privacy:metadata:myeportfolios'] = 'Meine ePortfolios';
+$string['privacy:metadata:mysharedeportfolios'] = 'Von mir geteilte ePortfolios';
+
+$string['privacy:metadata:local_eportfolio'] = 'Vom ePortfolio freigegebene Daten';
 $string['privacy:metadata:local_eportfolio:usermodified'] = 'Nutzer:innen ID, die die ePortfolio-Daten angelegt/freigegeben hat';
-$string['privacy:metadata:local_eportfolio:enrolled'] = 'Nutzer:innen IDs, mit denen die ePortfolio-Daten geteilt wurden';
+$string['privacy:metadata:local_eportfolio:title'] = 'Dateiname/Titel des ePortfolio';
+$string['privacy:metadata:local_eportfolio:timecreated'] = 'Datum, an dem das ePortfolio angelegt wurde';
+$string['privacy:metadata:local_eportfolio:timemodified'] = 'Datum, an dem das ePortfolio zuletzt bearbeitet wurde';
+
+$string['privacy:metadata:local_eportfolio_share'] = 'Informationen zu geteilten ePortfolios';
+$string['privacy:metadata:local_eportfolio_share:usermodified'] =
+        'Nutzer:innen ID, die die ePortfolio-Daten angelegt/freigegeben hat';
+$string['privacy:metadata:local_eportfolio_share:title'] = 'Dateiname/Titel des ePortfolio';
+$string['privacy:metadata:local_eportfolio_share:shareoption'] = 'Art der Teilung';
+$string['privacy:metadata:local_eportfolio_share:enddate'] = 'Optional - Enddatum, bis wann die Teilung aktiv ist';
+$string['privacy:metadata:local_eportfolio_share:courseid'] = 'Kurs, in dem das ePortfolio geteilt wurde';
+$string['privacy:metadata:local_eportfolio_share:timecreated'] = 'Datum, an dem das ePortfolio geteilt wurde';
+$string['privacy:metadata:local_eportfolio_share:timemodified'] = 'Datum, an dem das geteilte ePortfolio zuletzt bearbeitet wurde';

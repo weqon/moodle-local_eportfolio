@@ -24,6 +24,8 @@
 
 namespace local_eportfolio\event;
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * The local_eportfolio delete event class.
  *
@@ -42,7 +44,7 @@ class eportfolio_deleted extends \core\event\base {
         global $USER;
         $this->context = \context_user::instance($USER->id);
         $this->data['objecttable'] = 'eportfolio';
-        $this->data['crud'] = 'r';
+        $this->data['crud'] = 'd';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
 

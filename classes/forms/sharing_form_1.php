@@ -75,7 +75,7 @@ class sharing_form_1 extends moodleform {
         $config = get_config('local_eportfolio');
         $roleids = explode(',', $config->studentroles);
 
-        $searchcourses = get_eportfolio_courses($roleids);
+        $searchcourses = local_eportfolio_get_eportfolio_courses($roleids);
         $courses = [];
 
         if ($searchcourses) {

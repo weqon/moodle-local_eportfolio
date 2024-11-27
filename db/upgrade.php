@@ -412,5 +412,18 @@ function xmldb_local_eportfolio_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2024111500, 'local', 'eportfolio');
     }
 
+    if ($oldversion < 2024112700) {
+
+        // Changing type of field courseid on table local_eportfolio_share to int.
+        $table = new xmldb_table('local_eportfolio_share');
+        $field = new xmldb_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'title');
+
+        // Launch change of type for field courseid.
+        $dbman->change_field_type($table, $field);
+
+        // Eportfolio savepoint reached.
+        upgrade_plugin_savepoint(true, 2024112700, 'local', 'eportfolio');
+    }
+
     return true;
 }

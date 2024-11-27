@@ -16,6 +16,8 @@
 
 namespace local_eportfolio\h5p;
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * Plugin can edit H5P content using H5P core features.
  *

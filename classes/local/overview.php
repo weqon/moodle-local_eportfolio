@@ -22,7 +22,7 @@
  * @license https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_eportfolio\overview;
+namespace local_eportfolio\local\overview;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -143,7 +143,7 @@ class overview {
 
         $footerdata = new \stdClass();
 
-        $footerdata->helpfaqurl = new \moodle_url('/local/eportfolio/helpfaq.php');
+        $footerdata->helpfaqurl = 'https://github.com/weqon/moodle-local_eportfolio/wiki';
 
         echo $OUTPUT->render_from_template('local_eportfolio/footer', $footerdata);
 
@@ -528,7 +528,7 @@ class overview {
                 $shareend = (!empty($ent->enddate)) ? date('d.m.Y', $ent->enddate) : './.';
 
                 // Get participants who have access to my shared eportfolios.
-                $participants = get_shared_participants($course->id, $ent->fullcourse,
+                $participants = local_eportfolio_get_shared_participants($course->id, $ent->fullcourse,
                         $ent->enrolled, $ent->roles, $ent->coursegroups);
 
                 $sharedwith = implode(', ', $participants);
@@ -557,7 +557,7 @@ class overview {
                 $sharestart = date('d.m.Y', $ent->timecreated);
 
                 // Check, if the course module is still available and visible.
-                $cmid = get_eportfolio_cm($ent->courseid);
+                $cmid = local_eportfolio_get_eportfolio_cm($ent->courseid);
 
                 if (!empty($cmid)) {
                     // Check, if grade exists.
@@ -627,7 +627,7 @@ class overview {
                 $hasgrade = get_string('overview:table:graded:pending', 'local_eportfolio');
 
                 // Check, if the course module is (still) available and visible.
-                $cmid = get_eportfolio_cm($ent->courseid);
+                $cmid = local_eportfolio_get_eportfolio_cm($ent->courseid);
 
                 if (!empty($cmid)) {
                     // Grade URL is only visible, if the CM is available and visible.

@@ -24,6 +24,8 @@
 
 namespace local_eportfolio\event;
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * The local_eportfolio view event class.
  *
