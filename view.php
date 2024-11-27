@@ -43,7 +43,6 @@ if (!has_capability('local/eportfolio:view_eport', context_system::instance())) 
 $id = required_param('id', PARAM_INT);
 $courseid = optional_param('course', 0, PARAM_INT);
 $cmid = optional_param('cmid', 0, PARAM_INT);
-$userid = optional_param('userid', 0, PARAM_INT);
 $tocourse = optional_param('tocourse', 0, PARAM_INT);
 $section = optional_param('section', '', PARAM_ALPHA);
 
@@ -133,15 +132,14 @@ if ($tocourse) {
 }
 
 $userfullname = '';
+$user = $DB->get_record('user', ['id' => $eport->usermodified]);
+$userfullname = fullname($user);
 
 // Let's check if user "owns" the ePortfolio and can edit it and also, if user isn't in course context.
 if ($USER->id == $file->get_userid() && !$tocourse && $file->get_component() != 'mod_eportfolio') {
     $editurl = new moodle_url('/local/eportfolio/edit.php', ['id' => $editid, 'section' => $section]);
 } else {
     $editurl = '';
-
-    $user = $DB->get_record('user', ['id' => $userid]);
-    $userfullname = fullname($user);
 }
 
 // Prepare data for template files.
