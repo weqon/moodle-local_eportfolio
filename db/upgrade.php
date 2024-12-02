@@ -391,7 +391,7 @@ function xmldb_local_eportfolio_upgrade($oldversion) {
         }
 
         // Eportfolio savepoint reached.
-        upgrade_plugin_savepoint(true, 2024111101, 'local', 'eportfolio');
+        upgrade_plugin_savepoint(true, 2024111100, 'local', 'eportfolio');
     }
 
     if ($oldversion < 2024111500) {

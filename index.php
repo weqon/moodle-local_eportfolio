@@ -90,7 +90,7 @@ if (!empty((array) $configcheck)) {
     $data = $configcheck;
     echo $OUTPUT->render_from_template('local_eportfolio/missingconfiguration', $data);
 } else {
-    $renderer = new local_eportfolio\local\overview\overview($url, $section, $tsort = '', $tdir = '');
+    $renderer = new local_eportfolio\local\overview\overview($url, $section, $tsort, $tdir);
     $renderer->display();
 }
 

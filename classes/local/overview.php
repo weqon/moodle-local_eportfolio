@@ -43,7 +43,7 @@ class overview {
      * @param string $tsort
      * @param int $tdir
      */
-    public function __construct($url, $section, $tsort = '', $tdir = '') {
+    public function __construct($url, $section, $tsort = null, $tdir = null) {
         $this->url = $url;
         $this->section = $section;
         $this->tsort = $tsort;
@@ -88,6 +88,11 @@ class overview {
             $table->sortable(true, 'filename', SORT_ASC);
             $table->initialbars(true);
             $table->no_sorting('actions');
+            $table->no_sorting('filesize');
+            $table->no_sorting('coursefullname');
+            $table->no_sorting('participants');
+            $table->no_sorting('grading');
+            $table->no_sorting('sharedby');
             $table->setup();
 
             // Add a checkbox to select single files for download.
@@ -221,17 +226,23 @@ class overview {
 
             $orderby = self::get_sort_order($this->tdir);
 
-            if ($this->tsort === 'title') {
+            if ($this->tsort === 'filename') {
                 $orderbyfield = 'title';
-            } else if ($this->tsort === 'timespan') {
-                $orderbyfield = 'timestart';
+            } else if ($this->tsort === 'filetimecreated') {
+                $orderbyfield = 'timecreated';
+            } else if ($this->tsort === 'filetimemodified') {
+                $orderbyfield = 'timemodified';
+            } else if ($this->tsort === 'sharestart') {
+                $orderbyfield = 'timecreated';
+            } else if ($this->tsort === 'shareend') {
+                $orderbyfield = 'enddate';
             }
 
             $sortorder = " ORDER BY " . $orderbyfield . " " . $orderby;
 
         }
 
-        if ($sortorder) {
+        if (!empty($sortorder)) {
             $sql .= $sortorder;
         }
 
@@ -449,7 +460,11 @@ class overview {
             $filename = self::get_h5p_title($file->get_pathnamehash());
         }
 
-        $filesize = display_size($file->get_filesize());
+        if (!empty($file)) {
+            $filesize = display_size($file->get_filesize());
+        } else {
+            $filesize = './';
+        }
 
         switch ($this->section) {
             case 'my':
@@ -503,8 +518,8 @@ class overview {
                 $tabledata = [
                         $checkboxform . \html_writer::link($viewurl, $filename . $istemplatefile,
                                 ['title' => get_string('overview:table:viewfile', 'local_eportfolio')]),
-                        date('d.m.Y', $file->get_timecreated()),
-                        date('d.m.Y', $file->get_timemodified()),
+                        date('d.m.Y', $ent->timecreated),
+                        date('d.m.Y', $ent->timemodified),
                         $filesize,
                         $actions,
                 ];
@@ -536,7 +551,7 @@ class overview {
                 $tabledata = [
                         \html_writer::link($viewurl, $filename,
                                 ['title' => get_string('overview:table:viewfile', 'local_eportfolio')]),
-                        date('d.m.Y', $file->get_timemodified()),
+                        date('d.m.Y', $ent->timemodified),
                         $filesize,
                         $courseurlfull,
                         $sharedwith,
@@ -560,6 +575,10 @@ class overview {
                 $cmid = local_eportfolio_get_eportfolio_cm($ent->courseid);
 
                 if (!empty($cmid)) {
+                    // Grade URL is only visible, if the CM is available and visible.
+                    $gradeurl = new \moodle_url('/mod/eportfolio/grade.php', ['id' => $cmid, 'eportid' => $ent->id]);
+                    $actions .= self::action_button_grade($gradeurl);
+
                     // Check, if grade exists.
                     $gradeexists = $DB->get_record('eportfolio_grade',
                             ['courseid' => $ent->courseid, 'userid' => $ent->usermodified, 'fileidcontext' => $ent->fileidcontext,
@@ -586,7 +605,7 @@ class overview {
                 $tabledata = [
                         \html_writer::link($viewurl, $filename . $filedeleted,
                                 ['title' => get_string('overview:table:viewfile', 'local_eportfolio')]),
-                        date('d.m.Y', $file->get_timemodified()),
+                        date('d.m.Y', $ent->timemodified),
                         $filesize,
                         $courseurlfull,
                         $sharestart,
@@ -631,8 +650,7 @@ class overview {
 
                 if (!empty($cmid)) {
                     // Grade URL is only visible, if the CM is available and visible.
-                    $gradeurl = new \moodle_url('/mod/eportfolio/view.php', ['id' => $cmid, 'fileid' => $ent->fileidcontext,
-                            'userid' => $ent->usermodified, 'action' => 'grade']);
+                    $gradeurl = new \moodle_url('/mod/eportfolio/grade.php', ['id' => $cmid, 'eportid' => $ent->id]);
                     $actions .= self::action_button_grade($gradeurl);
 
                     // Check, if grade exists.
