@@ -243,7 +243,7 @@ function xmldb_local_eportfolio_upgrade($oldversion) {
                     $h5pfile = $DB->get_record('h5p', ['pathnamehash' => $efile->pathnamehash]);
 
                     // In case there is no H5P file we assume the entry was deleted.
-                    if (empty($h5pfile)) {
+                    if (!empty($h5pfile)) {
 
                         $insertfile = new stdClass();
 
