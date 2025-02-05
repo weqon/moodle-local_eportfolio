@@ -269,6 +269,9 @@ $string['settings:studentroles:desc'] = 'Bitte wählen Sie die Rolle/n aus, in d
 im Kurs eingeschrieben sind.';
 $string['settings:globalnavbar:enable'] = 'Eintrag Hauptnavigation';
 $string['settings:globalnavbar:enable:desc'] = 'In der Hauptnavigation wird ein Eintrag für das ePortfolio angezeigt.';
+$string['settings:helpandfaq'] = 'Hilfe & FAQ URL';
+$string['settings:helpandfaq:desc'] = 'Sie können eine abweichende URL für die Hilfe & FAQ seite hinterlegen, um z. B.
+auf Ihre eigene Hilfe-Seite zu verweisen.';
 
 // Privacy provider.
 $string['privacy:metadata:myeportfolios'] = 'Meine ePortfolios';

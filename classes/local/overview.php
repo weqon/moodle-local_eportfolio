@@ -149,7 +149,14 @@ class overview {
 
         $footerdata = new \stdClass();
 
-        $footerdata->helpfaqurl = 'https://github.com/weqon/moodle-local_eportfolio/wiki';
+        // Get URL from config.
+        $config = get_config('local_eportfolio');
+        
+        if (!empty($config->helpandfaq)) {
+            $footerdata->helpfaqurl = $config->helpandfaq;
+        } else {
+            $footerdata->helpfaqurl = 'https://github.com/weqon/moodle-local_eportfolio/wiki';
+        }
 
         echo $OUTPUT->render_from_template('local_eportfolio/footer', $footerdata);
 

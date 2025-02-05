@@ -43,6 +43,14 @@ if ($hassiteconfig) {
             )
     );
 
+    // Default URL for Help & FAQ page
+    $settingspage->add(new admin_setting_configtext(
+            'local_eportfolio/helpandfaq',
+            get_string('settings:helpandfaq', 'local_eportfolio'),
+            get_string('settings:helpandfaq:desc', 'local_eportfolio'),
+            'https://github.com/weqon/moodle-local_eportfolio/wiki'
+    ));
+
     // Default role for gradingteacher.
     $settingspage->add(new admin_setting_pickroles(
             'local_eportfolio/gradingteacher',
