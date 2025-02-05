@@ -425,5 +425,28 @@ function xmldb_local_eportfolio_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2024112700, 'local', 'eportfolio');
     }
 
+    if ($oldversion < 2024112701) {
+
+        // Updating custom field data to add missing configdata.
+        $updatedata = $DB->get_record('customfield_field', ['shortname' => 'eportfolio_course']);
+
+        $configdata = new stdClass();
+
+        $configdata->required = "0";
+        $configdata->uniquevalues = "0";
+        $configdata->checkbydefault = "0";
+        $configdata->locked = "0";
+        $configdata->visibility = "2";
+
+        $updatedata->configdata = json_encode($configdata);
+        $updatedata->descriptionformat = 1;
+        $updatedata->sortorder = 0;
+
+        $DB->update_record('customfield_field', $updatedata);
+
+        // Eportfolio savepoint reached.
+        upgrade_plugin_savepoint(true, 2024112701, 'local', 'eportfolio');
+    }
+
     return true;
 }

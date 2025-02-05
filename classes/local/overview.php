@@ -92,6 +92,7 @@ class overview {
             $table->no_sorting('coursefullname');
             $table->no_sorting('participants');
             $table->no_sorting('grading');
+            $table->no_sorting('graded');
             $table->no_sorting('sharedby');
             $table->setup();
 
@@ -592,6 +593,10 @@ class overview {
                 }
 
                 $filedeleted = '';
+
+                if (empty($ent->fileid)) {
+                    $filewasdeleted = true;
+                }
 
                 if ($filewasdeleted) {
 

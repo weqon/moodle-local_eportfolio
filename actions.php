@@ -138,7 +138,7 @@ if ($action === 'delete') {
             // Note, we can only delete files, which were shared for view or as template.
             // Shared files for grading can only be deleted in the activity by the "gradingteacher".
             if ($es->shareoption === 'grade') {
-                $updatedata = $eportshared;
+                $updatedata = $es;
                 $updatedata->fileid = '0';
                 $updatedata->eportid = '0';
 

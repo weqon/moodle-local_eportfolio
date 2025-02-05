@@ -37,7 +37,7 @@ function xmldb_local_eportfolio_install() {
     $addcategory->name = get_string('pluginname', 'local_eportfolio');
     $addcategory->description = '';
     $addcategory->timecreated = time();
-    $addcategory->timemodified = '0';
+    $addcategory->timemodified = time();
     $addcategory->component = 'core_course';
     $addcategory->area = 'course';
     $addcategory->contextid = '1';
@@ -45,16 +45,28 @@ function xmldb_local_eportfolio_install() {
     $categoryid = $DB->insert_record('customfield_category', $addcategory);
 
     // Second step: Add customfield field.
-
     $addfield = new stdClass();
 
     $addfield->shortname = 'eportfolio_course';
     $addfield->name = get_string('customfield:name', 'local_eportfolio');
     $addfield->type = 'checkbox';
     $addfield->description = get_string('customfield:description', 'local_eportfolio');;
+    $addfield->descriptionformat = 1;
+    $addfield->sortorder = 1;
     $addfield->categoryid = $categoryid;
     $addfield->timecreated = time();
-    $addfield->timemodified = '0';
+    $addfield->timemodified = time();
+
+    // Set default config data for custom field.
+    $configdata = new stdClass();
+
+    $configdata->required = "0";
+    $configdata->uniquevalues = "0";
+    $configdata->checkbydefault = "0";
+    $configdata->locked = "0";
+    $configdata->visibility = "2";
+
+    $addfield->configdata = json_encode($configdata);
 
     $DB->insert_record('customfield_field', $addfield);
 
