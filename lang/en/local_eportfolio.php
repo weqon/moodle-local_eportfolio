@@ -41,7 +41,7 @@ $string['error:missingconfig:description'] = 'The ePortfolio has not been fully 
 Please follow the installation instructions for the plugin.';
 $string['error:missingconfig:gradingteacher'] = 'Role for grading not configured.';
 $string['error:missingconfig:studentroles'] = 'Role for students not configured.';
-$string['error:missingconfig:missingh5pcapability'] = 'Capability for H5P not configured.';
+$string['error:missingconfig:h5pcapability'] = 'Capability for H5P not configured.';
 
 // Overview.
 $string['overview:header'] = 'ePortfolio - Overview';
