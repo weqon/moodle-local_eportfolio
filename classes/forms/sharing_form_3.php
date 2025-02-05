@@ -92,7 +92,7 @@ class sharing_form_3 extends moodleform {
         $mform->addRule('fullcourse', get_string('sharing:form:select:pleaseselect', 'local_eportfolio'),
                 'nonzero', null, 'client');
 
-        // Get assigned course roles.
+        // Get roles.
         $courseroles = local_eportfolio_get_course_roles_to_share($sharedcourseid);
 
         if (!empty($courseroles)) {

@@ -188,23 +188,21 @@ function local_eportfolio_get_course_user_to_share($courseid) {
 function local_eportfolio_get_course_roles_to_share($courseid) {
     global $DB;
 
-    // We need a little more to do here.
+    // Get roles from config.
+    $config = get_config('local_eportfolio');
+    $studentroleids = explode(',', $config->studentroles);
+    $gradingtecherroleids = explode(',', $config->gradingteacher);
+
+    $courseroles = array_merge($studentroleids, $gradingtecherroleids);
+
     $coursecontext = context_course::instance($courseid);
-
-    $sql = "SELECT roleid FROM {role_assignments} WHERE contextid = :contextid GROUP BY roleid";
-    $params = [
-            'contextid' => (int) $coursecontext->id,
-    ];
-
-    // Get only assigned roles.
-    $courseroles = $DB->get_records_sql($sql, $params);
 
     $rolenames = role_get_names($coursecontext, ROLENAME_ALIAS, true);
 
     $returnroles = [];
 
     foreach ($courseroles as $cr) {
-        $returnroles[$cr->roleid] = $rolenames[$cr->roleid];
+        $returnroles[$cr] = $rolenames[$cr];
     }
 
     return $returnroles;
