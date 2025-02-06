@@ -73,7 +73,10 @@ class sharing_form_1 extends moodleform {
 
         // Get all courses marked as eportfolio course and the specific user is enrolled as student.
         $config = get_config('local_eportfolio');
-        $roleids = explode(',', $config->studentroles);
+        $studentroleids = explode(',', $config->studentroles);
+        $gradingtecherroleids = explode(',', $config->gradingteacher);
+
+        $roleids = array_merge($studentroleids, $gradingtecherroleids);
 
         $searchcourses = local_eportfolio_get_eportfolio_courses($roleids);
         $courses = [];

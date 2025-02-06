@@ -543,8 +543,12 @@ class overview {
 
                 // Course URL.
                 $course = $DB->get_record('course', ['id' => $ent->courseid]);
-                $courseurl = new \moodle_url('/course/view.php', ['id' => $ent->courseid]);
-                $courseurlfull = \html_writer::link($courseurl, $course->fullname);
+                if (!empty($course)) {
+                    $courseurl = new \moodle_url('/course/view.php', ['id' => $ent->courseid]);
+                    $courseurlfull = \html_writer::link($courseurl, $course->fullname);
+                } else {
+                    $courseurlfull = './.';
+                }
 
                 // Additional entry details.
                 $sharestart = date('d.m.Y', $ent->timecreated);
@@ -574,8 +578,12 @@ class overview {
 
                 // Course URL.
                 $course = $DB->get_record('course', ['id' => $ent->courseid]);
-                $courseurl = new \moodle_url('/course/view.php', ['id' => $ent->courseid]);
-                $courseurlfull = \html_writer::link($courseurl, $course->fullname);
+                if (!empty($course)) {
+                    $courseurl = new \moodle_url('/course/view.php', ['id' => $ent->courseid]);
+                    $courseurlfull = \html_writer::link($courseurl, $course->fullname);
+                } else {
+                    $courseurlfull = './.';
+                }
 
                 $sharestart = date('d.m.Y', $ent->timecreated);
 
@@ -631,8 +639,12 @@ class overview {
 
                 // Course URL.
                 $course = $DB->get_record('course', ['id' => $ent->courseid]);
-                $courseurl = new \moodle_url('/course/view.php', ['id' => $ent->courseid]);
-                $courseurlfull = \html_writer::link($courseurl, $course->fullname);
+                if (!empty($course)) {
+                    $courseurl = new \moodle_url('/course/view.php', ['id' => $ent->courseid]);
+                    $courseurlfull = \html_writer::link($courseurl, $course->fullname);
+                } else {
+                    $courseurlfull = './.';
+                }
 
                 // Additional entry details.
                 $sharestart = date('d.m.Y', $ent->timecreated);
@@ -679,8 +691,12 @@ class overview {
 
                 // Course URL.
                 $course = $DB->get_record('course', ['id' => $ent->courseid]);
-                $courseurl = new \moodle_url('/course/view.php', ['id' => $ent->courseid]);
-                $courseurlfull = \html_writer::link($courseurl, $course->fullname);
+                if (!empty($course)) {
+                    $courseurl = new \moodle_url('/course/view.php', ['id' => $ent->courseid]);
+                    $courseurlfull = \html_writer::link($courseurl, $course->fullname);
+                } else {
+                    $courseurlfull = './.';
+                }
 
                 // Additional entry details.
                 $sharestart = date('d.m.Y', $ent->timecreated);
@@ -708,8 +724,12 @@ class overview {
                 $actions .= self::action_button_reuse($useurl, $filename);
 
                 $course = $DB->get_record('course', ['id' => $ent->courseid]);
-                $courseurl = new \moodle_url('/course/view.php', ['id' => $ent->courseid]);
-                $courseurlfull = \html_writer::link($courseurl, $course->fullname);
+                if (!empty($course)) {
+                    $courseurl = new \moodle_url('/course/view.php', ['id' => $ent->courseid]);
+                    $courseurlfull = \html_writer::link($courseurl, $course->fullname);
+                } else {
+                    $courseurlfull = './.';
+                }
 
                 $user = $DB->get_record('user', ['id' => $ent->usermodified]);
                 $userfullname = fullname($user);
