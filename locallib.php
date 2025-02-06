@@ -183,14 +183,20 @@ function local_eportfolio_get_course_user_to_share($courseid) {
  * Get course roles for sharing form.
  *
  * @param int $courseid
+ * @param string $shareoption
  * @return array
  */
-function local_eportfolio_get_course_roles_to_share($courseid) {
-    global $DB;
+function local_eportfolio_get_course_roles_to_share($courseid, $shareoption = null) {
 
     // Get roles from config.
     $config = get_config('local_eportfolio');
-    $studentroleids = explode(',', $config->studentroles);
+
+    $studentroleids = [];
+
+    if ($shareoption != 'grade') {
+        $studentroleids = explode(',', $config->studentroles);
+    }
+
     $gradingtecherroleids = explode(',', $config->gradingteacher);
 
     $courseroles = array_merge($studentroleids, $gradingtecherroleids);
@@ -305,8 +311,14 @@ function local_eportfolio_get_assigned_role_by_course($roleid, $coursecontextid,
     $params = [
             'contextid' => (int) $coursecontextid,
             'roleid' => (int) $roleid,
-            'userid' => (int) $USER->id,
     ];
+
+    if (!empty($userid)) {
+        $params['userid'] = (int) $userid;
+    } else {
+        $params['userid'] = (int) $USER->id;
+
+    }
 
     return $DB->get_record_sql($sql, $params);
 }

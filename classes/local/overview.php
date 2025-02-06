@@ -151,7 +151,7 @@ class overview {
 
         // Get URL from config.
         $config = get_config('local_eportfolio');
-        
+
         if (!empty($config->helpandfaq)) {
             $footerdata->helpfaqurl = $config->helpandfaq;
         } else {
