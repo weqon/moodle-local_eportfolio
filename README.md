@@ -45,6 +45,14 @@ Set the default roles for "students" and "grading teacher" in the plugin setting
 
 ### Please note: This plugin is a "Release Candidate" and should not be used in productive systems. ###
 
+**Version 0.2.5**  
+
+- Workaround for missing configdata for course custom field, until Custom fields API will be implemented.
+- Fixed missing lang strings for mustache template missing configurations.
+- Bug fix selecting available roles for sharing forms.
+- Added new settings for own Help & FAQ page.
+- Added observer to check for course_deleted event and clean up shared eportfolios for deleted course.
+
 **Version 0.2.4**  
 
 - Switched from custom session handling to Moodle core Cache API
