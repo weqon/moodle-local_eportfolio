@@ -24,25 +24,29 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-/**
- * Add entry to main navigation.
- *
- * @return void
- */
-function local_eportfolio_before_http_headers() {
-    global $PAGE;
-
-    // Get eportfolionavbar from settings.
-    $config = get_config('local_eportfolio');
-
-    if (!empty($config->eportfolionavbar)) {
-
-        $context = context_system::instance();
-
-        if (has_capability('local/eportfolio:view_eport', $context) || has_capability('moodle/site:config', $context)) {
-            $PAGE->primarynav->add(get_string('navbar', 'local_eportfolio'),
-                    new moodle_url('/local/eportfolio/index.php'));
+global $CFG;
+// Moodle 4.4.6 here, because we are using that version
+if ($CFG->version < 2024042206) {
+    
+    /**
+     * Add entry to main navigation.
+     *
+     * @return void
+     */
+    function local_eportfolio_before_http_headers() {
+        global $PAGE;
+    
+        // Get eportfolionavbar from settings.
+        $config = get_config('local_eportfolio');
+    
+        if (!empty($config->eportfolionavbar)) {
+    
+            $context = context_system::instance();
+    
+            if (has_capability('local/eportfolio:view_eport', $context) || has_capability('moodle/site:config', $context)) {
+                $PAGE->primarynav->add(get_string('navbar', 'local_eportfolio'),
+                        new moodle_url('/local/eportfolio/index.php'));
+            }
         }
     }
-
 }
