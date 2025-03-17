@@ -57,10 +57,14 @@ class sharing_form_1 extends moodleform {
         $mform->addElement('html', '<span class="fa fa-arrow-right mx-3"></span>');
         $mform->addElement('html',
                 '<span class="icon-round icon-round-secondary mr-2 mt-4 mb-5">3. </span>' .
-                get_string('sharing:form:step:userselection', 'local_eportfolio'));
+                get_string('sharing:form:step:activityselection', 'local_eportfolio'));
         $mform->addElement('html', '<span class="fa fa-arrow-right mx-3"></span>');
         $mform->addElement('html',
                 '<span class="icon-round icon-round-secondary mr-2 mt-4 mb-5">4. </span>' .
+                get_string('sharing:form:step:userselection', 'local_eportfolio'));
+        $mform->addElement('html', '<span class="fa fa-arrow-right mx-3"></span>');
+        $mform->addElement('html',
+                '<span class="icon-round icon-round-secondary mr-2 mt-4 mb-5">5. </span>' .
                 get_string('sharing:form:step:confirm', 'local_eportfolio'));
 
         $mform->addElement('html', '</div>');

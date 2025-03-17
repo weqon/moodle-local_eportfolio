@@ -238,13 +238,10 @@ function local_eportfolio_get_course_groups_to_share($courseid) {
  * Get course module for the ePortfolio activity.
  *
  * @param int $courseid
- * @param bool $fromform
- * @return false|void
+ * @return array
  */
-function local_eportfolio_get_eportfolio_cm($courseid, $fromform = null) {
+function local_eportfolio_get_eportfolio_cm($courseid) {
     global $DB;
-
-    // There must be a better solution.
 
     // First check, if the eportfolio activity is available and enabled.
     $activityplugin = \core_plugin_manager::instance()->get_plugin_info('mod_eportfolio');
@@ -254,7 +251,7 @@ function local_eportfolio_get_eportfolio_cm($courseid, $fromform = null) {
 
     // Only one instance per course is allowed.
     // Get the cm ID for the eportfolio activity for the current course.
-    $sql = "SELECT cm.id
+    $sql = "SELECT cm.id, cm.instance
         FROM {modules} m
         JOIN {course_modules} cm
         ON m.id = cm.module
@@ -265,33 +262,29 @@ function local_eportfolio_get_eportfolio_cm($courseid, $fromform = null) {
             'mname' => 'eportfolio',
     ];
 
-    $coursemodule = $DB->get_record_sql($sql, $params);
+    $coursemodules = $DB->get_records_sql($sql, $params);
 
-    if ($coursemodule) {
-        // At last but not least, let's do an availability check.
-        $modinfo = get_fast_modinfo($courseid);
-        $cm = $modinfo->get_cm($coursemodule->id);
+    $cmarr = [];
 
-        if ($cm->uservisible) {
-            // User can access the activity.
-            return $coursemodule->id;
+    if ($coursemodules) {
+        foreach ($coursemodules as $cmod) {
+            $cmoddata = new stdClass();
 
-        } else if ($cm->availableinfo) {
-            if ($fromform) {
-                // User cannot access the activity, but is still able to share an ePortfolio for grading.
-                return $coursemodule->id;
-            } else {
-                // User cannot access the activity.
-                // But on the course page they will see a why they can't access it.
-                return false;
+            // At last but not least, let's do an availability check.
+            $modinfo = get_fast_modinfo($courseid);
+            $cm = $modinfo->get_cm($cmod->id);
+
+            if ($cm->uservisible) {
+                // User can access the activity.
+                $cmoddata->canaccess = true;
+                $cmoddata->id = $cmod->id;
+                $cmoddata->instance = $cmod->instance;
+                $cmarr[] = $cmoddata;
             }
-
-        } else {
-            // User cannot access the activity.
-            return false;
-
         }
     }
+    
+    return $cmarr;
 
 }
 

@@ -49,19 +49,23 @@ class sharing_form_2 extends moodleform {
         $mform->addElement('html', '<div role="group" aria-label="progress">');
 
         $mform->addElement('html',
-                '<span class="icon-round icon-round-secondary mr-2 mt-4 mb-5">1. </span>' .
+                '<span class="icon-round icon-round-primary mr-2 mt-4 mb-5">1. </span>' .
                 get_string('sharing:form:step:courseselection', 'local_eportfolio'));
         $mform->addElement('html', '<span class="fa fa-arrow-right mx-3"></span>');
         $mform->addElement('html',
-                '<span class="icon-round icon-round-primary mr-2 mt-4 mb-5" aria-current="true">2. </span>' .
+                '<span class="icon-round icon-round-primary mr-2 mt-4 mb-5">2. </span>' .
                 get_string('sharing:form:step:shareoptionselection', 'local_eportfolio'));
         $mform->addElement('html', '<span class="fa fa-arrow-right mx-3"></span>');
         $mform->addElement('html',
-                '<span class="icon-round icon-round-secondary mr-2 mt-4 mb-5">3. </span>' .
-                get_string('sharing:form:step:userselection', 'local_eportfolio'));
+                '<span class="icon-round icon-round-secondary mr-2 mt-4 mb-5" aria-current="true">3. </span>' .
+                get_string('sharing:form:step:activityselection', 'local_eportfolio'));
         $mform->addElement('html', '<span class="fa fa-arrow-right mx-3"></span>');
         $mform->addElement('html',
                 '<span class="icon-round icon-round-secondary mr-2 mt-4 mb-5">4. </span>' .
+                get_string('sharing:form:step:userselection', 'local_eportfolio'));
+        $mform->addElement('html', '<span class="fa fa-arrow-right mx-3"></span>');
+        $mform->addElement('html',
+                '<span class="icon-round icon-round-secondary mr-2 mt-4 mb-5">5. </span>' .
                 get_string('sharing:form:step:confirm', 'local_eportfolio'));
 
         $mform->addElement('html', '</div>');
@@ -77,12 +81,16 @@ class sharing_form_2 extends moodleform {
         $selectvalues = [];
         $selectvalues['share'] = get_string('sharing:form:select:share', 'local_eportfolio');
 
-        if ($cmid = local_eportfolio_get_eportfolio_cm($sharedcourseid, true)) {
-            $selectvalues['grade'] = get_string('sharing:form:select:grade', 'local_eportfolio');
+        $coursemodules = local_eportfolio_get_eportfolio_cm($sharedcourseid, true);
+        $gradingenabled = false;
 
-            // Also submit the cm id as hidden value.
-            $mform->addElement('hidden', 'cmid', $cmid);
-            $this->_form->setType('cmid', PARAM_INT);
+        foreach ($coursemodules as $cmods) {
+            if ($cmods->canaccess) {
+                $gradingenabled = true; // At this point it's enough if only one activity is accessible.
+            }
+        }
+        if ($gradingenabled) {
+            $selectvalues['grade'] = get_string('sharing:form:select:grade', 'local_eportfolio');
         }
 
         // If current user is enrolled as grading teacher in the selected course show the share as template option.

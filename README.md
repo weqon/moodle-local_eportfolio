@@ -45,6 +45,12 @@ Set the default roles for "students" and "grading teacher" in the plugin setting
 
 ### Please note: This plugin is a "Release Candidate" and should not be used in productive systems. ###
 
+**Version 0.2.6**  
+
+- New functionality to select the activity to share an ePortfolio for grading if more than one activity is available in a course.
+  - If only one activity is available for ePortfolio grading in the course, the intermediate step is automatically skipped.
+  - If an ePortfolio is shared for viewing or as a template, the intermediate step is also skipped.
+
 **Version 0.2.5**  
 
 - Workaround for missing configdata for course custom field, until Custom fields API will be implemented.

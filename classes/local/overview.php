@@ -90,6 +90,7 @@ class overview {
             $table->no_sorting('actions');
             $table->no_sorting('filesize');
             $table->no_sorting('coursefullname');
+            $table->no_sorting('instancename');
             $table->no_sorting('participants');
             $table->no_sorting('grading');
             $table->no_sorting('graded');
@@ -333,6 +334,7 @@ class overview {
                         'filetimemodified',
                         'filesize',
                         'coursefullname',
+                        'instancename',
                         'sharestart',
                         'grading',
                         'actions',
@@ -343,6 +345,7 @@ class overview {
                         'filename',
                         'sharedby',
                         'coursefullname',
+                        'instancename',
                         'sharestart',
                         'graded',
                         'actions',
@@ -402,6 +405,7 @@ class overview {
                         get_string('overview:table:filetimemodified', 'local_eportfolio'),
                         get_string('overview:table:filesize', 'local_eportfolio'),
                         get_string('overview:table:coursefullname', 'local_eportfolio'),
+                        get_string('overview:table:instancename', 'local_eportfolio'),
                         get_string('overview:table:sharestart', 'local_eportfolio'),
                         get_string('overview:table:grading', 'local_eportfolio'),
                         get_string('overview:table:actions', 'local_eportfolio'),
@@ -412,6 +416,7 @@ class overview {
                         get_string('overview:table:filename', 'local_eportfolio'),
                         get_string('overview:table:sharedby', 'local_eportfolio'),
                         get_string('overview:table:coursefullname', 'local_eportfolio'),
+                        get_string('overview:table:instancename', 'local_eportfolio'),
                         get_string('overview:table:sharestart', 'local_eportfolio'),
                         get_string('overview:table:graded', 'local_eportfolio'),
                         get_string('overview:table:actions', 'local_eportfolio'),
@@ -588,12 +593,26 @@ class overview {
                 $sharestart = date('d.m.Y', $ent->timecreated);
 
                 // Check, if the course module is still available and visible.
-                $cmid = local_eportfolio_get_eportfolio_cm($ent->courseid);
+                $cmid = '0';
+                $coursemodule = local_eportfolio_get_eportfolio_cm($ent->courseid);
+
+                foreach ($coursemodule as $cmods) {
+                    if ($cmods->id === $ent->cmid) {
+                        $cmid = $ent->cmid;
+                    }
+                }
 
                 if (!empty($cmid)) {
                     // Grade URL is only visible, if the CM is available and visible.
                     $gradeurl = new \moodle_url('/mod/eportfolio/grade.php', ['id' => $cmid, 'eportid' => $ent->id]);
                     $actions .= self::action_button_grade($gradeurl);
+
+                    $cm = get_coursemodule_from_id('eportfolio', $cmid, 0, false, MUST_EXIST);
+                    $moduleinstance = $DB->get_record('eportfolio', ['id' => $cm->instance], '*', MUST_EXIST);
+                    $instancename = $moduleinstance->name;
+
+                    $instanceurl = new \moodle_url('/mod/eportfolio/view.php', ['id' => $cmid]);
+                    $instanceurlfull = \html_writer::link($instanceurl, $instancename);
 
                     // Check, if grade exists.
                     $gradeexists = $DB->get_record('eportfolio_grade',
@@ -628,6 +647,7 @@ class overview {
                         date('d.m.Y', $ent->timemodified),
                         $filesize,
                         $courseurlfull,
+                        $instanceurlfull,
                         $sharestart,
                         $grade,
                         $actions,
@@ -670,12 +690,27 @@ class overview {
                 $hasgrade = get_string('overview:table:graded:pending', 'local_eportfolio');
 
                 // Check, if the course module is (still) available and visible.
-                $cmid = local_eportfolio_get_eportfolio_cm($ent->courseid);
+                // Check, if the course module is still available and visible.
+                $cmid = '0';
+                $coursemodule = local_eportfolio_get_eportfolio_cm($ent->courseid);
+
+                foreach ($coursemodule as $cmods) {
+                    if ($cmods->id === $ent->cmid) {
+                        $cmid = $ent->cmid;
+                    }
+                }
 
                 if (!empty($cmid)) {
                     // Grade URL is only visible, if the CM is available and visible.
                     $gradeurl = new \moodle_url('/mod/eportfolio/grade.php', ['id' => $cmid, 'eportid' => $ent->id]);
                     $actions .= self::action_button_grade($gradeurl);
+
+                    $cm = get_coursemodule_from_id('eportfolio', $cmid, 0, false, MUST_EXIST);
+                    $moduleinstance = $DB->get_record('eportfolio', ['id' => $cm->instance], '*', MUST_EXIST);
+                    $instancename = $moduleinstance->name;
+
+                    $instanceurl = new \moodle_url('/mod/eportfolio/view.php', ['id' => $cmid]);
+                    $instanceurlfull = \html_writer::link($instanceurl, $instancename);
 
                     // Check, if grade exists.
                     $gradeexists = $DB->get_record('eportfolio_grade',
@@ -709,6 +744,7 @@ class overview {
                                 ['title' => get_string('overview:table:viewfile', 'local_eportfolio')]),
                         $userfullname,
                         $courseurlfull,
+                        $instanceurlfull,
                         $sharestart,
                         $hasgrade,
                         $actions,
