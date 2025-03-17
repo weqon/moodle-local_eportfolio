@@ -148,7 +148,8 @@ $string['sharing:form:enddate:enable'] = 'Set enddate';
 $string['sharing:form:enddate:label'] = 'Activate date selection';
 $string['sharing:form:enddate:select'] = 'Available until';
 $string['sharing:form:sharedactivity'] = 'Select activity';
-$string['sharing:form:sharedactivity:desc'] = 'Please select the activity for which you would like to share your ePortfolio for grading.';
+$string['sharing:form:sharedactivity:desc'] =
+        'Please select the activity for which you would like to share your ePortfolio for grading.';
 $string['sharing:form:sharedactivity:error'] = 'Please select a course module';
 $string['sharing:form:sharedactivity:select'] = 'Select course module';
 $string['sharing:form:sharedusers'] = 'Share ePortfolio with whole course or only selected participants';
@@ -164,6 +165,9 @@ $string['sharing:form:enrolledusers'] = 'Participants to share with';
 $string['sharing:form:enrolledusers_help'] = 'Only selected participants are able to view/grade the ePortfolio';
 $string['sharing:form:groups'] = 'Course groups to share with';
 $string['sharing:form:groups_help'] = 'Only group members are able to view/grade the ePortfolio';
+$string['sharing:form:nousersselected'] =
+        'You must select at least one role, one user or one course group or
+        share the ePortfolio for the entire course before you can continue!';
 
 $string['sharing:alreadyshared:info'] = 'The ePortfolio has already been shared in the following courses:';
 $string['sharing:alreadyshared:course'] = 'Course';

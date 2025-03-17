@@ -50,6 +50,8 @@ Set the default roles for "students" and "grading teacher" in the plugin setting
 - New functionality to select the activity to share an ePortfolio for grading if more than one activity is available in a course.
   - If only one activity is available for ePortfolio grading in the course, the intermediate step is automatically skipped.
   - If an ePortfolio is shared for viewing or as a template, the intermediate step is also skipped.
+  - New column to display the activity for which the ePortfolio was shared.
+- Bug fix, if no users were selected for sharing.
 
 **Version 0.2.5**  
 

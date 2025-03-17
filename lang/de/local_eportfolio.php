@@ -152,7 +152,8 @@ $string['sharing:form:enddate:enable'] = 'Enddatum setzen';
 $string['sharing:form:enddate:label'] = 'Datumsauswahl aktivieren';
 $string['sharing:form:enddate:select'] = 'Verfügbar bis';
 $string['sharing:form:sharedactivity'] = 'Aktivität auswählen';
-$string['sharing:form:sharedactivity:desc'] = 'Bitte wählen Sie die Aktivität aus, für die Sie Ihr ePortfolio zur Bewertung freigeben möchten.';
+$string['sharing:form:sharedactivity:desc'] =
+        'Bitte wählen Sie die Aktivität aus, für die Sie Ihr ePortfolio zur Bewertung freigeben möchten.';
 $string['sharing:form:sharedactivity:error'] = 'Bitte eine Aktivität auswählen';
 $string['sharing:form:sharedactivity:select'] = 'Aktivität wählen';
 $string['sharing:form:sharedusers'] = 'ePortfolio für den gesamten Kurs oder ausgewählte Nutzer:innen freigeben';
@@ -169,6 +170,9 @@ $string['sharing:form:enrolledusers_help'] = 'Nur explizit ausgewählte Nutzer:i
 $string['sharing:form:groups'] = 'Verfügbare Kursgruppen';
 $string['sharing:form:groups_help'] =
         'Nur die zugewiesenen Nutzer:innen der ausgewählten Kursgruppen können das ePortfolio ansehen.';
+$string['sharing:form:nousersselected'] =
+        'Sie müssen mindestens eine Rolle, eine/n Nutzer:in oder eine Kursgruppe auswählen oder
+        das ePortfolio für den kompletten Kurs freigeben, bevor Sie fortfahren können!';
 
 $string['sharing:alreadyshared:info'] = 'Das ePortfolio wurde bereits in folgenden Kursen geteilt:';
 $string['sharing:alreadyshared:course'] = 'Kurs';

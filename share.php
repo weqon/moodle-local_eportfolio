@@ -249,6 +249,8 @@ if ($step == '3') {
         // We only need the following steps, if ePortfolio isn't shared for the complete course.
         if ($formdata4->fullcourse === '2') {
 
+            $nouserselected = false;
+
             if (isset($formdata4->roles)) {
                 $roles = [];
                 foreach ($formdata4->roles as $key => $value) {
@@ -256,7 +258,11 @@ if ($step == '3') {
                         $roles[] = $key;
                     }
                 }
-                $data->roles = implode(', ', $roles);
+                if (!empty($roles)) {
+                    $data->roles = implode(', ', $roles);
+                } else {
+                    $nouserselected = true;
+                }
             }
 
             if (isset($formdata4->enrolled)) {
@@ -266,7 +272,11 @@ if ($step == '3') {
                         $enrolled[] = $key;
                     }
                 }
-                $data->enrolled = implode(', ', $enrolled);
+                if (!empty($enrolled)) {
+                    $data->enrolled = implode(', ', $enrolled);
+                } else {
+                    $nouserselected = true;
+                }
             }
 
             if (isset($formdata4->groups)) {
@@ -276,7 +286,19 @@ if ($step == '3') {
                         $groups[] = $key;
                     }
                 }
-                $data->coursegroups = implode(', ', $groups);
+                if (!empty($groups)) {
+                    $data->coursegroups = implode(', ', $groups);
+                } else {
+                    $nouserselected = true;
+                }
+            }
+
+            // Before further processing, check, if roles, enrolled or groups was selected.
+            if($nouserselected) {
+                $redirecturl = new moodle_url('/local/eportfolio/share.php', ['id' => $id]);
+                redirect($redirecturl, get_string('sharing:form:nousersselected', 'local_eportfolio'), null,
+                        \core\output\notification::NOTIFY_ERROR);
+                
             }
         }
 
