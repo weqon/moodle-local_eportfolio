@@ -98,7 +98,7 @@ if ($step == '0') {
                 \core\output\notification::NOTIFY_WARNING);
 
     } else if ($formdata1 = $mform1->get_data()) {
-        
+
         $cache->set('sharedcourse', $formdata1->sharedcourse);
         $cache->set('step', '1');
 
@@ -249,8 +249,6 @@ if ($step == '3') {
         // We only need the following steps, if ePortfolio isn't shared for the complete course.
         if ($formdata4->fullcourse === '2') {
 
-            $nouserselected = false;
-
             if (isset($formdata4->roles)) {
                 $roles = [];
                 foreach ($formdata4->roles as $key => $value) {
@@ -258,11 +256,7 @@ if ($step == '3') {
                         $roles[] = $key;
                     }
                 }
-                if (!empty($roles)) {
-                    $data->roles = implode(', ', $roles);
-                } else {
-                    $nouserselected = true;
-                }
+                $data->roles = implode(', ', $roles);
             }
 
             if (isset($formdata4->enrolled)) {
@@ -272,11 +266,7 @@ if ($step == '3') {
                         $enrolled[] = $key;
                     }
                 }
-                if (!empty($enrolled)) {
-                    $data->enrolled = implode(', ', $enrolled);
-                } else {
-                    $nouserselected = true;
-                }
+                $data->enrolled = implode(', ', $enrolled);
             }
 
             if (isset($formdata4->groups)) {
@@ -286,19 +276,13 @@ if ($step == '3') {
                         $groups[] = $key;
                     }
                 }
-                if (!empty($groups)) {
-                    $data->coursegroups = implode(', ', $groups);
-                } else {
-                    $nouserselected = true;
-                }
+                $data->coursegroups = implode(', ', $groups);
             }
 
-            // Before further processing, check, if roles, enrolled or groups was selected.
-            if($nouserselected) {
+            if (empty($data->roles) && empty($data->enrolled) && empty($data->coursegroups)) {
                 $redirecturl = new moodle_url('/local/eportfolio/share.php', ['id' => $id]);
                 redirect($redirecturl, get_string('sharing:form:nousersselected', 'local_eportfolio'), null,
                         \core\output\notification::NOTIFY_ERROR);
-                
             }
         }
 
