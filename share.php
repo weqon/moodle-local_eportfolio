@@ -27,6 +27,7 @@ require_once('locallib.php');
 require_once('classes/forms/sharing_form_1.php');
 require_once('classes/forms/sharing_form_2.php');
 require_once('classes/forms/sharing_form_3.php');
+require_once('classes/forms/sharing_form_4.php');
 require_once($CFG->dirroot . '/course/modlib.php');
 require_once($CFG->dirroot . '/mod/h5pactivity/lib.php');
 
@@ -85,6 +86,9 @@ $PAGE->add_body_class('limitedwith');
 $mform1 = new sharing_form_1($url);
 
 if ($step == '0') {
+    // Sharing_form_1.php
+    // Select course.
+
     if ($formdata1 = $mform1->is_cancelled()) {
 
         $cache->purge();
@@ -106,6 +110,8 @@ if ($step == '0') {
 }
 
 if ($step == '1') {
+    // Sharing_form_2.php
+    // Select share option.
 
     $sharedcourse = $cache->get('sharedcourse', '1');
     $id = $cache->get('id', '1');
@@ -131,11 +137,23 @@ if ($step == '1') {
             $cache->set('shareendenabled', $formdata2->shareendenabled);
         }
 
-        if (!empty($formdata2->cmid)) {
-            $cache->set('cmid', $formdata2->cmid);
-        }
+        $cache->set('cmid', '');
+        $cache->set('instanceid', '');
 
-        $cache->set('step', '2');
+        if ($formdata2->shareoption === 'grade') {
+            $coursemodules = local_eportfolio_get_eportfolio_cm($sharedcourse);
+
+            if (count($coursemodules) == '1') {
+                // Only one activity available. Will be set in case of share option = grade.
+                $cache->set('cmid', $coursemodules[0]->id);
+                $cache->set('instanceid', $coursemodules[0]->instance);
+                $cache->set('step', '3');
+            } else {
+                $cache->set('step', '2');
+            }
+        } else {
+            $cache->set('step', '3');
+        }
 
         redirect(new moodle_url('/local/eportfolio/share.php', ['id' => $id]));
 
@@ -145,6 +163,37 @@ if ($step == '1') {
 }
 
 if ($step == '2') {
+    // Sharing_form_3.php
+    // Only, shareoption = grade and more than one activity is available.
+
+    $sharedcourse = $cache->get('sharedcourse', '1');
+    $id = $cache->get('id', '1');
+
+    $customdata['sharedcourse'] = $sharedcourse;
+
+    $mform3 = new sharing_form_3($url, $customdata);
+
+    if ($formdata3 = $mform3->is_cancelled()) {
+        $cache->purge();
+
+        $redirecturl = new moodle_url('/local/eportfolio/index.php');
+        redirect($redirecturl, get_string('uploadform:cancelled', 'local_eportfolio'), null,
+                \core\output\notification::NOTIFY_WARNING);
+
+    } else if ($formdata3 = $mform3->get_data()) {
+
+        $cache->set('cmid', $formdata3->activitygrade);
+        $cache->set('step', '3');
+
+        redirect(new moodle_url('/local/eportfolio/share.php', ['id' => $id]));
+
+    } else {
+        $renderform = $mform3->render();
+    }
+}
+
+if ($step == '3') {
+    // Sharing_form_4.php
 
     $sharedcourse = $cache->get('sharedcourse');
     $shareoption = $cache->get('shareoption');
@@ -156,9 +205,9 @@ if ($step == '2') {
     $customdata['sharedcourse'] = $sharedcourse;
     $customdata['shareoption'] = $shareoption;
 
-    $mform3 = new sharing_form_3($url, $customdata);
+    $mform4 = new sharing_form_4($url, $customdata);
 
-    if ($formdata3 = $mform3->is_cancelled()) {
+    if ($formdata4 = $mform4->is_cancelled()) {
 
         $cache->purge();
 
@@ -166,7 +215,7 @@ if ($step == '2') {
         redirect($redirecturl, get_string('uploadform:cancelled', 'local_eportfolio'), null,
                 \core\output\notification::NOTIFY_WARNING);
 
-    } else if ($formdata3 = $mform3->get_data()) {
+    } else if ($formdata4 = $mform4->get_data()) {
 
         $eport = $DB->get_record('local_eportfolio', ['id' => $id]);
 
@@ -195,14 +244,14 @@ if ($step == '2') {
         $data->coursegroups = '';
 
         // Let's collect the target groups.
-        $data->fullcourse = ($formdata3->fullcourse == '1') ? $formdata3->fullcourse : '0';
+        $data->fullcourse = ($formdata4->fullcourse == '1') ? $formdata4->fullcourse : '0';
 
         // We only need the following steps, if ePortfolio isn't shared for the complete course.
-        if ($formdata3->fullcourse === '2') {
+        if ($formdata4->fullcourse === '2') {
 
-            if (isset($formdata3->roles)) {
+            if (isset($formdata4->roles)) {
                 $roles = [];
-                foreach ($formdata3->roles as $key => $value) {
+                foreach ($formdata4->roles as $key => $value) {
                     if ($value) {
                         $roles[] = $key;
                     }
@@ -210,9 +259,9 @@ if ($step == '2') {
                 $data->roles = implode(', ', $roles);
             }
 
-            if (isset($formdata3->enrolled)) {
+            if (isset($formdata4->enrolled)) {
                 $enrolled = [];
-                foreach ($formdata3->enrolled as $key => $value) {
+                foreach ($formdata4->enrolled as $key => $value) {
                     if ($value) {
                         $enrolled[] = $key;
                     }
@@ -220,14 +269,20 @@ if ($step == '2') {
                 $data->enrolled = implode(', ', $enrolled);
             }
 
-            if (isset($formdata3->groups)) {
+            if (isset($formdata4->groups)) {
                 $groups = [];
-                foreach ($formdata3->groups as $key => $value) {
+                foreach ($formdata4->groups as $key => $value) {
                     if ($value) {
                         $groups[] = $key;
                     }
                 }
                 $data->coursegroups = implode(', ', $groups);
+            }
+
+            if (empty($data->roles) && empty($data->enrolled) && empty($data->coursegroups)) {
+                $redirecturl = new moodle_url('/local/eportfolio/share.php', ['id' => $id]);
+                redirect($redirecturl, get_string('sharing:form:nousersselected', 'local_eportfolio'), null,
+                        \core\output\notification::NOTIFY_ERROR);
             }
         }
 
@@ -342,7 +397,7 @@ if ($step == '2') {
 
     } else {
 
-        $renderform = $mform3->render();
+        $renderform = $mform4->render();
 
     }
 }

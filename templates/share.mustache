@@ -35,13 +35,11 @@
 
 <div class="container-fluid">
     <div class="row mt-3 mb-3">
-        <div class="col-6">
-            {{{renderform}}}
-        </div>
-        <div class="col-6">
+        <div class="col">
             {{#alreadyshared}}
                 {{>local_eportfolio/alreadysharedwith}}
             {{/alreadyshared}}
+            {{{renderform}}}
         </div>
     </div>
 </div>

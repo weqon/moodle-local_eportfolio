@@ -41,133 +41,62 @@ class sharing_form_3 extends moodleform {
      * @return void
      */
     public function definition() {
+        global $DB;
 
         $mform = $this->_form; // Don't forget the underscore!
 
         $sharedcourseid = $this->_customdata['sharedcourse'];
-        $shareoption = $this->_customdata['shareoption'];
 
         $mform->addElement('html', '<div role="group" aria-label="progress">');
 
         $mform->addElement('html',
-                '<span class="icon-round icon-round-secondary mr-2 mt-4 mb-5">1. </span>' .
+                '<span class="icon-round icon-round-primary mr-2 mt-4 mb-5">1. </span>' .
                 get_string('sharing:form:step:courseselection', 'local_eportfolio'));
         $mform->addElement('html', '<span class="fa fa-arrow-right mx-3"></span>');
         $mform->addElement('html',
-                '<span class="icon-round icon-round-secondary mr-2 mt-4 mb-5">2. </span>' .
+                '<span class="icon-round icon-round-primary mr-2 mt-4 mb-5">2. </span>' .
                 get_string('sharing:form:step:shareoptionselection', 'local_eportfolio'));
         $mform->addElement('html', '<span class="fa fa-arrow-right mx-3"></span>');
         $mform->addElement('html',
                 '<span class="icon-round icon-round-primary mr-2 mt-4 mb-5" aria-current="true">3. </span>' .
-                get_string('sharing:form:step:userselection', 'local_eportfolio'));
+                get_string('sharing:form:step:activityselection', 'local_eportfolio'));
         $mform->addElement('html', '<span class="fa fa-arrow-right mx-3"></span>');
         $mform->addElement('html',
                 '<span class="icon-round icon-round-secondary mr-2 mt-4 mb-5">4. </span>' .
+                get_string('sharing:form:step:userselection', 'local_eportfolio'));
+        $mform->addElement('html', '<span class="fa fa-arrow-right mx-3"></span>');
+        $mform->addElement('html',
+                '<span class="icon-round icon-round-secondary mr-2 mt-4 mb-5">5. </span>' .
                 get_string('sharing:form:step:confirm', 'local_eportfolio'));
 
         $mform->addElement('html', '</div>');
 
-        // Select complete course, users, groups or roles to share with.
+        // Select activity to share ePortfolio for grading.
         $mform->addElement('html',
-                '<h3>' . get_string('sharing:form:sharedusers', 'local_eportfolio') . '</h3>');
+                '<h3>' . get_string('sharing:form:sharedactivity', 'local_eportfolio') . '</h3>');
         $mform->addElement('html',
-                '<p class="mb-5">' . get_string('sharing:form:sharedusers:desc', 'local_eportfolio') . '</p>');
+                '<p class="mb-5">' . get_string('sharing:form:sharedactivity:desc', 'local_eportfolio') . '</p>');
 
-        $selectcourse = [
-                '0' => get_string('sharing:form:select:pleaseselect', 'local_eportfolio'),
-        ];
+        // Add select to choose sharing or grading.
 
-        // Maybe there is a better option, but for now it's working.
-        if ($shareoption == 'grade') {
-            $selectcourse['2'] = get_string('sharing:form:select:targetgroup', 'local_eportfolio');
-        } else {
-            $selectcourse['1'] = get_string('sharing:form:select:fullcourse', 'local_eportfolio');
-            $selectcourse['2'] = get_string('sharing:form:select:targetgroup', 'local_eportfolio');
-        }
+        // Target group. Radio-Buttons
+        $targetgroup = [];
 
-        // Add select to share with complete course.
-        $mform->addElement('select', 'fullcourse', get_string('sharing:form:fullcourse', 'local_eportfolio'),
-                $selectcourse);
+        $coursemodules = local_eportfolio_get_eportfolio_cm($sharedcourseid);
 
-        $mform->addRule('fullcourse', get_string('sharing:form:select:pleaseselect', 'local_eportfolio'),
-                'nonzero', null, 'client');
+        foreach ($coursemodules as $cmods) {
+            if ($cmods->canaccess) {
+                $instance = $DB->get_record('eportfolio', ['id' => $cmods->instance]);
 
-        // Get roles.
-        $courseroles = local_eportfolio_get_course_roles_to_share($sharedcourseid, $shareoption);
-
-        if (!empty($courseroles)) {
-            $roles = [];
-
-            foreach ($courseroles as $key => $value) {
-                $roles[] = &$mform->createElement('advcheckbox', $key, '', $value, ['name' => $key, 'group' => 1], $key);
-                $mform->setDefault("roles[$key]", false);
-            }
-
-            $mform->addGroup($roles, 'roles', get_string('sharing:form:roles', 'local_eportfolio'));
-            $this->add_checkbox_controller(1, ' ');
-            $mform->addHelpButton('roles', 'sharing:form:roles', 'local_eportfolio');
-        }
-
-        // Get enrolled users.
-        $enrolledusers = local_eportfolio_get_course_user_to_share($sharedcourseid);
-
-        // Get course context.
-        $coursecontext = context_course::instance($sharedcourseid);
-
-        if (!empty($enrolledusers)) {
-            $enrolled = [];
-            foreach ($enrolledusers as $key => $value) {
-
-                if ($shareoption != 'grade') {
-                    $enrolled[] = &$mform->createElement('advcheckbox', $key, '', $value,
-                            ['name' => $key, 'group' => 2], $key);
-                    $mform->setDefault("enrolled[$key]", false);
-                } else {
-                    // Check, if user is enrolled as grading teacher.
-                    $config = get_config('local_eportfolio');
-                    $roleids = explode(',', $config->gradingteacher);
-
-                    foreach ($roleids as $rid) {
-                        $hasrole = local_eportfolio_get_assigned_role_by_course($rid, $coursecontext->id, $key);
-
-                        if (!empty($hasrole)) {
-                            $enrolled[] = &$mform->createElement('advcheckbox', $key, '', $value,
-                                    ['name' => $key, 'group' => 2], $key);
-                            $mform->setDefault("enrolled[$key]", false);
-                        }
-                    }
-                }
-            }
-
-            $mform->addGroup($enrolled, 'enrolled', get_string('sharing:form:enrolledusers', 'local_eportfolio'));
-            $this->add_checkbox_controller(2, ' ');
-            $mform->addHelpButton('enrolled', 'sharing:form:enrolledusers', 'local_eportfolio');
-        }
-
-        // Get available course groups only if it's not shared for grading.
-        if ($shareoption != 'grade') {
-            $coursegroups = local_eportfolio_get_course_groups_to_share($sharedcourseid);
-
-            if ($coursegroups) {
-                $groups = [];
-                foreach ($coursegroups as $key => $value) {
-                    $groups[] = &$mform->createElement('advcheckbox', $key, '', $value, ['name' => $key, 'group' => 3], $key);
-                    $mform->setDefault("groups[$key]", false);
-                }
-                $mform->addGroup($groups, 'groups', get_string('sharing:form:groups', 'local_eportfolio'));
-                $this->add_checkbox_controller(3, ' ');
-                $mform->addHelpButton('groups', 'sharing:form:groups', 'local_eportfolio');
+                $targetgroup[] = $mform->createElement('radio', 'activitygrade', '',
+                        $instance->name, $cmods->id);
             }
         }
 
-        // Disable checkboxes in case fullcourse is selected for sharing.
-        $mform->hideIf('roles', 'fullcourse', 'eq', '0');
-        $mform->hideIf('enrolled', 'fullcourse', 'eq', '0');
-        $mform->hideIf('groups', 'fullcourse', 'eq', '0');
-
-        $mform->hideIf('roles', 'fullcourse', 'eq', '1');
-        $mform->hideIf('enrolled', 'fullcourse', 'eq', '1');
-        $mform->hideIf('groups', 'fullcourse', 'eq', '1');
+        $mform->addGroup($targetgroup, 'activitygradedata', get_string('sharing:form:sharedactivity:select', 'local_eportfolio'),
+                ['<br>'], false);
+        $mform->addRule('activitygradedata', get_string('sharing:form:sharedactivity:error', 'local_eportfolio'), 'required', '',
+                'client');
 
         // Add standard buttons.
         $this->add_action_buttons();

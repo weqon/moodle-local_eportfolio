@@ -77,6 +77,7 @@ $string['overview:table:filetimecreated'] = 'Created/Uploaded';
 $string['overview:table:filetimemodified'] = 'Last modified';
 $string['overview:table:filesize'] = 'Filesize';
 $string['overview:table:coursefullname'] = 'Shared in course';
+$string['overview:table:instancename'] = 'Course module';
 $string['overview:table:sharedby'] = 'Shared by';
 $string['overview:table:participants'] = 'Shared with';
 $string['overview:table:sharestart'] = 'Shared on';
@@ -118,6 +119,7 @@ $string['view:eportfolio:timemodified'] = 'Last modified';
 $string['sharing:header'] = 'Share ePortfolio';
 $string['sharing:form:step:nocourseselection'] = 'Currently there is no course available to share your ePortfolio.';
 $string['sharing:form:step:courseselection'] = 'Select course';
+$string['sharing:form:step:activityselection'] = 'Select activity';
 $string['sharing:form:step:shareoptionselection'] = 'Select share option';
 $string['sharing:form:select:hint'] = 'Please select a course';
 $string['sharing:form:step:userselection'] = 'Select participants';
@@ -145,6 +147,11 @@ $string['sharing:form:select:template'] = 'Template';
 $string['sharing:form:enddate:enable'] = 'Set enddate';
 $string['sharing:form:enddate:label'] = 'Activate date selection';
 $string['sharing:form:enddate:select'] = 'Available until';
+$string['sharing:form:sharedactivity'] = 'Select activity';
+$string['sharing:form:sharedactivity:desc'] =
+        'Please select the activity for which you would like to share your ePortfolio for grading.';
+$string['sharing:form:sharedactivity:error'] = 'Please select a course module';
+$string['sharing:form:sharedactivity:select'] = 'Select course module';
 $string['sharing:form:sharedusers'] = 'Share ePortfolio with whole course or only selected participants';
 $string['sharing:form:sharedusers:desc'] = 'Please select whether you would like to share your ePortfolio with the entire course or with selected participants<br>
 You can share your ePortfolio with all enrolled participants in the course or only with certain roles, participants or course groups.';
@@ -158,6 +165,9 @@ $string['sharing:form:enrolledusers'] = 'Participants to share with';
 $string['sharing:form:enrolledusers_help'] = 'Only selected participants are able to view/grade the ePortfolio';
 $string['sharing:form:groups'] = 'Course groups to share with';
 $string['sharing:form:groups_help'] = 'Only group members are able to view/grade the ePortfolio';
+$string['sharing:form:nousersselected'] =
+        'You must select at least one role, one user or one course group or
+        share the ePortfolio for the entire course before you can continue!';
 
 $string['sharing:alreadyshared:info'] = 'The ePortfolio has already been shared in the following courses:';
 $string['sharing:alreadyshared:course'] = 'Course';
