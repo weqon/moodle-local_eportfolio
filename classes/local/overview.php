@@ -22,7 +22,7 @@
  * @license https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_eportfolio\local\overview;
+namespace local_eportfolio\local;
 
 defined('MOODLE_INTERNAL') || die();
 
