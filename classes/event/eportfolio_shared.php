@@ -43,7 +43,7 @@ class eportfolio_shared extends \core\event\base {
     protected function init() {
         global $USER;
         $this->context = \context_user::instance($USER->id);
-        $this->data['objecttable'] = 'eportfolio';
+        $this->data['objecttable'] = 'local_eportfolio';
         $this->data['crud'] = 'c';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }

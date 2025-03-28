@@ -15,11 +15,18 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * lib.php for ePortfolio.
+ * Hook callbacks for local_eportfolio.
  *
- * @package     local_eportfolio
- * @copyright   2024 weQon UG <support@weqon.net>
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package local_eportfolio
+ * @copyright   2025 weQon UG <support@weqon.net>
+ * @license https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
+
+$callbacks = [
+        [
+                'hook' => \core\hook\output\before_http_headers::class,
+                'callback' => [\local_eportfolio\local\hooks\output\before_http_headers::class, 'callback'],
+        ],
+];

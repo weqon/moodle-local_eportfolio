@@ -45,6 +45,15 @@ Set the default roles for "students" and "grading teacher" in the plugin setting
 
 ### Please note: This plugin is a "Release Candidate" and should not be used in productive systems. ###
 
+### Moodle 4.4 / 4.5 - pre release ###
+
+**Version 0.3.0**  
+
+- Added new output hook class to replace http_before_headers in lib.php.
+- Fixed objecttable in events.
+
+### Moodle 4.1 ###
+
 **Version 0.2.6**  
 
 - New functionality to select the activity to share an ePortfolio for grading if more than one activity is available in a course.

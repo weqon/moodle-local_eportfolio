@@ -43,7 +43,7 @@ class eportfolio_edited extends \core\event\base {
     protected function init() {
         global $USER;
         $this->context = \context_user::instance($USER->id);
-        $this->data['objecttable'] = 'eportfolio';
+        $this->data['objecttable'] = 'local_eportfolio';
         $this->data['crud'] = 'u';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
