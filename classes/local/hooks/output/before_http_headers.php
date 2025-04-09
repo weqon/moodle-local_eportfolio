@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - https://moodle.org/
+// This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,27 +12,28 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+namespace local_eportfolio\local\hooks\output;
 
 /**
- * lib.php for ePortfolio.
- *
- * @package     local_eportfolio
- * @copyright   2024 weQon UG <support@weqon.net>
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * Allows plugins to modify headers.
+ * *
+ * @package local_eportfolio
+ * @copyright   2025 weQon UG <support@weqon.net>
+ * @license https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-// Prepare plugin compatibility for Moodle version 4.3 and above.
-if ($CFG->version < 2023100900) {
-
+/**
+ * Callback to allow modify headers for local_eportfolio.
+ */
+class before_http_headers {
     /**
-     * Add entry to main navigation.
+     * Callback to allow modify headers.
      *
-     * @return void
+     * @param \core\hook\output\before_http_headers $hook
      */
-    function local_eportfolio_before_http_headers() {
+    public static function callback(\core\hook\output\before_http_headers $hook): void {
         global $PAGE;
 
         // Get eportfolionavbar from settings.
@@ -40,13 +41,12 @@ if ($CFG->version < 2023100900) {
 
         if (!empty($config->eportfolionavbar)) {
 
-            $context = context_system::instance();
+            $context = \context_system::instance();
 
             if (has_capability('local/eportfolio:view_eport', $context) || has_capability('moodle/site:config', $context)) {
                 $PAGE->primarynav->add(get_string('navbar', 'local_eportfolio'),
-                        new moodle_url('/local/eportfolio/index.php'));
+                        new \moodle_url('/local/eportfolio/index.php'));
             }
         }
     }
-
 }
