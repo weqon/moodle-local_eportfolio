@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-// Prepare plugin compatibility for Moodle version 4.3 and above.
+// Prepare plugin compability for Moodle version 4.3 and above.
 if ($CFG->version < 2023100900) {
 
     /**

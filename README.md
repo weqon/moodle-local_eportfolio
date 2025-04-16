@@ -45,6 +45,9 @@ Set the default roles for "students" and "grading teacher" in the plugin setting
 
 ### Please note: This plugin is a "Release Candidate" and should not be used in productive systems. ###
 
+**Version 0.2.8**  
+- Changed optional_param to optional_param_array in download.php
+
 **Version 0.2.7**  
 - Added navigation hook for compability with Moodle 4.3 and above
 

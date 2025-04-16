@@ -39,7 +39,7 @@ if (!has_capability('local/eportfolio:view_eport', context_system::instance())) 
             null, \core\output\notification::NOTIFY_ERROR);
 }
 
-$ids = optional_param('fileids', '0', PARAM_RAW);
+$ids = optional_param_array('fileids', '0', PARAM_RAW);
 
 $downloadids = [];
 
