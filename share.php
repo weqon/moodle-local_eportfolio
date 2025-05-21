@@ -371,7 +371,6 @@ if ($step == '3') {
 
                 // Trigger event for sharing ePortfolio.
                 \local_eportfolio\event\eportfolio_shared::create([
-                        'objecttable' => 'local_eportfolio',
                         'objectid' => $eport->fileid,
                         'other' => [
                                 'description' => get_string('event:eportfolio:shared:' . $data->shareoption, 'local_eportfolio',

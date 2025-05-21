@@ -153,7 +153,6 @@ if ($formdata = $mform->is_cancelled()) {
         }
 
         \local_eportfolio\event\eportfolio_created::create([
-                'objecttable' => 'local_eportfolio',
                 'objectid' => $data->fileid,
                 'other' => [
                         'description' => get_string('event:eportfolio:created', 'local_eportfolio',
