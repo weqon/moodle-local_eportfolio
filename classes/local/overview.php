@@ -810,7 +810,7 @@ class overview {
     public function action_button_share($url) {
         global $OUTPUT;
 
-        $icon = $OUTPUT->pix_icon('i/publish', get_string('overview:table:actions:share', 'local_eportfolio'));
+        $icon = $OUTPUT->pix_icon('i/share', get_string('overview:table:actions:share', 'local_eportfolio'));
         return \html_writer::link($url, $icon, ['class' => 'mr-2']);
     }
 
@@ -823,7 +823,7 @@ class overview {
     public function action_button_edit($url) {
         global $OUTPUT;
 
-        $icon = $OUTPUT->pix_icon('i/permissions', get_string('overview:table:actions:edit', 'local_eportfolio'));
+        $icon = $OUTPUT->pix_icon('i/edit', get_string('overview:table:actions:edit', 'local_eportfolio'));
         return \html_writer::link($url, $icon, ['class' => 'mr-2']);
     }
 

@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_eportfolio';
-$plugin->release = '0.3.1';
-$plugin->version = 2025041600;
-$plugin->requires = 2024042200; // Moodle 4.4 Stable.
+$plugin->release = '0.3.2';
+$plugin->version = 2025052100;
+$plugin->requires = 2024100700; // Moodle 4.5 Stable.
 $plugin->maturity = MATURITY_RC;

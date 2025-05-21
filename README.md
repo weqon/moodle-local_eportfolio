@@ -45,7 +45,12 @@ Set the default roles for "students" and "grading teacher" in the plugin setting
 
 ### Please note: This plugin is a "Release Candidate" and should not be used in productive systems. ###
 
-### Moodle 4.4 / 4.5 - pre release ###
+### Moodle 4.5 - pre release ###
+
+**Version 0.3.2**  
+
+- Updated icons to use Font Awesome 6
+- Set supported Moodle version to 4.5
 
 **Version 0.3.1**  
 
