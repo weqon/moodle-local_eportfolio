@@ -36,6 +36,26 @@ require_once($CFG->libdir . '/formslib.php');
 class overview {
 
     /**
+     * @var string $url string with the basic url incl. parameters
+     */
+    private $url;
+
+    /**
+     * @var string $section current selected section
+     */
+    private $section;
+
+    /**
+     * @var string $tsort sort param column
+     */
+    private $tsort;
+
+    /**
+     * @var int $tdir sort order ASC or DESC
+     */
+    private $tdir;
+
+    /**
      * Construct the base stuff.
      *
      * @param string $url
