@@ -275,6 +275,8 @@ $string['settings:globalnavbar:enable'] = 'Main navigation entry';
 $string['settings:globalnavbar:enable:desc'] = 'An entry for the ePortfolio is displayed in the main navigation.';
 $string['settings:helpandfaq'] = 'Help & FAQ URL';
 $string['settings:helpandfaq:desc'] = 'You can enter a different URL for the Help & FAQ page, e.g. to refer to your own help page.';
+$string['settings:disableuserselection:disable'] = 'Disable student selection';
+$string['settings:disableuserselection:disable:desc'] = 'If disabled, individual students cannot be selected when sharing an ePortfolio.';
 
 // Privacy provider.
 $string['privacy:metadata:myeportfolios'] = 'My ePortfolios';

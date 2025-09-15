@@ -282,6 +282,8 @@ $string['settings:globalnavbar:enable:desc'] = 'In der Hauptnavigation wird ein 
 $string['settings:helpandfaq'] = 'Hilfe & FAQ URL';
 $string['settings:helpandfaq:desc'] = 'Sie können eine abweichende URL für die Hilfe & FAQ seite hinterlegen, um z. B.
 auf Ihre eigene Hilfe-Seite zu verweisen.';
+$string['settings:disableuserselection:disable'] = 'Auswahl Teilnehmer/innen deaktivieren';
+$string['settings:disableuserselection:disable:desc'] = 'Wenn deaktiviert, können bei der Teilung eines ePortfolios keine einzelnen Teilnehmer/innen ausgewählt werden.';
 
 // Privacy provider.
 $string['privacy:metadata:myeportfolios'] = 'Meine ePortfolios';
