@@ -89,6 +89,12 @@ $string['overview:table:graded:done'] = 'Graded with:';
 $string['overview:table:istemplate'] = 'This file was uploaded or shared as template for other users.';
 $string['overview:table:filedeleted'] = 'You have deleted the ePortfolio from your personal overview.
  The file shared for grading must be permanently deleted in the course.';
+ 
+$string['overview:table:participants:fullcourse'] = 'Shared with complete course';
+$string['overview:table:participants:enrolled'] = 'Participants hidden';
+$string['overview:table:participants:courserole'] = 'Course role: ';
+$string['overview:table:participants:coursegroup'] = 'Course group: ';
+$string['overview:table:participants:anonymous'] = 'Name hidden';
 
 $string['overview:eportfolio:fileselect'] = 'File selection';
 $string['overview:eportfolio:uploadnewfile'] = 'Upload H5P file';

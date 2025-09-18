@@ -76,23 +76,138 @@ function local_eportfolio_get_eportfolio_courses($roleids = null) {
  * @param array $enrolled
  * @param array $roleids
  * @param array $groupids
- * @return array
+ * @return mixed
  */
 function local_eportfolio_get_shared_participants($courseid, $fullcourse = null, $enrolled = null, $roleids = null,
         $groupids = null) {
     global $DB;
+
+    // Get current config settings.
+    $config = get_config('local_eportfolio');
+
+    // Get the course context.
+    $coursecontext = context_course::instance($courseid);
+
+    $isgradingteacher = local_eportfolio_is_grading_teacher($config, $coursecontext);
+
+    if ($config->disableuserselection && !$isgradingteacher) {   
+        $sharedusers = '';
+
+        // Just in case the setting was enabled after users already shared with selected participants.
+        if (!empty($enrolled)) {
+            $sharedusers = get_string('overview:table:participants:enrolled', 'local_eportfolio');
+        }
+
+        if (!empty($fullcourse)) {
+            $sharedusers = get_string('overview:table:participants:fullcourse', 'local_eportfolio');
+        }
+
+        if (!empty($roleids)) {  
+            $roleids = explode(', ', $roleids);
+            $rolenames = role_get_names($coursecontext, ROLENAME_ALIAS, true);
+
+            $sharedusers = get_string('overview:table:participants:courserole', 'local_eportfolio');
+
+            foreach ($roleids as $rid) {
+                $roles[] = $rolenames[$rid];
+            }
+            $sharedusers .= implode(', ', $roles);
+        }
+
+        if (!empty($groupids)) {
+            // Get course groups by course id.
+            $groupids = explode(', ', $groupids);
+            $coursegroups = groups_get_all_groups($courseid);
+            
+            $sharedusers = get_string('overview:table:participants:coursegroup', 'local_eportfolio');
+
+            foreach ($groupids as $gid) {
+                $groups[] = $coursegroups[$gid]->name;
+            }
+
+            $sharedusers .=  implode(', ', $groups);
+        }
+    } else {
+
+        $allenrolledusers = [];
+        $selecteduser = [];
+        $usersbyrole = [];
+        $groupmembers = [];
+
+        // In case of shared with full course.
+        if (!empty($fullcourse)) {
+            $getenrolledusers = get_enrolled_users($coursecontext);
+
+            foreach ($getenrolledusers as $eu) {
+                $allenrolledusers[$eu->id] = fullname($eu);
+            }
+
+        }
+
+        if (!empty($enrolled)) {
+            $enrolled = explode(', ', $enrolled);
+
+            foreach ($enrolled as $us) {
+                $user = $DB->get_record('user', ['id' => $us]);
+                $selecteduser[$user->id] = fullname($user);
+            }
+        }
+
+        if (!empty($roleids)) {
+            $roleids = explode(', ', $roleids);
+
+            foreach ($roleids as $ro) {
+                $user = get_role_users($ro, $coursecontext);
+
+                foreach ($user as $us) {
+                    $usersbyrole[$us->id] = fullname($us);
+                }
+            }
+        }
+
+        if (!empty($groupids)) {
+            $groupids = explode(', ', $groupids);
+
+            foreach ($groupids as $grp) {
+                $group = groups_get_members($grp);
+
+                foreach ($group as $gp) {
+                    $groupmembers[$gp->id] = fullname($gp);
+                }
+            }
+        }
+
+        // Put all together. Since user ids are unique we can use array replace to provide user ids as key for further usage.
+        $sharedusers = array_replace($allenrolledusers, $selecteduser, $groupmembers, $usersbyrole);
+    }
+
+    return $sharedusers;
+}
+
+/**
+ * Get users who have been shared with for sending message.
+ *
+ * @param int $courseid
+ * @param bool $fullcourse
+ * @param array $enrolled
+ * @param array $roleids
+ * @param array $groupids
+ * @return mixed
+ */
+function local_eportfolio_get_shared_participants_message($courseid, $fullcourse = null, $enrolled = null, $roleids = null,
+        $groupids = null) {
+    global $DB;
+
+    // Get the course context.
+    $coursecontext = context_course::instance($courseid);
 
     $allenrolledusers = [];
     $selecteduser = [];
     $usersbyrole = [];
     $groupmembers = [];
 
-    // Get the course context.
-    $coursecontext = context_course::instance($courseid);
-
     // In case of shared with full course.
     if (!empty($fullcourse)) {
-
         $getenrolledusers = get_enrolled_users($coursecontext);
 
         foreach ($getenrolledusers as $eu) {
@@ -102,47 +217,35 @@ function local_eportfolio_get_shared_participants($courseid, $fullcourse = null,
     }
 
     if (!empty($enrolled)) {
-
         $enrolled = explode(', ', $enrolled);
 
         foreach ($enrolled as $us) {
-
             $user = $DB->get_record('user', ['id' => $us]);
-
             $selecteduser[$user->id] = fullname($user);
-
         }
     }
 
     if (!empty($roleids)) {
-
         $roleids = explode(', ', $roleids);
 
         foreach ($roleids as $ro) {
-
             $user = get_role_users($ro, $coursecontext);
 
             foreach ($user as $us) {
-
                 $usersbyrole[$us->id] = fullname($us);
             }
-
         }
     }
 
     if (!empty($groupids)) {
-
-        // A little mess. Clean up...
         $groupids = explode(', ', $groupids);
 
         foreach ($groupids as $grp) {
-
             $group = groups_get_members($grp);
 
             foreach ($group as $gp) {
                 $groupmembers[$gp->id] = fullname($gp);
             }
-
         }
     }
 
@@ -387,4 +490,29 @@ function local_eportfolio_check_config($context) {
     }
 
     return $configset;
+}
+
+/**
+ * Check, if the plugin was configured properly.
+ *
+ * @param stdClass $config
+ * @param stdClass $coursecontext
+ * @return bool
+ */
+
+function local_eportfolio_is_grading_teacher($config, $coursecontext, $userid = null) {    
+
+    // Check, if current user is enrolled as grading teacher.
+    $checkroleids = explode(',', $config->gradingteacher);
+
+    $isgradingteacher = false;
+
+    foreach ($checkroleids as $rid) {
+        $hasrole = local_eportfolio_get_assigned_role_by_course($rid, $coursecontext->id, $userid);
+        if (!empty($hasrole)) {
+            $isgradingteacher = true;
+        }
+    }
+
+    return $isgradingteacher;
 }

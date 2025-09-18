@@ -90,6 +90,12 @@ $string['overview:table:graded:done'] = 'Bewertet mit:';
 $string['overview:table:istemplate'] = 'Dieses ePortfolio wurde für andere Nutzer:innen als Vorlage zur Verfügung gestellt.';
 $string['overview:table:filedeleted'] = 'Sie haben das ePortfolio aus Ihrer persönlichen Übersicht gelöscht.
  Die zur Bewertung geteilte Datei muss endgültig im Kurs gelöscht werden.';
+ 
+$string['overview:table:participants:fullcourse'] = 'Geteilt mit allen Teilnehmer/innen im Kurs';
+$string['overview:table:participants:enrolled'] = 'Teilnehmer/innen verborgen';
+$string['overview:table:participants:courserole'] = 'Kursrolle: ';
+$string['overview:table:participants:coursegroup'] = 'Kursgruppe: ';
+$string['overview:table:participants:anonymous'] = 'Name verborgen';
 
 $string['overview:eportfolio:fileselect'] = 'Dateiauswahl';
 $string['overview:eportfolio:uploadnewfile'] = 'H5P-Datei hochladen';

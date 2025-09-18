@@ -48,6 +48,8 @@ class overview {
         $this->section = $section;
         $this->tsort = $tsort;
         $this->tdir = $tdir;
+
+        $this->config = get_config('local_eportfolio');
     }
 
     /**
@@ -563,7 +565,11 @@ class overview {
                 $participants = local_eportfolio_get_shared_participants($course->id, $ent->fullcourse,
                         $ent->enrolled, $ent->roles, $ent->coursegroups);
 
-                $sharedwith = implode(', ', $participants);
+                if (is_array($participants)) {
+                    $sharedwith = implode(', ', $participants);
+                } else {
+                    $sharedwith = $participants;
+                }
 
                 $tabledata = [
                         \html_writer::link($viewurl, $filename,
@@ -668,10 +674,19 @@ class overview {
 
                 // Additional entry details.
                 $sharestart = date('d.m.Y', $ent->timecreated);
-                $shareend = (!empty($ent->enddate)) ? date('d.m.Y', $ent->enddate) : './.';
+                $shareend = (!empty($ent->enddate)) ? date('d.m.Y', $ent->enddate) : './.';  
 
-                $user = $DB->get_record('user', ['id' => $ent->usermodified]);
-                $userfullname = fullname($user);
+                $coursecontext = \context_course::instance($ent->courseid);
+
+                // Check if current user is grading teacher.
+                $isgradingteacher = local_eportfolio_is_grading_teacher($this->config, $coursecontext);
+
+                if ($this->config->disableuserselection && !$isgradingteacher) {
+                    $userfullname = get_string('overview:table:participants:anonymous', 'local_eportfolio');
+                } else {
+                    $user = $DB->get_record('user', ['id' => $ent->usermodified]);
+                    $userfullname = fullname($user);
+                }
 
                 $tabledata = [
                         \html_writer::link($viewurl, $filename,
