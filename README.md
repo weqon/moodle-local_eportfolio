@@ -43,9 +43,12 @@ Set the default roles for "students" and "grading teacher" in the plugin setting
 
 ## Relase notes ##
 
-### Please note: This plugin is a "Release Candidate" and should not be used in productive systems. ###
+### Moodle 4.5 ###
 
-### Moodle 4.5 - pre release ###
+**Version 0.3.3**  
+
+- Added new setting to disable selection of users for better privacy
+- Set maturity to stable
 
 **Version 0.3.2**  
 
