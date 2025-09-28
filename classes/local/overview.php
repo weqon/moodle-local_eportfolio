@@ -158,7 +158,7 @@ class overview {
             // Download is only available on the my page.
             if ($this->section === 'my') {
                 echo \html_writer::empty_tag('input',
-                        ['class' => 'btn btn-primary', 'type' => 'submit', 'name' => 'submit',
+                        ['class' => 'btn btn-primary mt-3', 'type' => 'submit', 'name' => 'submit',
                                 'value' => get_string('overview:eportfolio:downloadfiles', 'local_eportfolio'),
                                 'role' => 'button', 'alt' => get_string('overview:eportfolio:downloadfiles', 'local_eportfolio'),
                                 'title' => get_string('overview:eportfolio:downloadfiles', 'local_eportfolio')]);

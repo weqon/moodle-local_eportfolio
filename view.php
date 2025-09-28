@@ -134,16 +134,22 @@ if ($tocourse) {
     $backurlstring = get_string('view:eportfolio:button:backtoeportfolio', 'local_eportfolio');
 }
 
-$coursecontext = context_course::instance($eport->courseid);
+$user = $DB->get_record('user', ['id' => $eport->usermodified]);
+$userfullname = fullname($user);
 
-// Check if current user is grading teacher.
-$isgradingteacher = local_eportfolio_is_grading_teacher($pluginconfig, $coursecontext);
+if ($pluginconfig->disableuserselection && $USER->id != $eport->usermodified) {
+    $isgradingteacher = false;
+    $coursecontext = context_course::instance($eport->courseid);
 
-if ($pluginconfig->disableuserselection && !$isgradingteacher) {
-    $userfullname = get_string('overview:table:participants:anonymous', 'local_eportfolio');
-} else {
-    $user = $DB->get_record('user', ['id' => $eport->usermodified]);
-    $userfullname = fullname($user);
+    // Check if current user is grading teacher.
+    $isgradingteacher = local_eportfolio_is_grading_teacher($pluginconfig, $coursecontext);
+
+    if ($eport->shareoption === 'template') {
+        $user = $DB->get_record('user', ['id' => $eport->usermodified]);
+        $userfullname = fullname($user);
+    } else if (!$isgradingteacher) {
+        $userfullname = get_string('overview:table:participants:anonymous', 'local_eportfolio');
+    }
 }
 
 // Let's check if user "owns" the ePortfolio and can edit it and also, if user isn't in course context.
