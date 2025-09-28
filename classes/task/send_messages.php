@@ -58,8 +58,18 @@ class send_messages extends \core\task\adhoc_task {
 
         $a->shareoption = get_string('overview:shareoption:' . $data->shareoption, 'local_eportfolio');
 
-        $userfromdata = $DB->get_record('user', ['id' => $data->userfrom]);
-        $a->userfrom = fullname($userfromdata);
+        $coursecontext = \context_course::instance($data->courseid);
+        $config = get_config('local_eportfolio');
+
+        // Check if current user is grading teacher.
+        $isgradingteacher = local_eportfolio_is_grading_teacher($config, $coursecontext, $data->userto);
+
+        if ($config->disableuserselection && !$isgradingteacher) {
+            $a->userfrom = get_string('overview:table:participants:anonymous', 'local_eportfolio');
+        } else {
+            $userfromdata = $DB->get_record('user', ['id' => $data->userfrom]);
+            $a->userfrom = fullname($userfromdata);
+        }
 
         $a->filename = $data->filename;
         $a->viewurl = (string) $contexturl;

@@ -24,6 +24,7 @@
 
 require(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/lib.php');
+require_once(__DIR__ . '/locallib.php');
 
 // First check, if user is logged in before accessing this page.
 require_login();
@@ -45,6 +46,8 @@ $courseid = optional_param('course', 0, PARAM_INT);
 $cmid = optional_param('cmid', 0, PARAM_INT);
 $tocourse = optional_param('tocourse', 0, PARAM_INT);
 $section = optional_param('section', '', PARAM_ALPHA);
+
+$pluginconfig = get_config('local_eportfolio');
 
 $url = new moodle_url('/local/eportfolio/view.php', ['id' => $id, 'section' => $section]);
 
@@ -131,9 +134,17 @@ if ($tocourse) {
     $backurlstring = get_string('view:eportfolio:button:backtoeportfolio', 'local_eportfolio');
 }
 
-$userfullname = '';
-$user = $DB->get_record('user', ['id' => $eport->usermodified]);
-$userfullname = fullname($user);
+$coursecontext = context_course::instance($eport->courseid);
+
+// Check if current user is grading teacher.
+$isgradingteacher = local_eportfolio_is_grading_teacher($pluginconfig, $coursecontext);
+
+if ($pluginconfig->disableuserselection && !$isgradingteacher) {
+    $userfullname = get_string('overview:table:participants:anonymous', 'local_eportfolio');
+} else {
+    $user = $DB->get_record('user', ['id' => $eport->usermodified]);
+    $userfullname = fullname($user);
+}
 
 // Let's check if user "owns" the ePortfolio and can edit it and also, if user isn't in course context.
 if ($USER->id == $file->get_userid() && !$tocourse && $file->get_component() != 'mod_eportfolio') {

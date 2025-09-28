@@ -67,6 +67,16 @@ if ($hassiteconfig) {
             ['student'],
     ));
 
+    // Disable user selection (Default role: Student).
+    $settingspage->add(
+            new admin_setting_configcheckbox(
+                    'local_eportfolio/disableuserselection',
+                    get_string('settings:disableuserselection:disable', 'local_eportfolio'),
+                    get_string('settings:disableuserselection:disable:desc', 'local_eportfolio'),
+                    false
+            )
+    );
+    
     $settings->add('local_eportfolio_settings', $settingspage);
 
     $ADMIN->add('localplugins', $settings);

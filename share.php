@@ -341,8 +341,8 @@ if ($step == '3') {
                 }
 
                 // Let's send a message to the users shared with.
-                $participants = local_eportfolio_get_shared_participants($data->courseid, $data->fullcourse,
-                        $data->enrolled, $data->roles, $data->coursegroups, true);
+                $participants = local_eportfolio_get_shared_participants_message($data->courseid, $data->fullcourse,
+                        $data->enrolled, $data->roles, $data->coursegroups);
 
                 foreach ($participants as $key => $value) {
                     // Generate and queue adhoc task.

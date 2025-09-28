@@ -90,6 +90,12 @@ $string['overview:table:istemplate'] = 'This file was uploaded or shared as temp
 $string['overview:table:filedeleted'] = 'You have deleted the ePortfolio from your personal overview.
  The file shared for grading must be permanently deleted in the course.';
 
+$string['overview:table:participants:fullcourse'] = 'Shared with complete course';
+$string['overview:table:participants:enrolled'] = 'Participants hidden';
+$string['overview:table:participants:courserole'] = 'Course role: ';
+$string['overview:table:participants:coursegroup'] = 'Course group: ';
+$string['overview:table:participants:anonymous'] = 'Name hidden';
+
 $string['overview:eportfolio:fileselect'] = 'File selection';
 $string['overview:eportfolio:uploadnewfile'] = 'Upload H5P file';
 $string['overview:eportfolio:createnewfile'] = 'Create H5P file';
@@ -275,6 +281,9 @@ $string['settings:globalnavbar:enable'] = 'Main navigation entry';
 $string['settings:globalnavbar:enable:desc'] = 'An entry for the ePortfolio is displayed in the main navigation.';
 $string['settings:helpandfaq'] = 'Help & FAQ URL';
 $string['settings:helpandfaq:desc'] = 'You can enter a different URL for the Help & FAQ page, e.g. to refer to your own help page.';
+$string['settings:disableuserselection:disable'] = 'Disable student selection';
+$string['settings:disableuserselection:disable:desc'] =
+        'If disabled, individual students cannot be selected when sharing an ePortfolio.';
 
 // Privacy provider.
 $string['privacy:metadata:myeportfolios'] = 'My ePortfolios';

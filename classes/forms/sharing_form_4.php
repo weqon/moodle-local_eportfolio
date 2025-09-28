@@ -112,40 +112,45 @@ class sharing_form_4 extends moodleform {
             $mform->addHelpButton('roles', 'sharing:form:roles', 'local_eportfolio');
         }
 
-        // Get enrolled users.
-        $enrolledusers = local_eportfolio_get_course_user_to_share($sharedcourseid);
+        // Check, if disableuserselection is set. If it's set to true, skip this step.
+        $config = get_config('local_eportfolio');
 
-        // Get course context.
-        $coursecontext = context_course::instance($sharedcourseid);
+        if (!$config->disableuserselection) {
+            // Get enrolled users.
+            $enrolledusers = local_eportfolio_get_course_user_to_share($sharedcourseid);
 
-        if (!empty($enrolledusers)) {
-            $enrolled = [];
-            foreach ($enrolledusers as $key => $value) {
+            // Get course context.
+            $coursecontext = context_course::instance($sharedcourseid);
 
-                if ($shareoption != 'grade') {
-                    $enrolled[] = &$mform->createElement('advcheckbox', $key, '', $value,
-                            ['name' => $key, 'group' => 2], $key);
-                    $mform->setDefault("enrolled[$key]", false);
-                } else {
-                    // Check, if user is enrolled as grading teacher.
-                    $config = get_config('local_eportfolio');
-                    $roleids = explode(',', $config->gradingteacher);
+            if (!empty($enrolledusers)) {
+                $enrolled = [];
+                foreach ($enrolledusers as $key => $value) {
 
-                    foreach ($roleids as $rid) {
-                        $hasrole = local_eportfolio_get_assigned_role_by_course($rid, $coursecontext->id, $key);
+                    if ($shareoption != 'grade') {
+                        $enrolled[] = &$mform->createElement('advcheckbox', $key, '', $value,
+                                ['name' => $key, 'group' => 2], $key);
+                        $mform->setDefault("enrolled[$key]", false);
+                    } else {
+                        // Check, if user is enrolled as grading teacher.
+                        $config = get_config('local_eportfolio');
+                        $roleids = explode(',', $config->gradingteacher);
 
-                        if (!empty($hasrole)) {
-                            $enrolled[] = &$mform->createElement('advcheckbox', $key, '', $value,
-                                    ['name' => $key, 'group' => 2], $key);
-                            $mform->setDefault("enrolled[$key]", false);
+                        foreach ($roleids as $rid) {
+                            $hasrole = local_eportfolio_get_assigned_role_by_course($rid, $coursecontext->id, $key);
+
+                            if (!empty($hasrole)) {
+                                $enrolled[] = &$mform->createElement('advcheckbox', $key, '', $value,
+                                        ['name' => $key, 'group' => 2], $key);
+                                $mform->setDefault("enrolled[$key]", false);
+                            }
                         }
                     }
                 }
-            }
 
-            $mform->addGroup($enrolled, 'enrolled', get_string('sharing:form:enrolledusers', 'local_eportfolio'));
-            $this->add_checkbox_controller(2, ' ');
-            $mform->addHelpButton('enrolled', 'sharing:form:enrolledusers', 'local_eportfolio');
+                $mform->addGroup($enrolled, 'enrolled', get_string('sharing:form:enrolledusers', 'local_eportfolio'));
+                $this->add_checkbox_controller(2, ' ');
+                $mform->addHelpButton('enrolled', 'sharing:form:enrolledusers', 'local_eportfolio');
+            }
         }
 
         // Get available course groups only if it's not shared for grading.
