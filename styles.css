@@ -36,10 +36,10 @@
 }
 
 .path-local-eportfolio .icon-round-primary {
-    background-color: var(--primary);
+    background-color: var(--bs-primary);
 }
 
 .path-local-eportfolio .icon-round-secondary {
     color: #000;
-    background-color: var(--secondary);
+    background-color: var(--bs-secondary);
 }
