@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $callbacks = [
         [
-                'hook' => \core\hook\output\before_http_headers::class,
-                'callback' => [\local_eportfolio\local\hooks\output\before_http_headers::class, 'callback'],
+                'hook' => \core\hook\navigation\primary_extend::class,
+                'callback' => [\local_eportfolio\local\hooks\output\primary_extend::class, 'callback'],
         ],
 ];

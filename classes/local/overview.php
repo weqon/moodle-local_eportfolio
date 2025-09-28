@@ -550,7 +550,7 @@ class overview {
                                 new \moodle_url('/local/eportfolio/actions.php',
                                         ['id' => $eportshared->id, 'section' => $this->section,
                                                 'sesskey' => sesskey(), 'action' => 'undo']);
-                        $actions .= self::action_button_undo($undourl, $filename);
+                        $actions .= self::action_button_undo($undourl, $filename, true);
                     }
 
                 }
@@ -571,7 +571,7 @@ class overview {
                 // Undo URL.
                 $undourl = new \moodle_url('/local/eportfolio/actions.php', ['id' => $ent->id, 'section' => $this->section,
                         'sesskey' => sesskey(), 'action' => 'undo']);
-                $actions .= self::action_button_undo($undourl, $filename);
+                $actions .= self::action_button_undo($undourl, $filename, false);
 
                 // Course URL.
                 $course = $DB->get_record('course', ['id' => $ent->courseid]);
@@ -893,12 +893,13 @@ class overview {
      * @param string $filename
      * @return mixed
      */
-    public function action_button_undo($url, $filename) {
+    public function action_button_undo($url, $filename, $istemplate) {
         global $OUTPUT;
 
         $data = new \stdClass();
         $data->undourl = $url->out(false);
         $data->title = $filename;
+        $data->istemplate = $istemplate;
 
         return $OUTPUT->render_from_template('local_eportfolio/button_undo', $data);
     }

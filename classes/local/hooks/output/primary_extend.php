@@ -17,23 +17,23 @@
 namespace local_eportfolio\local\hooks\output;
 
 /**
- * Allows plugins to modify headers.
- * *
+ * Allows plugins to extend the primary navigation.
+ *
  * @package local_eportfolio
  * @copyright   2025 weQon UG <support@weqon.net>
  * @license https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 /**
- * Callback to allow modify headers for local_eportfolio.
+ * Callback to allow modifying the primary navigation for local_eportfolio.
  */
-class before_http_headers {
+class primary_extend {
     /**
      * Callback to allow modify headers.
      *
-     * @param \core\hook\output\before_http_headers $hook
+     * @param \core\hook\navigation\primary_extend $hook
      */
-    public static function callback(\core\hook\output\before_http_headers $hook): void {
+    public static function callback(\core\hook\navigation\primary_extend $hook): void {
         global $PAGE;
 
         // Get eportfolionavbar from settings.
@@ -44,7 +44,7 @@ class before_http_headers {
             $context = \context_system::instance();
 
             if (has_capability('local/eportfolio:view_eport', $context) || has_capability('moodle/site:config', $context)) {
-                $PAGE->primarynav->add(get_string('navbar', 'local_eportfolio'),
+                $hook->get_primaryview()->add(get_string('navbar', 'local_eportfolio'),
                         new \moodle_url('/local/eportfolio/index.php'));
             }
         }
