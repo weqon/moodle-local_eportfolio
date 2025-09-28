@@ -134,10 +134,14 @@ if ($tocourse) {
     $backurlstring = get_string('view:eportfolio:button:backtoeportfolio', 'local_eportfolio');
 }
 
-$coursecontext = context_course::instance($eport->courseid);
+$isgradingteacher = false;
 
-// Check if current user is grading teacher.
-$isgradingteacher = local_eportfolio_is_grading_teacher($pluginconfig, $coursecontext);
+if (!empty($eport->courseid)) {
+    $coursecontext = context_course::instance($eport->courseid);
+
+    // Check if current user is grading teacher.
+    $isgradingteacher = local_eportfolio_is_grading_teacher($pluginconfig, $coursecontext);
+}
 
 if ($pluginconfig->disableuserselection && !$isgradingteacher) {
     $userfullname = get_string('overview:table:participants:anonymous', 'local_eportfolio');
