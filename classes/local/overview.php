@@ -265,8 +265,30 @@ class overview {
             foreach ($eportfolios as $eport) {
                 $coursecontext = \context_course::instance($eport->courseid);
 
-                if (is_enrolled($coursecontext, $USER) || is_siteadmin($USER->id)) {
+                if (is_siteadmin($USER->id)) {
                     $returneports[] = $eport;
+                    continue;
+                }
+
+                // Check for explicit user shares.
+                $allowedusers = !empty($eport->enrolled) ? explode(',', $eport->enrolled) : [];
+                if (in_array($USER->id, $allowedusers)) {
+                    $returneports[] = $eport;
+                    continue;
+                }
+
+                // Check for group shares.
+                $allowedgroups = !empty($eport->coursegroups) ? explode(',', $eport->coursegroups) : [];
+                $ingroup = false;
+                foreach ($allowedgroups as $groupid) {
+                    if (groups_is_member((int)$groupid, $USER->id)) {
+                        $ingroup = true;
+                        break;
+                    }
+                }
+                if ($ingroup) {
+                    $returneports[] = $eport;
+                    continue;
                 }
             }
 
