@@ -261,7 +261,6 @@ class overview {
 
         // Check, if user is enrolled in same course as the ePortfolio was shared.
         if ($this->section === 'shared' || $this->section === 'grade' || $this->section === 'template') {
-
             foreach ($eportfolios as $eport) {
                 $coursecontext = \context_course::instance($eport->courseid);
 
@@ -270,15 +269,22 @@ class overview {
                     continue;
                 }
 
+                $now = time();
+
                 // Check for explicit user shares.
                 $allowedusers = !empty($eport->enrolled) ? explode(',', $eport->enrolled) : [];
-                if (in_array($USER->id, $allowedusers)) {
+                if (in_array($USER->id, $allowedusers)  && ($eport->enddate == 0 || $eport->enddate >= $now)) {
                     $returneports[] = $eport;
                     continue;
                 }
 
                 // Check for course-wide share.
-                if (empty($allowedusers) && empty($allowedgroups)) {
+                if (
+                    !empty($eport->fullcourse)
+                    && $eport->fullcourse == 1
+                    && is_enrolled($coursecontext, $USER)
+                    && ($eport->enddate == 0 || $eport->enddate >= $now)
+                ) {
                     $returneports[] = $eport;
                     continue;
                 }
@@ -292,18 +298,16 @@ class overview {
                         break;
                     }
                 }
-                if ($ingroup) {
+                if ($ingroup  && ($eport->enddate == 0 || $eport->enddate >= $now)) {
                     $returneports[] = $eport;
                     continue;
                 }
             }
 
             return $returneports;
-
         }
 
         return $eportfolios;
-
     }
 
     /**
