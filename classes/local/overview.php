@@ -88,7 +88,6 @@ class overview {
             $table->define_baseurl($this->url);
             $table->set_attribute('class', 'table table-hover');
             $table->sortable(true, 'filename', SORT_ASC);
-            $table->sortable(true, 'shareoption', SORT_ASC);
             $table->initialbars(true);
             $table->no_sorting('actions');
             $table->no_sorting('filesize');
