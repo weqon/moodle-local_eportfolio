@@ -75,6 +75,7 @@ $string['overview:table:selection'] = 'Select';
 $string['overview:table:filename'] = 'Filename';
 $string['overview:table:filetimecreated'] = 'Created/Uploaded';
 $string['overview:table:filetimemodified'] = 'Last modified';
+$string['overview:table:shareoption'] = 'Sharedoption';
 $string['overview:table:filesize'] = 'Filesize';
 $string['overview:table:coursefullname'] = 'Shared in course';
 $string['overview:table:instancename'] = 'Course module';

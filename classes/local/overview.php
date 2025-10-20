@@ -88,6 +88,7 @@ class overview {
             $table->define_baseurl($this->url);
             $table->set_attribute('class', 'table table-hover');
             $table->sortable(true, 'filename', SORT_ASC);
+            $table->sortable(true, 'shareoption', SORT_ASC);
             $table->initialbars(true);
             $table->no_sorting('actions');
             $table->no_sorting('filesize');
@@ -191,8 +192,13 @@ class overview {
                 $whereclauses[] = 'usermodified = :usermodified';
                 break;
             case 'myshared': // My ePortfolios shared for viewing.
-                $params['shareoption'] = 'share';
-                $whereclauses[] = 'shareoption = :shareoption';
+                //$params['shareoption'] = 'share';
+                //$whereclauses[] = 'shareoption = :shareoption';
+                // NEW
+                $params['shareoption1'] = 'share';
+                $params['shareoption2'] = 'template';
+                $whereclauses[] = '(shareoption = :shareoption1 OR shareoption = :shareoption2)';
+                // END
                 $params['usermodified'] = (int) $USER->id;
                 $whereclauses[] = 'usermodified = :usermodified';
                 break;
@@ -247,6 +253,8 @@ class overview {
                 $orderbyfield = 'timecreated';
             } else if ($this->tsort === 'shareend') {
                 $orderbyfield = 'enddate';
+            } else if ($this->tsort === 'shareoption') {
+                $orderbyfield = 'shareoption';
             }
 
             $sortorder = " ORDER BY " . $orderbyfield . " " . $orderby;
@@ -322,6 +330,7 @@ class overview {
                 $columns = [
                         'filename',
                         'filetimemodified',
+                        'shareoption',
                         'filesize',
                         'coursefullname',
                         'participants',
@@ -393,6 +402,7 @@ class overview {
                 $headers = [
                         get_string('overview:table:filename', 'local_eportfolio'),
                         get_string('overview:table:filetimemodified', 'local_eportfolio'),
+                        get_string('overview:table:shareoption', 'local_eportfolio'),
                         get_string('overview:table:filesize', 'local_eportfolio'),
                         get_string('overview:table:coursefullname', 'local_eportfolio'),
                         get_string('overview:table:participants', 'local_eportfolio'),
@@ -575,6 +585,7 @@ class overview {
                         \html_writer::link($viewurl, $filename,
                                 ['title' => get_string('overview:table:viewfile', 'local_eportfolio')]),
                         date('d.m.Y', $ent->timemodified),
+                        get_string('overview:shareoption:' . $ent->shareoption, 'local_eportfolio'),
                         $filesize,
                         $courseurlfull,
                         $sharedwith,

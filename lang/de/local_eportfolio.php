@@ -76,6 +76,7 @@ $string['overview:table:selection'] = 'Auswahl';
 $string['overview:table:filename'] = 'Dateiname';
 $string['overview:table:filetimecreated'] = 'Angelegt am';
 $string['overview:table:filetimemodified'] = 'Aktualisiert am';
+$string['overview:table:shareoption'] = 'Freigabetyp';
 $string['overview:table:filesize'] = 'Größe';
 $string['overview:table:coursefullname'] = 'Geteilt im Kurs';
 $string['overview:table:instancename'] = 'Aktivität';
