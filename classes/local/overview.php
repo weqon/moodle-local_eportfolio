@@ -277,6 +277,12 @@ class overview {
                     continue;
                 }
 
+                // Check for course-wide share.
+                if (empty($allowedusers) && empty($allowedgroups)) {
+                    $returneports[] = $eport;
+                    continue;
+                }
+
                 // Check for group shares.
                 $allowedgroups = !empty($eport->coursegroups) ? explode(',', $eport->coursegroups) : [];
                 $ingroup = false;
