@@ -289,6 +289,21 @@ class overview {
                     continue;
                 }
 
+                // 2a) Check roles.
+                if (!empty($eport->roles)) {
+                    $roleids = explode(',', $eport->roles);
+                    foreach ($roleids as $roleid) {
+                        $roleid = (int)$roleid;
+                        if (\user_has_role_assignment($USER->id, $roleid, $coursecontext->id)
+                            && is_enrolled($coursecontext, $USER)
+                            && ($eport->enddate == 0 || $eport->enddate >= $now)
+                        ) {
+                            $returneports[] = $eport;
+                            continue 2;
+                        }
+                    }
+                }
+
                 // Check for group shares.
                 $allowedgroups = !empty($eport->coursegroups) ? explode(',', $eport->coursegroups) : [];
                 $ingroup = false;
