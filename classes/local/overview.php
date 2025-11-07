@@ -63,8 +63,18 @@ class overview {
         // Output the file selector part and the navbar for the page.
         $fileselector = new \stdClass();
 
-        $fileselector->uploadh5pfile = 'upload.php';
-        $fileselector->createh5pfile = 'create.php';
+        // Get H5P content type Portfolio details for quickstart button.
+        $h5pportfoliodetails = self::get_h5p_portfolio();
+
+        // Display quickstart button if H5P Portfolio is installed and enabled.
+        if ($h5pportfoliodetails->enabled) {
+            $fileselector->quickstart = true;
+            $fileselector->quickstarturl =
+                    new \moodle_url('/local/eportfolio/create.php', ['library' => $h5pportfoliodetails->urlparam]);
+        }
+
+        $fileselector->uploadh5pfile = new \moodle_url('/local/eportfolio/upload.php');;
+        $fileselector->createh5pfile = new \moodle_url('/local/eportfolio/create.php');;
 
         $navitems = self::generate_navbar();
 
@@ -674,7 +684,7 @@ class overview {
 
                 // Additional entry details.
                 $sharestart = date('d.m.Y', $ent->timecreated);
-                $shareend = (!empty($ent->enddate)) ? date('d.m.Y', $ent->enddate) : './.';  
+                $shareend = (!empty($ent->enddate)) ? date('d.m.Y', $ent->enddate) : './.';
 
                 $coursecontext = \context_course::instance($ent->courseid);
 
@@ -910,7 +920,7 @@ class overview {
     /**
      * Generate the navbar.
      *
-     * @return \stdClass
+     * @return object
      */
     private function generate_navbar() {
         global $DB;
@@ -1024,5 +1034,35 @@ class overview {
                 return $title;
             }
         }
+    }
+
+    /**
+     * Get H5P Portfolio details for quickstart button.
+     *
+     * @return object
+     */
+    public function get_h5p_portfolio() {
+
+        // Store Portfolio details.
+        $type = new \stdClass();
+        $type->enabled = false;
+
+        $h5pfactory = new \core_h5p\factory();
+        $framework = $h5pfactory->get_framework();
+        $portfoliodetails = $framework->get_latest_library_version('H5P.Portfolio');
+
+        if ($portfoliodetails->enabled) {
+            // Only enabled content-types will be displayed.
+            $library = [
+                    'name' => $portfoliodetails->machinename,
+                    'majorVersion' => $portfoliodetails->majorversion,
+                    'minorVersion' => $portfoliodetails->minorversion,
+            ];
+            $key = \Moodle\H5PCore::libraryToString($library);
+            $type->urlparam = $key;
+            $type->enabled = true;
+        }
+
+        return $type;
     }
 }

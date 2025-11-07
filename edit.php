@@ -40,11 +40,10 @@ if (!has_capability('local/eportfolio:view_eport', context_system::instance())) 
 
 $id = required_param('id', PARAM_INT);
 $contenturl = optional_param('contenturl', 0, PARAM_LOCALURL);
-$section = optional_param('section', '', PARAM_ALPHA);
 
 $context = context_system::instance();
 
-$url = new moodle_url('/local/eportfolio/edit.php', ['id' => $id, 'section' => $section]);
+$url = new moodle_url('/local/eportfolio/edit.php', ['id' => $id]);
 
 $eport = $DB->get_record('local_eportfolio', ['id' => $id], '*', MUST_EXIST);
 
@@ -56,7 +55,8 @@ $PAGE->set_heading(get_string('edit:header', 'local_eportfolio'));
 $PAGE->set_pagelayout('base');
 $PAGE->add_body_class('limitedwith');
 
-$redirecturl = new moodle_url('/local/eportfolio/index.php');
+$redirecturlindex = new moodle_url('/local/eportfolio/index.php');
+$redirecturlview = new moodle_url('/local/eportfolio/view.php', ['id' => $id]);
 
 if ($eport->fileid) {
     $fs = get_file_storage();
@@ -102,10 +102,10 @@ if ($contenturl) {
         }
     }
 
-    $returnurl = new moodle_url('/local/eportfolio/edit.php', ['id' => $id, 'section' => $section]);
+    $returnurl = new moodle_url('/local/eportfolio/edit.php', ['id' => $id]);
 
     if (empty($contentid)) {
-        throw new \moodle_exception('error:emptycontentid', 'core_h5p', $redirecturl);
+        throw new \moodle_exception('error:emptycontentid', 'core_h5p', $redirecturlindex);
     }
 
     $customdata = [];
@@ -121,10 +121,13 @@ if ($contenturl) {
 
     if ($formdata = $mform->is_cancelled()) {
 
-        redirect($redirecturl, get_string('form:cancelled', 'local_eportfolio'),
+        redirect($redirecturlview, get_string('form:cancelled', 'local_eportfolio'),
                 null, \core\output\notification::NOTIFY_WARNING);
 
     } else if ($formdata = $mform->get_data()) {
+
+        #print_object($formdata);
+        #die;
 
         $fileid = $mform->save_content($formdata);
 
@@ -253,7 +256,6 @@ if ($contenturl) {
                     $filename = $file->get_filename();
                 }
 
-                // ToDo: Add event for editing.
                 \local_eportfolio\event\eportfolio_edited::create([
                         'objectid' => $fileid,
                         'other' => [
@@ -262,19 +264,28 @@ if ($contenturl) {
                         ],
                 ])->trigger();
 
-                redirect($redirecturl, get_string('edit:success', 'local_eportfolio'), null,
+                if (isset($formdata->save)) {
+                    $redirecturlsave = new moodle_url('/local/eportfolio/edit.php', ['id' => $id]);
+                } else if (isset($formdata->saveandreturn)) {
+                    $redirecturlsave = new moodle_url('/local/eportfolio/view.php', ['id' => $id]);
+                }
+
+                redirect($redirecturlsave, get_string('edit:success', 'local_eportfolio'), null,
                         \core\output\notification::NOTIFY_SUCCESS);
             }
 
         } else {
-            redirect($redirecturl, get_string('edit:error', 'local_eportfolio'), null,
+            redirect($redirecturlview, get_string('edit:error', 'local_eportfolio'), null,
                     \core\output\notification::NOTIFY_ERROR);
         }
 
     } else {
-
         echo $OUTPUT->header();
         $mform->display();
+
+        // Add modal to cancel button.
+        $PAGE->requires->js_call_amd('local_eportfolio/edit_confirm_cancel', 'init', ['#id_cancel', $id]);
+
         echo $OUTPUT->footer();
     }
 }
