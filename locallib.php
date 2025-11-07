@@ -516,3 +516,38 @@ function local_eportfolio_is_grading_teacher($config, $coursecontext, $userid = 
 
     return $isgradingteacher;
 }
+
+/**
+ * Get the upload max file size.
+ *
+ * @return int
+ */
+
+function local_eportfolio_get_upload_max_file_size() {
+    global $CFG;
+
+    $config = get_config('local_eportfolio');
+
+    if ($config->maxbytes != 0) {
+        // Check, if plugin has an upload limit set.
+        $filemaxbytes = $config->maxbytes;
+    } else if ($CFG->maxbytes == 0) {
+        // In case global setting is set to default.
+        $filemaxbytes = get_max_upload_file_size();
+    }  else if ($CFG->maxbytes != 0) {
+        // check, if the global upload limit was set.
+        $filemaxbytes = $CFG->maxbytes;
+    } else {
+        // Just in case.
+        $filemaxbytes = $CFG->maxbytes;
+    }
+
+    // Check, if global upload limit is lower than the limit set by plugin.
+    // Just in case the global upload limit was lowered afterwards.
+    if ($config->maxbytes != 0 && $CFG->maxbytes != 0 && $config->maxbytes > $CFG->maxbytes) {
+        $filemaxbytes = $CFG->maxbytes;
+    }
+
+    return (int) $filemaxbytes;
+
+}

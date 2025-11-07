@@ -52,11 +52,12 @@ $PAGE->set_heading(get_string('uploadform:header', 'local_eportfolio'));
 $PAGE->set_pagelayout('base');
 $PAGE->add_body_class('limitedwith');
 
-// ToDo: Make this configurable.
+$filemaxbytes = local_eportfolio_get_upload_max_file_size();
+
 $filemanageropts = [
         'subdirs' => 0,
-        'maxbytes' => 26214400,
-        'areamaxbytes' => 26214400,
+        'maxbytes' => $filemaxbytes,
+        'areamaxbytes' => $filemaxbytes,
         'maxfiles' => 1,
         'context' => $systemcontext,
         'accepted_types' => ['.h5p'],

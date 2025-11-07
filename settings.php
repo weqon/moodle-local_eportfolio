@@ -26,6 +26,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+global $CFG;
+
 if ($hassiteconfig) {
 
     $settings = new admin_category('local_eportfolio_settings', new lang_string('pluginname', 'local_eportfolio'));
@@ -76,9 +78,21 @@ if ($hassiteconfig) {
                     false
             )
     );
-    
+
+    // Set max upload size.
+    $choices = get_max_upload_sizes($CFG->maxbytes);
+
+    $settingspage->add(
+            new admin_setting_configselect(
+                    'local_eportfolio/maxbytes',
+                    get_string('settings:maxuploadfilezise', 'local_eportfolio'),
+                    get_string('settings:maxuploadfilezise:desc', 'local_eportfolio'),
+                    0,
+                    $choices
+            )
+    );
+
     $settings->add('local_eportfolio_settings', $settingspage);
 
     $ADMIN->add('localplugins', $settings);
 }
-

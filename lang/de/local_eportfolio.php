@@ -68,6 +68,7 @@ $string['overview:table:actions:viewgradeform'] = 'Zur Bewertung';
 $string['overview:table:actions:undo'] = 'Teilung zurückziehen';
 $string['overview:table:actions:undo:template'] = 'Teilung als Vorlage zurückziehen';
 $string['overview:table:actions:template'] = 'Diese Vorlage verwenden';
+$string['overview:table:actions:feedbackfile'] = 'Feedback Datei herunterladen';
 
 $string['overview:table:viewfile'] = 'Datei anzeigen';
 $string['overview:table:viewcourse'] = 'Kurs anzeigen';
@@ -97,6 +98,7 @@ $string['overview:table:participants:courserole'] = 'Kursrolle: ';
 $string['overview:table:participants:coursegroup'] = 'Kursgruppe: ';
 $string['overview:table:participants:anonymous'] = 'Name verborgen';
 
+$string['overview:eportfolio:quickstart'] = 'Neues Portfolio erstellen';
 $string['overview:eportfolio:fileselect'] = 'Dateiauswahl';
 $string['overview:eportfolio:uploadnewfile'] = 'H5P-Datei hochladen';
 $string['overview:eportfolio:createnewfile'] = 'Neue H5P-Datei anlegen';
@@ -217,8 +219,11 @@ $string['h5plibraries'] = 'H5P Bibliotheken';
 
 // Edit H5P file.
 $string['edit:header'] = 'ePortfolio - bearbeiten';
+$string['edit:saveandreturn'] = 'Speichern und verlassen';
 $string['edit:success'] = 'Der H5P Inhalt wurde erfolgreich aktualisiert.';
 $string['edit:error'] = 'Beim Speichern der Änderungen trat ein Fehler auf!';
+$string['edit:confirmcancel:title'] = 'Nicht gespeicherte Änderungen gehen verloren!';
+$string['edit:confirmcancel:message'] = 'Sind Sie sicher, dass Sie das Formular verlassen möchten?';
 
 // Delete files & Undo shared files.
 $string['undo:header'] = 'Geteiltes ePortfolio zurückziehen';
@@ -291,6 +296,9 @@ auf Ihre eigene Hilfe-Seite zu verweisen.';
 $string['settings:disableuserselection:disable'] = 'Auswahl Teilnehmer/innen deaktivieren';
 $string['settings:disableuserselection:disable:desc'] =
         'Wenn deaktiviert, können bei der Teilung eines ePortfolios keine einzelnen Teilnehmer/innen ausgewählt werden.';
+$string['settings:maxuploadfilezise'] = 'Maximale Dateigröße';
+$string['settings:maxuploadfilezise:desc'] =
+        'Diese Einstellung legt fest, welche maximale Dateigröße für das Hochladen von H5P-Dateien erlaubt ist.';
 
 // Privacy provider.
 $string['privacy:metadata:myeportfolios'] = 'Meine ePortfolios';

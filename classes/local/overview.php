@@ -88,8 +88,18 @@ class overview {
         // Output the file selector part and the navbar for the page.
         $fileselector = new \stdClass();
 
-        $fileselector->uploadh5pfile = 'upload.php';
-        $fileselector->createh5pfile = 'create.php';
+        // Get H5P content type Portfolio details for quickstart button.
+        $h5pportfoliodetails = self::get_h5p_portfolio();
+
+        // Display quickstart button if H5P Portfolio is installed and enabled.
+        if ($h5pportfoliodetails->enabled) {
+            $fileselector->quickstart = true;
+            $fileselector->quickstarturl =
+                    new \moodle_url('/local/eportfolio/create.php', ['library' => $h5pportfoliodetails->urlparam]);
+        }
+
+        $fileselector->uploadh5pfile = new \moodle_url('/local/eportfolio/upload.php');;
+        $fileselector->createh5pfile = new \moodle_url('/local/eportfolio/create.php');;
 
         $navitems = self::generate_navbar();
 
@@ -292,8 +302,54 @@ class overview {
             foreach ($eportfolios as $eport) {
                 $coursecontext = \context_course::instance($eport->courseid);
 
-                if (is_enrolled($coursecontext, $USER) || is_siteadmin($USER->id)) {
+                if (is_siteadmin($USER->id)) {
                     $returneports[] = $eport;
+                    continue;
+                }
+
+                $now = time();
+
+                // Check for explicit user shares.
+                $allowedusers = !empty($eport->enrolled) ? explode(',', $eport->enrolled) : [];
+                if (in_array($USER->id, $allowedusers) && ($eport->enddate == 0 || $eport->enddate >= $now)) {
+                    $returneports[] = $eport;
+                    continue;
+                }
+
+                // Check for course-wide share.
+                if (!empty($eport->fullcourse) && $eport->fullcourse == 1 && is_enrolled($coursecontext, $USER) &&
+                        ($eport->enddate == 0 || $eport->enddate >= $now)) {
+                    $returneports[] = $eport;
+                    continue;
+                }
+
+                if (!empty($eport->roles)) {
+                    $roleids = explode(',', $eport->roles);
+                    foreach ($roleids as $roleid) {
+                        $roleid = (int) $roleid;
+                        if (\user_has_role_assignment($USER->id, $roleid, $coursecontext->id)
+                                && is_enrolled($coursecontext, $USER)
+                                && ($eport->enddate == 0 || $eport->enddate >= $now)
+                        ) {
+                            $returneports[] = $eport;
+                            continue 2;
+                        }
+                    }
+                }
+
+                // Check for group shares.
+                $allowedgroups = !empty($eport->coursegroups) ? explode(',', $eport->coursegroups) : [];
+                $ingroup = false;
+                foreach ($allowedgroups as $groupid) {
+                    if (groups_is_member((int) $groupid, $USER->id)) {
+                        $ingroup = true;
+                        break;
+                    }
+                }
+
+                if ($ingroup  && ($eport->enddate == 0 || $eport->enddate >= $now)) {
+                    $returneports[] = $eport;
+                    continue;
                 }
             }
 
@@ -513,7 +569,7 @@ class overview {
                 $shareurl = new \moodle_url('/local/eportfolio/share.php', ['id' => $ent->id, 'step' => '0']);
                 $actions .= self::action_button_share($shareurl);
 
-                $editurl = new \moodle_url('/local/eportfolio/edit.php', ['id' => $ent->id]);
+                $editurl = new \moodle_url('/local/eportfolio/edit.php', ['id' => $ent->id, 'section' => 'my']);
                 $actions .= self::action_button_edit($editurl);
 
                 // Delete URL.
@@ -656,6 +712,21 @@ class overview {
                         $grade = $gradeexists->grade . ' %';
                     } else {
                         $grade = './.';
+                    }
+
+                    // Check, if a feedback file was uploaded.
+                    if ($gradeexists->feedbackfileid) {
+
+                        $fs = get_file_storage();
+                        $feedbackfile = $fs->get_file_by_id($gradeexists->feedbackfileid);
+
+                        $feedbackfileurl = \moodle_url::make_pluginfile_url($feedbackfile->get_contextid(), $feedbackfile->get_component(),
+                                $feedbackfile->get_filearea(), $feedbackfile->get_itemid(), $feedbackfile->get_filepath(),
+                                $feedbackfile->get_filename(), false);
+
+                        $feedbackfilebutton = self::action_button_feedback_file($feedbackfileurl, $feedbackfile->get_filename());
+
+                        $grade .= $feedbackfilebutton;
                     }
                 }
 
@@ -935,9 +1006,26 @@ class overview {
     }
 
     /**
+     * Generate feedback file button.
+     *
+     * @param string $url
+     * @param string $filename
+     * @return mixed
+     */
+    public function action_button_feedback_file($url, $filename) {
+        global $OUTPUT;
+
+        $data = new \stdClass();
+        $data->feedbackfile = $url->out(false);
+        $data->title = $filename;
+
+        return $OUTPUT->render_from_template('local_eportfolio/button_feedback_file', $data);
+    }
+
+    /**
      * Generate the navbar.
      *
-     * @return \stdClass
+     * @return object
      */
     private function generate_navbar() {
         global $DB;
@@ -1051,5 +1139,35 @@ class overview {
                 return $title;
             }
         }
+    }
+
+    /**
+     * Get H5P Portfolio details for quickstart button.
+     *
+     * @return object
+     */
+    public function get_h5p_portfolio() {
+
+        // Store Portfolio details.
+        $type = new \stdClass();
+        $type->enabled = false;
+
+        $h5pfactory = new \core_h5p\factory();
+        $framework = $h5pfactory->get_framework();
+        $portfoliodetails = $framework->get_latest_library_version('H5P.Portfolio');
+
+        if ($portfoliodetails->enabled) {
+            // Only enabled content-types will be displayed.
+            $library = [
+                    'name' => $portfoliodetails->machinename,
+                    'majorVersion' => $portfoliodetails->majorversion,
+                    'minorVersion' => $portfoliodetails->minorversion,
+            ];
+            $key = \Moodle\H5PCore::libraryToString($library);
+            $type->urlparam = $key;
+            $type->enabled = true;
+        }
+
+        return $type;
     }
 }

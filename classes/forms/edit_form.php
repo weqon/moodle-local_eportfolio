@@ -52,11 +52,16 @@ class edit_form extends \moodleform {
      * @return void
      */
     protected function definition() {
-        global $OUTPUT;
 
         $mform = $this->_form;
 
         $customdata = $this->_customdata;
+
+        $buttonarray = [];
+
+        $buttonarray[] = $mform->createElement('submit', 'save', get_string('savechanges'));
+        $buttonarray[] = $mform->createElement('submit', 'saveandreturn', get_string('edit:saveandreturn', 'local_eportfolio'));
+        $buttonarray[] = $mform->createElement('cancel');
 
         $mform->addElement('hidden', 'contextid', $customdata['contextid']);
         $this->_form->setType('contextid', PARAM_INT);
@@ -72,6 +77,10 @@ class edit_form extends \moodleform {
 
         $mform->addElement('hidden', 'returnurl', $customdata['returnurl']);
         $this->_form->setType('returnurl', PARAM_LOCALURL);
+
+        // Add additional action buttons above the form.
+        $mform->addGroup($buttonarray, 'buttonar', '', [' '], false);
+        $mform->addElement('html', '<div class="divider my-5"></div>');
 
         $mform->addElement('html', '<h2>' . get_string('contenteditor', 'local_eportfolio') . '</h2>');
 
@@ -97,8 +106,7 @@ class edit_form extends \moodleform {
 
         $mform->addElement('html', '<div class="divider my-5"></div>');
 
-        $this->add_action_buttons();
-
+        $mform->addGroup($buttonarray, 'buttonar', '', [' '], false);
     }
 
     /**

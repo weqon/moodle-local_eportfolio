@@ -56,7 +56,8 @@ $PAGE->set_heading(get_string('edit:header', 'local_eportfolio'));
 $PAGE->set_pagelayout('base');
 $PAGE->add_body_class('limitedwith');
 
-$redirecturl = new moodle_url('/local/eportfolio/index.php');
+$redirecturlindex = new moodle_url('/local/eportfolio/index.php');
+$redirecturlview = new moodle_url('/local/eportfolio/view.php', ['id' => $id, 'section' => $section]);
 
 if ($eport->fileid) {
     $fs = get_file_storage();
@@ -105,7 +106,7 @@ if ($contenturl) {
     $returnurl = new moodle_url('/local/eportfolio/edit.php', ['id' => $id, 'section' => $section]);
 
     if (empty($contentid)) {
-        throw new \moodle_exception('error:emptycontentid', 'core_h5p', $redirecturl);
+        throw new \moodle_exception('error:emptycontentid', 'core_h5p', $redirecturlindex);
     }
 
     $customdata = [];
@@ -121,7 +122,7 @@ if ($contenturl) {
 
     if ($formdata = $mform->is_cancelled()) {
 
-        redirect($redirecturl, get_string('form:cancelled', 'local_eportfolio'),
+        redirect($redirecturlview, get_string('form:cancelled', 'local_eportfolio'),
                 null, \core\output\notification::NOTIFY_WARNING);
 
     } else if ($formdata = $mform->get_data()) {
@@ -253,7 +254,6 @@ if ($contenturl) {
                     $filename = $file->get_filename();
                 }
 
-                // ToDo: Add event for editing.
                 \local_eportfolio\event\eportfolio_edited::create([
                         'objectid' => $fileid,
                         'other' => [
@@ -262,17 +262,22 @@ if ($contenturl) {
                         ],
                 ])->trigger();
 
-                redirect($redirecturl, get_string('edit:success', 'local_eportfolio'), null,
+                if (isset($formdata->save)) {
+                    $redirecturlsave = new moodle_url('/local/eportfolio/edit.php', ['id' => $id, 'section' => $section]);
+                } else if (isset($formdata->saveandreturn)) {
+                    $redirecturlsave = new moodle_url('/local/eportfolio/view.php', ['id' => $id, 'section' => $section]);
+                }
+
+                redirect($redirecturlsave, get_string('edit:success', 'local_eportfolio'), null,
                         \core\output\notification::NOTIFY_SUCCESS);
             }
 
         } else {
-            redirect($redirecturl, get_string('edit:error', 'local_eportfolio'), null,
+            redirect($redirecturlview, get_string('edit:error', 'local_eportfolio'), null,
                     \core\output\notification::NOTIFY_ERROR);
         }
 
     } else {
-
         echo $OUTPUT->header();
         $mform->display();
         echo $OUTPUT->footer();

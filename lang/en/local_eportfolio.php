@@ -67,6 +67,7 @@ $string['overview:table:actions:viewgradeform'] = 'View grading form';
 $string['overview:table:actions:undo'] = 'Undo share';
 $string['overview:table:actions:undo:template'] = 'Undo file sharing as template';
 $string['overview:table:actions:template'] = 'Use template';
+$string['overview:table:actions:feedbackfile'] = 'Download feedback file';
 
 $string['overview:table:viewfile'] = 'View file';
 $string['overview:table:viewcourse'] = 'View course';
@@ -96,6 +97,7 @@ $string['overview:table:participants:courserole'] = 'Course role: ';
 $string['overview:table:participants:coursegroup'] = 'Course group: ';
 $string['overview:table:participants:anonymous'] = 'Name hidden';
 
+$string['overview:eportfolio:quickstart'] = 'Create new Portfolio';
 $string['overview:eportfolio:fileselect'] = 'File selection';
 $string['overview:eportfolio:uploadnewfile'] = 'Upload H5P file';
 $string['overview:eportfolio:createnewfile'] = 'Create H5P file';
@@ -211,8 +213,11 @@ $string['h5plibraries'] = 'H5P Libraries';
 
 // Edit H5P file.
 $string['edit:header'] = 'ePortfolio - edit';
+$string['edit:saveandreturn'] = 'Save and leave';
 $string['edit:success'] = 'The H5P content has been successfully updated.';
 $string['edit:error'] = 'An error occurred while saving the changes!';
+$string['edit:confirmcancel:title'] = 'Unsaved changes will be lost!';
+$string['edit:confirmcancel:message'] = 'Are you sure you want to leave the form?';
 
 // Delete files & Undo shared files.
 $string['undo:header'] = 'Undo shared ePortfolio';
@@ -284,6 +289,9 @@ $string['settings:helpandfaq:desc'] = 'You can enter a different URL for the Hel
 $string['settings:disableuserselection:disable'] = 'Disable student selection';
 $string['settings:disableuserselection:disable:desc'] =
         'If disabled, individual students cannot be selected when sharing an ePortfolio.';
+$string['settings:disableuserselection:disable:desc'] = 'If disabled, individual students cannot be selected when sharing an ePortfolio.';
+$string['settings:maxuploadfilezise'] = 'Maximum file size';
+$string['settings:maxuploadfilezise:desc'] = 'This setting sets the maximum file size allowed for uploading H5P files.';
 
 // Privacy provider.
 $string['privacy:metadata:myeportfolios'] = 'My ePortfolios';
