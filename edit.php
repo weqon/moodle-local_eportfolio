@@ -40,10 +40,11 @@ if (!has_capability('local/eportfolio:view_eport', context_system::instance())) 
 
 $id = required_param('id', PARAM_INT);
 $contenturl = optional_param('contenturl', 0, PARAM_LOCALURL);
+$section = optional_param('section', '', PARAM_ALPHA);
 
 $context = context_system::instance();
 
-$url = new moodle_url('/local/eportfolio/edit.php', ['id' => $id]);
+$url = new moodle_url('/local/eportfolio/edit.php', ['id' => $id, 'section' => $section]);
 
 $eport = $DB->get_record('local_eportfolio', ['id' => $id], '*', MUST_EXIST);
 
@@ -56,7 +57,7 @@ $PAGE->set_pagelayout('base');
 $PAGE->add_body_class('limitedwith');
 
 $redirecturlindex = new moodle_url('/local/eportfolio/index.php');
-$redirecturlview = new moodle_url('/local/eportfolio/view.php', ['id' => $id]);
+$redirecturlview = new moodle_url('/local/eportfolio/view.php', ['id' => $id, 'section' => $section]);
 
 if ($eport->fileid) {
     $fs = get_file_storage();
@@ -102,7 +103,7 @@ if ($contenturl) {
         }
     }
 
-    $returnurl = new moodle_url('/local/eportfolio/edit.php', ['id' => $id]);
+    $returnurl = new moodle_url('/local/eportfolio/edit.php', ['id' => $id, 'section' => $section]);
 
     if (empty($contentid)) {
         throw new \moodle_exception('error:emptycontentid', 'core_h5p', $redirecturlindex);
@@ -265,9 +266,9 @@ if ($contenturl) {
                 ])->trigger();
 
                 if (isset($formdata->save)) {
-                    $redirecturlsave = new moodle_url('/local/eportfolio/edit.php', ['id' => $id]);
+                    $redirecturlsave = new moodle_url('/local/eportfolio/edit.php', ['id' => $id, 'section' => $section]);
                 } else if (isset($formdata->saveandreturn)) {
-                    $redirecturlsave = new moodle_url('/local/eportfolio/view.php', ['id' => $id]);
+                    $redirecturlsave = new moodle_url('/local/eportfolio/view.php', ['id' => $id, 'section' => $section]);
                 }
 
                 redirect($redirecturlsave, get_string('edit:success', 'local_eportfolio'), null,

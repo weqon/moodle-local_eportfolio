@@ -68,6 +68,7 @@ $string['overview:table:actions:viewgradeform'] = 'Zur Bewertung';
 $string['overview:table:actions:undo'] = 'Teilung zurückziehen';
 $string['overview:table:actions:undo:template'] = 'Teilung als Vorlage zurückziehen';
 $string['overview:table:actions:template'] = 'Diese Vorlage verwenden';
+$string['overview:table:actions:feedbackfile'] = 'Feedback Datei herunterladen';
 
 $string['overview:table:viewfile'] = 'Datei anzeigen';
 $string['overview:table:viewcourse'] = 'Kurs anzeigen';
@@ -218,7 +219,7 @@ $string['h5plibraries'] = 'H5P Bibliotheken';
 
 // Edit H5P file.
 $string['edit:header'] = 'ePortfolio - bearbeiten';
-$string['edit:saveandreturn'] = 'Speichern und zurück';
+$string['edit:saveandreturn'] = 'Speichern und verlassen';
 $string['edit:success'] = 'Der H5P Inhalt wurde erfolgreich aktualisiert.';
 $string['edit:error'] = 'Beim Speichern der Änderungen trat ein Fehler auf!';
 $string['edit:confirmcancel:title'] = 'Nicht gespeicherte Änderungen gehen verloren!';

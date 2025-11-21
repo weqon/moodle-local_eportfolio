@@ -67,6 +67,7 @@ $string['overview:table:actions:viewgradeform'] = 'View grading form';
 $string['overview:table:actions:undo'] = 'Undo share';
 $string['overview:table:actions:undo:template'] = 'Undo file sharing as template';
 $string['overview:table:actions:template'] = 'Use template';
+$string['overview:table:actions:feedbackfile'] = 'Download feedback file';
 
 $string['overview:table:viewfile'] = 'View file';
 $string['overview:table:viewcourse'] = 'View course';
@@ -212,7 +213,7 @@ $string['h5plibraries'] = 'H5P Libraries';
 
 // Edit H5P file.
 $string['edit:header'] = 'ePortfolio - edit';
-$string['edit:saveandreturn'] = 'Save and return';
+$string['edit:saveandreturn'] = 'Save and leave';
 $string['edit:success'] = 'The H5P content has been successfully updated.';
 $string['edit:error'] = 'An error occurred while saving the changes!';
 $string['edit:confirmcancel:title'] = 'Unsaved changes will be lost!';

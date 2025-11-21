@@ -52,7 +52,6 @@ class edit_form extends \moodleform {
      * @return void
      */
     protected function definition() {
-        global $OUTPUT;
 
         $mform = $this->_form;
 

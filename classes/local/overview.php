@@ -498,7 +498,7 @@ class overview {
                 $shareurl = new \moodle_url('/local/eportfolio/share.php', ['id' => $ent->id, 'step' => '0']);
                 $actions .= self::action_button_share($shareurl);
 
-                $editurl = new \moodle_url('/local/eportfolio/edit.php', ['id' => $ent->id]);
+                $editurl = new \moodle_url('/local/eportfolio/edit.php', ['id' => $ent->id, 'section' => 'my']);
                 $actions .= self::action_button_edit($editurl);
 
                 // Delete URL.
@@ -639,6 +639,21 @@ class overview {
                         $grade = $gradeexists->grade . ' %';
                     } else {
                         $grade = './.';
+                    }
+
+                    // Check, if a feedback file was uploaded.
+                    if ($gradeexists->feedbackfileid) {
+
+                        $fs = get_file_storage();
+                        $feedbackfile = $fs->get_file_by_id($gradeexists->feedbackfileid);
+
+                        $feedbackfileurl = \moodle_url::make_pluginfile_url($feedbackfile->get_contextid(), $feedbackfile->get_component(),
+                                $feedbackfile->get_filearea(), $feedbackfile->get_itemid(), $feedbackfile->get_filepath(),
+                                $feedbackfile->get_filename(), false);
+
+                        $feedbackfilebutton = self::action_button_feedback_file($feedbackfileurl, $feedbackfile->get_filename());
+
+                        $grade .= $feedbackfilebutton;
                     }
                 }
 
@@ -915,6 +930,23 @@ class overview {
         $data->title = $filename;
 
         return $OUTPUT->render_from_template('local_eportfolio/button_reuse', $data);
+    }
+
+    /**
+     * Generate feedback file button.
+     *
+     * @param string $url
+     * @param string $filename
+     * @return mixed
+     */
+    public function action_button_feedback_file($url, $filename) {
+        global $OUTPUT;
+
+        $data = new \stdClass();
+        $data->feedbackfile = $url->out(false);
+        $data->title = $filename;
+
+        return $OUTPUT->render_from_template('local_eportfolio/button_feedback_file', $data);
     }
 
     /**
