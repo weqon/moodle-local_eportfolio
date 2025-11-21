@@ -23,3 +23,30 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
+
+// Prepare plugin compability for Moodle version 4.3 and above.
+if ($CFG->version < 2023100900) {
+
+    /**
+     * Add entry to main navigation.
+     *
+     * @return void
+     */
+    function local_eportfolio_before_http_headers() {
+        global $PAGE;
+
+        // Get eportfolionavbar from settings.
+        $config = get_config('local_eportfolio');
+
+        if (!empty($config->eportfolionavbar)) {
+
+            $context = context_system::instance();
+
+            if (has_capability('local/eportfolio:view_eport', $context) || has_capability('moodle/site:config', $context)) {
+                $PAGE->primarynav->add(get_string('navbar', 'local_eportfolio'),
+                        new moodle_url('/local/eportfolio/index.php'));
+            }
+        }
+    }
+
+}
