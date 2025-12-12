@@ -277,8 +277,54 @@ class overview {
             foreach ($eportfolios as $eport) {
                 $coursecontext = \context_course::instance($eport->courseid);
 
-                if (is_enrolled($coursecontext, $USER) || is_siteadmin($USER->id)) {
+                if (is_siteadmin($USER->id)) {
                     $returneports[] = $eport;
+                    continue;
+                }
+
+                $now = time();
+
+                // Check for explicit user shares.
+                $allowedusers = !empty($eport->enrolled) ? explode(',', $eport->enrolled) : [];
+                if (in_array($USER->id, $allowedusers) && ($eport->enddate == 0 || $eport->enddate >= $now)) {
+                    $returneports[] = $eport;
+                    continue;
+                }
+
+                // Check for course-wide share.
+                if (!empty($eport->fullcourse) && $eport->fullcourse == 1 && is_enrolled($coursecontext, $USER) &&
+                        ($eport->enddate == 0 || $eport->enddate >= $now)) {
+                    $returneports[] = $eport;
+                    continue;
+                }
+
+                if (!empty($eport->roles)) {
+                    $roleids = explode(',', $eport->roles);
+                    foreach ($roleids as $roleid) {
+                        $roleid = (int) $roleid;
+                        if (\user_has_role_assignment($USER->id, $roleid, $coursecontext->id)
+                                && is_enrolled($coursecontext, $USER)
+                                && ($eport->enddate == 0 || $eport->enddate >= $now)
+                        ) {
+                            $returneports[] = $eport;
+                            continue 2;
+                        }
+                    }
+                }
+
+                // Check for group shares.
+                $allowedgroups = !empty($eport->coursegroups) ? explode(',', $eport->coursegroups) : [];
+                $ingroup = false;
+                foreach ($allowedgroups as $groupid) {
+                    if (groups_is_member((int) $groupid, $USER->id)) {
+                        $ingroup = true;
+                        break;
+                    }
+                }
+
+                if ($ingroup  && ($eport->enddate == 0 || $eport->enddate >= $now)) {
+                    $returneports[] = $eport;
+                    continue;
                 }
             }
 
@@ -647,9 +693,10 @@ class overview {
                         $fs = get_file_storage();
                         $feedbackfile = $fs->get_file_by_id($gradeexists->feedbackfileid);
 
-                        $feedbackfileurl = \moodle_url::make_pluginfile_url($feedbackfile->get_contextid(), $feedbackfile->get_component(),
-                                $feedbackfile->get_filearea(), $feedbackfile->get_itemid(), $feedbackfile->get_filepath(),
-                                $feedbackfile->get_filename(), false);
+                        $feedbackfileurl =
+                                \moodle_url::make_pluginfile_url($feedbackfile->get_contextid(), $feedbackfile->get_component(),
+                                        $feedbackfile->get_filearea(), $feedbackfile->get_itemid(), $feedbackfile->get_filepath(),
+                                        $feedbackfile->get_filename(), false);
 
                         $feedbackfilebutton = self::action_button_feedback_file($feedbackfileurl, $feedbackfile->get_filename());
 
