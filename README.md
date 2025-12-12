@@ -45,6 +45,11 @@ Set the default roles for "students" and "grading teacher" in the plugin setting
 
 ### Moodle 4.5 ###
 
+**Version 0.3.6**
+
+- Bug fix getting upload limit plugin config/global config
+- Implemented PR #29 - Fixed visibility of shared eportfolios
+
 **Version 0.3.5**
 
 - UX improvements
