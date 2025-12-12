@@ -45,6 +45,16 @@ Set the default roles for "students" and "grading teacher" in the plugin setting
 
 ### Moodle 5.0 ###
 
+**Version 0.3.6**
+
+- Plugin parity matched with MOODLE_405_STABLE
+- UX improvements
+- Additional form buttons for edit page at the top
+- Added buttons for "Save and continue" and "Save and leave"
+- Quick access button on the overview page
+- Added configuration for upload size limit
+- If mod_activity is using feedback files, they will be linked on the overview page
+
 **Version 0.3.5**
 
 - Added new setting to disable selection of users for better privacy
