@@ -45,8 +45,6 @@ $url = new moodle_url('/local/eportfolio/upload.php');
 $systemcontext = context_system::instance();
 $usercontext = context_user::instance($USER->id);
 
-$config = get_config('local_eportfolio');
-
 $PAGE->set_url($url);
 $PAGE->set_context($usercontext);
 $PAGE->set_title(get_string('uploadform:header', 'local_eportfolio'));
@@ -54,11 +52,7 @@ $PAGE->set_heading(get_string('uploadform:header', 'local_eportfolio'));
 $PAGE->set_pagelayout('base');
 $PAGE->add_body_class('limitedwith');
 
-if (isset($config->maxbytes)) {
-    $filemaxbytes = $config->maxbytes;
-} else {
-    $filemaxbytes = $CFG->maxbytes;
-}
+$filemaxbytes = local_eportfolio_get_upload_max_file_size();
 
 $filemanageropts = [
         'subdirs' => 0,
