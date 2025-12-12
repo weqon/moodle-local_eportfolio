@@ -45,7 +45,7 @@ $id = required_param('id', PARAM_INT);
 $courseid = optional_param('course', 0, PARAM_INT);
 $cmid = optional_param('cmid', 0, PARAM_INT);
 $tocourse = optional_param('tocourse', 0, PARAM_INT);
-$section = optional_param('section', '', PARAM_ALPHA);
+$section = optional_param('section', 'my', PARAM_ALPHA);
 
 $pluginconfig = get_config('local_eportfolio');
 

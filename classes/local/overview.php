@@ -304,8 +304,7 @@ class overview {
                         $roleid = (int) $roleid;
                         if (\user_has_role_assignment($USER->id, $roleid, $coursecontext->id)
                                 && is_enrolled($coursecontext, $USER)
-                                && ($eport->enddate == 0 || $eport->enddate >= $now)
-                        ) {
+                                && ($eport->enddate == 0 || $eport->enddate >= $now)) {
                             $returneports[] = $eport;
                             continue 2;
                         }
@@ -322,7 +321,7 @@ class overview {
                     }
                 }
 
-                if ($ingroup  && ($eport->enddate == 0 || $eport->enddate >= $now)) {
+                if ($ingroup && ($eport->enddate == 0 || $eport->enddate >= $now)) {
                     $returneports[] = $eport;
                     continue;
                 }
