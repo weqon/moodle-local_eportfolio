@@ -665,7 +665,7 @@ class overview {
 
                 if (!empty($cmid)) {
                     // Grade URL is only visible, if the CM is available and visible.
-                    $gradeurl = new \moodle_url('/mod/eportfolio/grade.php', ['id' => $cmid, 'eportid' => $ent->id]);
+                    $gradeurl = new \moodle_url('/mod/eportfolio/grading.php', ['id' => $cmid, 'eportid' => $ent->id]);
                     $actions .= self::action_button_grade($gradeurl);
 
                     $cm = get_coursemodule_from_id('eportfolio', $cmid, 0, false, MUST_EXIST);
@@ -681,7 +681,27 @@ class overview {
                                     'cmid' => $cmid]);
 
                     if ($gradeexists) {
-                        $grade = $gradeexists->grade . ' %';
+                        // Get grade from gradebook.
+                        $grades = grade_get_grades(
+                                $ent->courseid,
+                                'mod',
+                                'eportfolio',
+                                $moduleinstance->id,
+                                $ent->usermodified
+                        );
+
+                        // Extract grade item.
+                        $item = $grades->items[0];
+                        $gradedata = $item->grades[$ent->usermodified];
+
+                        if (!empty($gradedata)) {
+                            // Format the grade for output.
+                            $grade = $gradedata->str_grade;
+                        } else {
+                            // Use the legacy entry from eportfolio_grade table.
+                            $grade = $gradeexists->grade . '%';
+                        }
+
                     } else {
                         $grade = './.';
                     }
@@ -788,7 +808,7 @@ class overview {
 
                 if (!empty($cmid)) {
                     // Grade URL is only visible, if the CM is available and visible.
-                    $gradeurl = new \moodle_url('/mod/eportfolio/grade.php', ['id' => $cmid, 'eportid' => $ent->id]);
+                    $gradeurl = new \moodle_url('/mod/eportfolio/grading.php', ['id' => $cmid, 'eportid' => $ent->id]);
                     $actions .= self::action_button_grade($gradeurl);
 
                     $cm = get_coursemodule_from_id('eportfolio', $cmid, 0, false, MUST_EXIST);
@@ -804,8 +824,27 @@ class overview {
                                     'cmid' => $cmid]);
 
                     if ($gradeexists) {
-                        $hasgrade = get_string('overview:table:graded:done', 'local_eportfolio') . ' ' .
-                                $gradeexists->grade . ' %';
+                        // Get grade from gradebook.
+                        $grades = grade_get_grades(
+                                $ent->courseid,
+                                'mod',
+                                'eportfolio',
+                                $moduleinstance->id,
+                                $ent->usermodified
+                        );
+
+                        // Extract grade item.
+                        $item = $grades->items[0];
+                        $gradedata = $item->grades[$ent->usermodified];
+
+                        if (!empty($gradedata)) {
+                            // Format the grade for output.
+                            $hasgrade = get_string('overview:table:graded:done', 'local_eportfolio') . ' ' . $gradedata->str_grade;
+                        } else {
+                            // Use the legacy entry from eportfolio_grade table.
+                            $hasgrade = get_string('overview:table:graded:done', 'local_eportfolio') . ' ' .
+                                    $gradeexists->grade . '%';
+                        }
                     }
 
                 }

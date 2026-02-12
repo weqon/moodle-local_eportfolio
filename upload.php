@@ -146,7 +146,7 @@ if ($formdata = $mform->is_cancelled()) {
             }
         }
 
-        $editurl = new moodle_url('/local/eportfolio/edit.php', ['id' => $eportid]);
+        $editurl = new moodle_url('/local/eportfolio/edit.php', ['id' => $eportid, 'section' => 'my']);
 
         // Trigger event for creating ePortfolio.
         if (!empty($data->title)) {

@@ -78,15 +78,16 @@ $fs = get_file_storage();
 // Set objectid for triggering the event.
 $objectid = 0;
 
-if ($section === 'my') {
+if (!empty($section)) {
     $eport = $DB->get_record('local_eportfolio', ['id' => $id]);
 
     $editid = $eport->id;
     $objectid = $eport->fileid;
 
-    if (empty($empty->h5pid)) {
-        // Get the file for user context.
-        $file = $fs->get_file_by_id($eport->fileid);
+    // Get the file.
+    $file = $fs->get_file_by_id($eport->fileid);
+    
+    if (empty($eport->h5pid)) {
 
         // We need a better solution for this.
         // Move this to edit.php and also update local_eportfolio_shared, in case file was uploaded as template.
@@ -100,7 +101,6 @@ if ($section === 'my') {
             $DB->update_record('local_eportfolio', $updatedata);
         }
     }
-
 } else {
     // File view was accessed from course or course module.
     $eport = $DB->get_record('local_eportfolio_share', ['id' => $id]);

@@ -127,9 +127,6 @@ if ($contenturl) {
 
     } else if ($formdata = $mform->get_data()) {
 
-        #print_object($formdata);
-        #die;
-
         $fileid = $mform->save_content($formdata);
 
         if ($fileid) {
