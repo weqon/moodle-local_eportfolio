@@ -48,6 +48,15 @@ if (!has_capability('local/eportfolio:view_eport', context_system::instance())) 
 
 $id = required_param('id', PARAM_INT);
 
+// Check, if user can access the ePortfolio before any further processing.
+$eport = $DB->get_record('local_eportfolio', ['id' => $id, 'usermodified' => $USER->id]);
+
+if (empty($eport)) {
+    // No file found or user is not allowed to access the file.
+    redirect(new moodle_url('/local/eportfolio/index.php'),
+            get_string('view:eportfolio:filenotfound', 'local_eportfolio'), null, \core\output\notification::NOTIFY_ERROR);
+}
+
 $cache = cache::make_from_params(cache_store::MODE_SESSION, 'local_eportfolio', 'sharing');
 
 // Reset session in case form was reopened, but already used.
@@ -217,7 +226,7 @@ if ($step == '3') {
 
     } else if ($formdata4 = $mform4->get_data()) {
 
-        $eport = $DB->get_record('local_eportfolio', ['id' => $id]);
+        $eport = $DB->get_record('local_eportfolio', ['id' => $id, 'usermodified' => $USER->id]);
 
         $data = new stdClass();
 
@@ -408,8 +417,7 @@ $data = new stdClass();
 
 $data->renderform = $renderform;
 
-// Check, if this ePortfolio was already shared in any way and inform user.
-$eport = $DB->get_record('local_eportfolio', ['id' => $id]);
+// Check, if user already shared the file.
 $alreadyshared = local_eportfolio_check_already_shared($eport->id, $eport->fileid);
 
 if (!empty($alreadyshared)) {

@@ -117,7 +117,7 @@ class overview {
                     $customdata[$ent->fileid] = $ent->fileid;
                 }
 
-                $formurl = new \moodle_url('/local/eportfolio/download.php');
+                $formurl = new \moodle_url('/local/eportfolio/download.php?sesskey=' . sesskey());
                 $formattributes = [
                         'action' => $formurl,
                         'method' => 'post',

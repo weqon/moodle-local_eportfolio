@@ -90,7 +90,7 @@ function local_eportfolio_get_shared_participants($courseid, $fullcourse = null,
 
     $isgradingteacher = local_eportfolio_is_grading_teacher($config, $coursecontext);
 
-    if ($config->disableuserselection && !$isgradingteacher) {   
+    if ($config->disableuserselection && !$isgradingteacher) {
         $sharedusers = '';
 
         // Just in case the setting was enabled after users already shared with selected participants.
@@ -102,7 +102,7 @@ function local_eportfolio_get_shared_participants($courseid, $fullcourse = null,
             $sharedusers = get_string('overview:table:participants:fullcourse', 'local_eportfolio');
         }
 
-        if (!empty($roleids)) {  
+        if (!empty($roleids)) {
             $roleids = explode(', ', $roleids);
             $rolenames = role_get_names($coursecontext, ROLENAME_ALIAS, true);
 
@@ -118,14 +118,14 @@ function local_eportfolio_get_shared_participants($courseid, $fullcourse = null,
             // Get course groups by course id.
             $groupids = explode(', ', $groupids);
             $coursegroups = groups_get_all_groups($courseid);
-            
+
             $sharedusers = get_string('overview:table:participants:coursegroup', 'local_eportfolio');
 
             foreach ($groupids as $gid) {
                 $groups[] = $coursegroups[$gid]->name;
             }
 
-            $sharedusers .=  implode(', ', $groups);
+            $sharedusers .= implode(', ', $groups);
         }
     } else {
 
@@ -386,7 +386,7 @@ function local_eportfolio_get_eportfolio_cm($courseid) {
             }
         }
     }
-    
+
     return $cmarr;
 
 }
@@ -500,7 +500,7 @@ function local_eportfolio_check_config($context) {
  * @return bool
  */
 
-function local_eportfolio_is_grading_teacher($config, $coursecontext, $userid = null) {    
+function local_eportfolio_is_grading_teacher($config, $coursecontext, $userid = null) {
 
     // Check, if current user is enrolled as grading teacher.
     $checkroleids = explode(',', $config->gradingteacher);
@@ -534,7 +534,7 @@ function local_eportfolio_get_upload_max_file_size() {
     } else if ($CFG->maxbytes == 0) {
         // In case global setting is set to default.
         $filemaxbytes = get_max_upload_file_size();
-    }  else if ($CFG->maxbytes != 0) {
+    } else if ($CFG->maxbytes != 0) {
         // check, if the global upload limit was set.
         $filemaxbytes = $CFG->maxbytes;
     } else {
@@ -550,4 +550,60 @@ function local_eportfolio_get_upload_max_file_size() {
 
     return (int) $filemaxbytes;
 
+}
+
+/**
+ * Check, if user can view shared ePortfolio
+ *
+ * @param stdClass $share DB record local_eportfolio_share
+ * @param int $userid
+ *
+ * @return bool
+ */
+function local_eportfolio_user_can_view_share($share, int $userid) {
+
+    // If user is the owner of the file it can be accessed no matter which share option.
+    if ((int) $share->usermodified === $userid) {
+        return true;
+    }
+
+    $coursecontext = context_course::instance($share->courseid);
+    if (!is_enrolled($coursecontext, $userid)) {
+        return false;
+    }
+
+    if ((int) $share->fullcourse === 1) {
+        return true;
+    }
+
+    // Explicit user list.
+    if (!empty($share->enrolled)) {
+        $list = explode(', ', $share->enrolled);
+        if (in_array($userid, $list)) {
+            return true;
+        }
+    }
+
+    // Role intersection.
+    if (!empty($share->roles)) {
+        $shareroles = explode(', ', $share->roles);
+        $userroles = get_user_roles($coursecontext, $userid);
+        foreach ($userroles as $r) {
+            if (in_array((int) $r->roleid, $shareroles)) {
+                return true;
+            }
+        }
+    }
+
+    // Group membership.
+    if (!empty($share->coursegroups)) {
+        $sharegroups = explode(',', $share->coursegroups);
+        foreach ($sharegroups as $gid) {
+            if (groups_is_member($gid, $userid)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
