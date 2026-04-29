@@ -46,7 +46,13 @@ $context = context_system::instance();
 
 $url = new moodle_url('/local/eportfolio/edit.php', ['id' => $id, 'section' => $section]);
 
-$eport = $DB->get_record('local_eportfolio', ['id' => $id], '*', MUST_EXIST);
+$eport = $DB->get_record('local_eportfolio', ['id' => $id, 'usermodified' => $USER->id]);
+
+if (empty($eport)) {
+    // No file found or user is not allowed to access the file.
+    redirect(new moodle_url('/local/eportfolio/index.php'),
+            get_string('view:eportfolio:filenotfound', 'local_eportfolio'), null, \core\output\notification::NOTIFY_ERROR);
+}
 
 // Set page layout.
 $PAGE->set_url($url);

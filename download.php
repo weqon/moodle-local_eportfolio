@@ -41,6 +41,8 @@ if (!has_capability('local/eportfolio:view_eport', context_system::instance())) 
 
 $ids = optional_param_array('fileids', '0', PARAM_RAW);
 
+require_sesskey();
+
 $downloadids = [];
 
 if ($ids != 'fileids' && !empty($ids)) {
@@ -48,12 +50,18 @@ if ($ids != 'fileids' && !empty($ids)) {
         $cleanid = clean_param($id, PARAM_INT);
 
         $downloadids[] = $cleanid;
+        $eport = $DB->get_record('local_eportfolio', ['fileid' => $cleanid, 'usermodified' => $USER->id]);
+
+        if ($eport) {
+            $downloadids[] = (int) $eport->fileid;
+        }
     }
 } else {
     $allfiles = $DB->get_records('local_eportfolio', ['usermodified' => $USER->id]);
 
     foreach ($allfiles as $alf) {
         $downloadids[] = $alf->fileid;
+        $downloadids[] = (int) $alf->fileid;
     }
 }
 
@@ -80,7 +88,7 @@ $username = fullname($USER);
 $filenameraw = $plugin . '_' . $username;
 
 $zipname = format_string($filenameraw, true, ['context' => $context]);
-$filename = shorten_filename(clean_filename($zipname . '-' . date('Ymd')) . '.zip');
+$filename = shorten_filename(clean_filename($zipname . '-' . date('YmdHi')) . '.zip');
 $zipwriter = \core_files\archive_writer::get_stream_writer($filename, \core_files\archive_writer::ZIP_WRITER);
 
 foreach ($downloadids as $did) {
