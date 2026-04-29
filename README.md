@@ -45,6 +45,12 @@ Set the default roles for "students" and "grading teacher" in the plugin setting
 
 ### Moodle 4.5 ###
 
+**Version 0.3.7**
+
+- Security improvements
+  - Added better file ownership checks
+- Bug fix view.php when accessings file from the course context
+
 **Version 0.3.6**
 
 - Bug fix getting upload limit plugin config/global config
