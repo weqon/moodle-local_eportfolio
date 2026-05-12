@@ -45,7 +45,11 @@ $id = required_param('id', PARAM_INT);
 $courseid = optional_param('course', 0, PARAM_INT);
 $cmid = optional_param('cmid', 0, PARAM_INT);
 $tocourse = optional_param('tocourse', 0, PARAM_INT);
-$section = optional_param('section', 'my', PARAM_ALPHA);
+
+// In case a file is not accessed via course.
+if (empty($tocourse)) {
+    $section = optional_param('section', 'my', PARAM_ALPHA);
+}
 
 $pluginconfig = get_config('local_eportfolio');
 
@@ -72,22 +76,31 @@ $PAGE->set_heading(get_string('view:header', 'local_eportfolio'));
 $PAGE->set_pagelayout('base');
 $PAGE->add_body_class('limitedwith');
 
+// Let's build the backurl.
+// Moved here, so we can use it for the error message in case of invalid file access.
+if ($tocourse) {
+    $backurl = new moodle_url('/course/view.php', ['id' => $courseid]);
+    $backurlstring = get_string('view:eportfolio:button:backtocourse', 'local_eportfolio');
+} else {
+    $backurl = new moodle_url('/local/eportfolio/index.php', ['section' => $section]);
+    $backurlstring = get_string('view:eportfolio:button:backtoeportfolio', 'local_eportfolio');
+}
+
 // Get the ePortfolio entry and file storage.
 $fs = get_file_storage();
 
 // Set objectid for triggering the event.
 $objectid = 0;
 
-if (!empty($section)) {
-    $eport = $DB->get_record('local_eportfolio', ['id' => $id]);
+if ($section === 'my') {
+    $eport = $DB->get_record('local_eportfolio', ['id' => $id, 'usermodified' => $USER->id]);
 
-    $editid = $eport->id;
-    $objectid = $eport->fileid;
+    if (!empty($eport)) {
+        $editid = $eport->id;
+        $objectid = $eport->fileid;
 
-    // Get the file.
-    $file = $fs->get_file_by_id($eport->fileid);
-    
-    if (empty($eport->h5pid)) {
+        // Get the file for user context.
+        $file = $fs->get_file_by_id($eport->fileid);
 
         // We need a better solution for this.
         // Move this to edit.php and also update local_eportfolio_shared, in case file was uploaded as template.
@@ -100,15 +113,36 @@ if (!empty($section)) {
 
             $DB->update_record('local_eportfolio', $updatedata);
         }
+    } else {
+        // No file found or user is not allowed to access the file.
+        redirect($backurl, get_string('view:eportfolio:filenotfound', 'local_eportfolio'), null,
+                \core\output\notification::NOTIFY_ERROR);
     }
+
 } else {
     // File view was accessed from course or course module.
     $eport = $DB->get_record('local_eportfolio_share', ['id' => $id]);
-    $editid = $eport->eportid;
-    $objectid = $eport->fileidcontext;
 
-    // Get the file for shared context.
-    $file = $fs->get_file_by_id($eport->fileidcontext);
+    if (!empty($eport)) {
+        // Check, if user can access ePortfolio.
+        $cannaccess = local_eportfolio_user_can_view_share($eport, $USER->id);
+
+        if ($cannaccess) {
+            $editid = $eport->eportid;
+            $objectid = $eport->fileidcontext;
+
+            // Get the file for shared context.
+            $file = $fs->get_file_by_id($eport->fileidcontext);
+        } else {
+            // No file found or user is not allowed to access the file.
+            redirect($backurl, get_string('view:eportfolio:filenotfound', 'local_eportfolio'), null,
+                    \core\output\notification::NOTIFY_ERROR);
+        }
+    } else {
+        // No file found or user is not allowed to access the file.
+        redirect($backurl, get_string('view:eportfolio:filenotfound', 'local_eportfolio'), null,
+                \core\output\notification::NOTIFY_ERROR);
+    }
 }
 
 // In case additional file types will be allowed we have to replace this.
@@ -124,15 +158,6 @@ $fileurl = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_co
 // Get the times for created and modified based on h5p file.
 $pathnamehash = $file->get_pathnamehash();
 $h5pfile = $DB->get_record('h5p', ['pathnamehash' => $pathnamehash]);
-
-// Let's build the backurl.
-if ($tocourse) {
-    $backurl = new moodle_url('/course/view.php', ['id' => $courseid]);
-    $backurlstring = get_string('view:eportfolio:button:backtocourse', 'local_eportfolio');
-} else {
-    $backurl = new moodle_url('/local/eportfolio/index.php', ['section' => $section]);
-    $backurlstring = get_string('view:eportfolio:button:backtoeportfolio', 'local_eportfolio');
-}
 
 $user = $DB->get_record('user', ['id' => $eport->usermodified]);
 $userfullname = fullname($user);

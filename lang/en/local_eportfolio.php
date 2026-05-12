@@ -122,6 +122,7 @@ $string['view:eportfolio:button:edit'] = 'Edit H5P file';
 $string['view:eportfolio:sharedby'] = 'Shared by';
 $string['view:eportfolio:timecreated'] = 'Created at';
 $string['view:eportfolio:timemodified'] = 'Last modified';
+$string['view:eportfolio:filenotfound'] = 'The file you are looking for could not be found!';
 
 // Sharing.
 $string['sharing:header'] = 'Share ePortfolio';

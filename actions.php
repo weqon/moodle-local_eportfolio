@@ -60,7 +60,6 @@ if ($courseid) {
 
 $url = new moodle_url('/local/eportfolio/actions.php', $urlparams);
 
-
 // Set page layout.
 $PAGE->set_url($url);
 $PAGE->set_context(context_user::instance($USER->id));
@@ -73,8 +72,14 @@ $redirecturl = new moodle_url('/local/eportfolio/index.php', ['section' => $sect
 
 if ($action === 'undo') {
 
-    // First, get the record.
-    $eport = $DB->get_record('local_eportfolio_share', ['id' => $id]);
+    // Check, if user can access the ePortfolio before any further processing.
+    $eport = $DB->get_record('local_eportfolio_share', ['id' => $id, 'usermodified' => $USER->id]);
+
+    if (empty($eport)) {
+        // No file found or user is not allowed to access the file.
+        redirect(new moodle_url('/local/eportfolio/index.php'),
+                get_string('view:eportfolio:filenotfound', 'local_eportfolio'), null, \core\output\notification::NOTIFY_ERROR);
+    }
 
     // First delete the shared file from course context.
     $coursecontext = context_course::instance($eport->courseid);
@@ -124,8 +129,14 @@ if ($action === 'undo') {
 
 if ($action === 'delete') {
 
-    // First, get the record.
-    $eport = $DB->get_record('local_eportfolio', ['id' => $id]);
+    // Check, if user can access the ePortfolio before any further processing.
+    $eport = $DB->get_record('local_eportfolio', ['id' => $id, 'usermodified' => $USER->id]);
+
+    if (empty($eport)) {
+        // No file found or user is not allowed to access the file.
+        redirect(new moodle_url('/local/eportfolio/index.php'),
+                get_string('view:eportfolio:filenotfound', 'local_eportfolio'), null, \core\output\notification::NOTIFY_ERROR);
+    }
 
     // Second, check, if the file was shared.
     // Note, we can only delete files, which were shared for view or as template.
@@ -214,6 +225,21 @@ if ($action == 'reuse') {
         // First, get the record.
         $eport = $DB->get_record('local_eportfolio_share', ['id' => $id, 'shareoption' => 'template']);
 
+        if (empty($eport)) {
+            // No file found or user is not allowed to access the file.
+            redirect(new moodle_url('/local/eportfolio/index.php'),
+                    get_string('view:eportfolio:filenotfound', 'local_eportfolio'), null, \core\output\notification::NOTIFY_ERROR);
+        }
+
+        // If eport record exists, check if user can access the course it was shared with.
+        $cannaccess = local_eportfolio_user_can_view_share($eport, $USER->id);
+
+        if (!$cannaccess) {
+            // No file found or user is not allowed to access the file.
+            redirect(new moodle_url('/local/eportfolio/index.php'),
+                    get_string('view:eportfolio:filenotfound', 'local_eportfolio'), null, \core\output\notification::NOTIFY_ERROR);
+        }
+
         // First we need the course context.
         $coursecontext = context_course::instance($courseid);
         $context = context_system::instance();
@@ -293,7 +319,7 @@ if ($action == 'reuse') {
 
                 // H5P core edit will redirect the user to this URL after editing the content.
                 $returnurl = new moodle_url('/local/eportfolio/index.php');
-                $editurl = new moodle_url('/local/eportfolio/edit.php', ['id' => $neweport]);
+                $editurl = new moodle_url('/local/eportfolio/edit.php', ['id' => $neweport, 'section' => 'my']);
 
                 redirect($editurl, get_string('use:template:success', 'local_eportfolio'),
                         null, \core\output\notification::NOTIFY_SUCCESS);
@@ -315,4 +341,3 @@ if ($action == 'reuse') {
     }
 
 }
-

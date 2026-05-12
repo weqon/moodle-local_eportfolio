@@ -116,8 +116,8 @@ class overview {
                 foreach ($entries as $ent) {
                     $customdata[$ent->fileid] = $ent->fileid;
                 }
-
-                $formurl = new \moodle_url('/local/eportfolio/download.php');
+                
+                $formurl = new \moodle_url('/local/eportfolio/download.php?sesskey=' . sesskey());
                 $formattributes = [
                         'action' => $formurl,
                         'method' => 'post',
@@ -845,8 +845,23 @@ class overview {
                             $hasgrade = get_string('overview:table:graded:done', 'local_eportfolio') . ' ' .
                                     $gradeexists->grade . '%';
                         }
-                    }
 
+                        // Check, if a feedback file was uploaded.
+                        if ($gradeexists->feedbackfileid) {
+
+                            $fs = get_file_storage();
+                            $feedbackfile = $fs->get_file_by_id($gradeexists->feedbackfileid);
+
+                            $feedbackfileurl =
+                                    \moodle_url::make_pluginfile_url($feedbackfile->get_contextid(), $feedbackfile->get_component(),
+                                            $feedbackfile->get_filearea(), $feedbackfile->get_itemid(), $feedbackfile->get_filepath(),
+                                            $feedbackfile->get_filename(), false);
+
+                            $feedbackfilebutton = self::action_button_feedback_file($feedbackfileurl, $feedbackfile->get_filename());
+
+                            $hasgrade .= $feedbackfilebutton;
+                        }
+                    }
                 }
 
                 // Course URL.
