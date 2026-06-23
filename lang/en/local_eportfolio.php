@@ -291,6 +291,8 @@ $string['settings:disableuserselection:disable'] = 'Disable student selection';
 $string['settings:disableuserselection:disable:desc'] = 'If disabled, individual students cannot be selected when sharing an ePortfolio.';
 $string['settings:maxuploadfilezise'] = 'Maximum file size';
 $string['settings:maxuploadfilezise:desc'] = 'This setting sets the maximum file size allowed for uploading H5P files.';
+$string['settings:subplugins'] = 'Subplugins ePortfolio';
+$string['settings:manage:hub'] = 'Settings ePortfolio Hub';
 
 // Privacy provider.
 $string['privacy:metadata:myeportfolios'] = 'My ePortfolios';

@@ -300,6 +300,8 @@ $string['settings:disableuserselection:disable:desc'] =
 $string['settings:maxuploadfilezise'] = 'Maximale Dateigröße';
 $string['settings:maxuploadfilezise:desc'] =
         'Diese Einstellung legt fest, welche maximale Dateigröße für das Hochladen von H5P-Dateien erlaubt ist.';
+$string['settings:subplugins'] = 'Subplugins ePortfolio';
+$string['settings:manage:hub'] = 'Einstellungen eportfolio Hub';
 
 // Privacy provider.
 $string['privacy:metadata:myeportfolios'] = 'Meine ePortfolios';

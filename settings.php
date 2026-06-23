@@ -94,6 +94,16 @@ if ($hassiteconfig) {
 
     $settings->add('local_eportfolio_settings', $settingspage);
 
+    // Include the settings for subplugins.
+    $subplugins = core_component::get_plugin_list('eportfolioplugins');
+
+    foreach ($subplugins as $subplugin => $path) {
+        $settingsfile = $path . '/settings.php';
+
+        if (file_exists($settingsfile)) {
+            include($settingsfile);
+        }
+    }
+
     $ADMIN->add('localplugins', $settings);
 }
-

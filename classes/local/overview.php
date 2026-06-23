@@ -50,6 +50,11 @@ class overview {
         $this->tdir = $tdir;
 
         $this->config = get_config('local_eportfolio');
+
+        // Check, if subplugin eportfolio hub is installed and hub is enabled.
+        $hubplugin = \core_plugin_manager::instance()->get_plugin_info('eportfolioplugins_hub');
+        $hubconfig = $hubplugin ? get_config('eportfolioplugins_hub') : null;
+        $this->hubconfig = (!empty($hubconfig->enablehub)) ? $hubconfig : null;
     }
 
     /**
@@ -502,7 +507,7 @@ class overview {
      * @return array|void
      */
     private function get_table_data($ent) {
-        global $DB, $USER;
+        global $DB, $USER, $CFG;
 
         $actions = '';
         $filewasdeleted = false;
@@ -583,6 +588,14 @@ class overview {
                         $actions .= self::action_button_undo($undourl, $filename, true);
                     }
 
+                }
+
+                // Add new action icon for publishing ePortfolio to subplugin hub.
+                if ($this->hubconfig != null) {
+                    require_once($CFG->dirroot . "/local/eportfolio/hub/locallib.php");
+
+                    $actions .= ' | ';
+                    $actions .= eportfolioplugins_hub_action_button_publish($ent->id);
                 }
 
                 $tabledata = [

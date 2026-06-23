@@ -1,0 +1,4 @@
+[submodule "hub"]
+	path = hub
+	url = https://github.com/weqon/moodle_eportfolioplugins_hub.git
+	branch = MOODLE_405_BETA
